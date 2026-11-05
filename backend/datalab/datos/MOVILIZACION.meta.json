@@ -1,0 +1,23 @@
+{
+  "fuente": "ANALISIS.xlsx",
+  "hoja": "MOVILIZACION",
+  "header": 4,
+  "filas": 30,
+  "columnas": [
+    "DISTRITO",
+    "Unnamed: 1",
+    "PERSONAS A",
+    "IMPORTE",
+    "PERSONAS A MOVILIZAR*",
+    "IMPORTE.1",
+    "15"
+  ],
+  "n_columnas": 7,
+  "generado": "2026-07-11 21:16",
+  "autor": "Martin Cortes",
+  "avisos": [
+    "columnas 100% vacias eliminadas: ['Unnamed: 4', 'Unnamed: 7']",
+    "filas totalmente vacias eliminadas: 1"
+  ],
+  "nota": "Los vacios se conservan como null. No se rellenan ni se corrigen datos."
+}

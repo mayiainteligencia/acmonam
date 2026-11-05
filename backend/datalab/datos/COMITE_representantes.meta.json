@@ -1,0 +1,21 @@
+{
+  "fuente": "ANALISIS.xlsx",
+  "hoja": "COMITÉ",
+  "header": "region A:F filas 6..625",
+  "filas": 571,
+  "columnas": [
+    "distrito",
+    "municipio",
+    "rep_casilla",
+    "importe_casilla",
+    "rep_generales",
+    "importe_generales"
+  ],
+  "n_columnas": 6,
+  "generado": "2026-07-11 12:49",
+  "autor": "Martin Cortes",
+  "avisos": [
+    "descartadas 49 filas con vacio en ['distrito', 'municipio']"
+  ],
+  "nota": "Los vacios se conservan como null. No se rellenan ni se corrigen datos."
+}

@@ -1,0 +1,40 @@
+{
+  "fuente": "ANALISIS.xlsx",
+  "hoja": "COMPILADO",
+  "header": 0,
+  "filas": 2391,
+  "columnas": [
+    "# MPIO",
+    "DTTO",
+    "Municipio",
+    "AÑO ELECCIÓN",
+    "TOTAL DE CASILLAS",
+    "Lista Nominal",
+    "PAN",
+    "PRD",
+    "CONVER",
+    "PT",
+    "PRI",
+    "PVEM",
+    "PARMEO",
+    "PUP",
+    "PNA",
+    "No Reg.",
+    "T.Votos Válidos",
+    "Nulos",
+    "V. Total Emitida",
+    "T. de Abst.",
+    "% Vot.",
+    "% Abst.",
+    "GANADOR",
+    "PARTIDO"
+  ],
+  "n_columnas": 24,
+  "generado": "2026-07-11 12:49",
+  "autor": "Martin Cortes",
+  "avisos": [
+    "columnas 100% vacias eliminadas: ['co pts', 'partido', 'prob part', '%']",
+    "filas totalmente vacias eliminadas: 2"
+  ],
+  "nota": "Los vacios se conservan como null. No se rellenan ni se corrigen datos."
+}

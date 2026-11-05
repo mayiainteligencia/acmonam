@@ -1,0 +1,243 @@
+==========================================================================
+PERFILADO DE DATOS - ANALISIS.xlsx
+Hecho por : Martin Cortes
+Ejecutado : 2026-07-11 10:23
+==========================================================================
+
+El archivo tiene 7 hoja(s): ['computo dttal', 'casillas anuladas TEEM', 'CONCENTRADO', 'MOVILIZACION', 'REPRESENTANTES', 'COMITÉ', 'COMPILADO']
+
+--------------------------------------------------------------------------
+HOJA: computo dttal
+  VEREDICTO: FUENTE DE DATOS (revisar - 1 senal dudosa)
+     - 6 celdas combinadas (layout de reporte)
+  Dimensiones: 56 filas x 20 columnas
+  Columnas:
+      #  NOMBRE                   TIPO           VACIOS  NOTAS
+      1  Unnamed: 0               object       10 (18%)  
+      2  Unnamed: 1               str           8 (14%)  
+      3  Unnamed: 2               object        8 (14%)  
+      4  INSTITUTO ELECTORAL DEL  object        6 (11%)  
+      5  Unnamed: 4               object        9 (16%)  
+      6  Unnamed: 5               object        8 (14%)  
+      7  Unnamed: 6               object        9 (16%)  
+      8  Unnamed: 7               object        8 (14%)  
+      9  Unnamed: 8               object        9 (16%)  
+     10  Unnamed: 9               object        8 (14%)  
+     11  Unnamed: 10              object        9 (16%)  
+     12  Unnamed: 11              object        8 (14%)  
+     13  Unnamed: 12              object        9 (16%)  
+     14  Unnamed: 13              object        8 (14%)  
+     15  Unnamed: 14              object        9 (16%)  
+     16  Unnamed: 15              object        8 (14%)  
+     17  Unnamed: 16              object        8 (14%)  
+     18  Unnamed: 17              float64      56 (100%)  
+     19  Unnamed: 18              object        8 (14%)  
+     20  Unnamed: 19              object        8 (14%)  
+  Aviso - columnas con MUCHOS vacios (>=30%), preguntar al cliente:
+     - Unnamed: 17: 100% vacio
+
+--------------------------------------------------------------------------
+HOJA: casillas anuladas TEEM
+  VEREDICTO: FUENTE DE DATOS (importable)
+  Dimensiones: 19 filas x 10 columnas
+  Columnas:
+      #  NOMBRE                   TIPO           VACIOS  NOTAS
+      1  Unnamed: 0               str          11 (58%)  
+      2  Unnamed: 1               object       11 (58%)  
+      3  INSTITUTO ELECTORAL DEL  object       11 (58%)  
+      4  Unnamed: 3               str          11 (58%)  
+      5  Unnamed: 4               object       10 (53%)  
+      6  Unnamed: 5               object       10 (53%)  
+      7  Unnamed: 6               object       10 (53%)  
+      8  Unnamed: 7               object       10 (53%)  
+      9  Unnamed: 8               object       10 (53%)  
+     10  Unnamed: 9               object       10 (53%)  
+  Aviso - columnas con MUCHOS vacios (>=30%), preguntar al cliente:
+     - Unnamed: 0: 58% vacio
+     - Unnamed: 1: 58% vacio
+     - INSTITUTO ELECTORAL DEL ESTADO DE MÉXICO: 58% vacio
+     - Unnamed: 3: 58% vacio
+     - Unnamed: 4: 53% vacio
+     - Unnamed: 5: 53% vacio
+     - Unnamed: 6: 53% vacio
+     - Unnamed: 7: 53% vacio
+     - Unnamed: 8: 53% vacio
+     - Unnamed: 9: 53% vacio
+
+--------------------------------------------------------------------------
+HOJA: CONCENTRADO
+  VEREDICTO: FUENTE DE DATOS (importable)
+  Dimensiones: 9 filas x 2 columnas
+  Columnas:
+      #  NOMBRE                   TIPO           VACIOS  NOTAS
+      1  Unnamed: 0               str            0 (0%)  posible LLAVE (todo unico)
+      2  Unnamed: 1               object        6 (67%)  
+  Aviso - columnas con MUCHOS vacios (>=30%), preguntar al cliente:
+     - Unnamed: 1: 67% vacio
+
+--------------------------------------------------------------------------
+HOJA: MOVILIZACION
+  VEREDICTO: FUENTE DE DATOS (revisar - 1 senal dudosa)
+     - 4 celdas combinadas (layout de reporte)
+  Dimensiones: 35 filas x 9 columnas
+  Columnas:
+      #  NOMBRE                   TIPO           VACIOS  NOTAS
+      1  Unnamed: 0               str           6 (17%)  
+      2  Unnamed: 1               str          10 (29%)  
+      3  Unnamed: 2               object        7 (20%)  
+      4  Unnamed: 3               object        8 (23%)  
+      5  Unnamed: 4               float64      35 (100%)  
+      6  Unnamed: 5               object        8 (23%)  
+      7  Unnamed: 6               object        7 (20%)  
+      8  Unnamed: 7               float64      35 (100%)  
+      9  Unnamed: 8               float64      33 (94%)  
+  Aviso - columnas con MUCHOS vacios (>=30%), preguntar al cliente:
+     - Unnamed: 4: 100% vacio
+     - Unnamed: 7: 100% vacio
+     - Unnamed: 8: 94% vacio
+
+--------------------------------------------------------------------------
+HOJA: REPRESENTANTES
+  VEREDICTO: FUENTE DE DATOS (revisar - 1 senal dudosa)
+     - 12 celdas combinadas (layout de reporte)
+  Dimensiones: 71 filas x 8 columnas
+  Columnas:
+      #  NOMBRE                   TIPO           VACIOS  NOTAS
+      1  REPRESENTANTES GENERALES object       33 (46%)  
+      2  Unnamed: 1               object       38 (54%)  
+      3  Unnamed: 2               object       48 (68%)  
+      4  Unnamed: 3               str          55 (77%)  
+      5  Unnamed: 4               object       49 (69%)  
+      6  Unnamed: 5               object       49 (69%)  
+      7  Unnamed: 6               object       65 (92%)  
+      8  Unnamed: 7               object       62 (87%)  
+  Aviso - columnas con MUCHOS vacios (>=30%), preguntar al cliente:
+     - REPRESENTANTES GENERALES: 46% vacio
+     - Unnamed: 1: 54% vacio
+     - Unnamed: 2: 68% vacio
+     - Unnamed: 3: 77% vacio
+     - Unnamed: 4: 69% vacio
+     - Unnamed: 5: 69% vacio
+     - Unnamed: 6: 92% vacio
+     - Unnamed: 7: 87% vacio
+
+--------------------------------------------------------------------------
+HOJA: COMITÉ
+  VEREDICTO: FUENTE DE DATOS (revisar - 1 senal dudosa)
+     - 13 encabezados sin nombre y vacios (fila 1 no es tabla)
+  Dimensiones: 633 filas x 19 columnas
+  Columnas:
+      #  NOMBRE                   TIPO           VACIOS  NOTAS
+      1  COMITE DIRECTIVO ESTATAL object        10 (2%)  
+      2  Unnamed: 1               str           54 (9%)  casing inconsistente ej. ['VILLA DE ETLA', 'Villa de Etla']
+      3  Unnamed: 2               object        34 (5%)  
+      4  Unnamed: 3               float64       32 (5%)  
+      5  Unnamed: 4               object        34 (5%)  
+      6  Unnamed: 5               float64       29 (5%)  
+      7  Unnamed: 6               str          627 (99%)  
+      8  Unnamed: 7               str          606 (96%)  
+      9  Unnamed: 8               object       606 (96%)  
+     10  Unnamed: 9               object       606 (96%)  
+     11  Unnamed: 10              object       606 (96%)  
+     12  Unnamed: 11              object       606 (96%)  
+     13  Unnamed: 12              object       606 (96%)  
+     14  Unnamed: 13              object       606 (96%)  
+     15  Unnamed: 14              object       606 (96%)  
+     16  Unnamed: 15              object       606 (96%)  
+     17  Unnamed: 16              object       606 (96%)  
+     18  Unnamed: 17              object       606 (96%)  
+     19  Unnamed: 18              object       606 (96%)  
+  Aviso - columnas con MUCHOS vacios (>=30%), preguntar al cliente:
+     - Unnamed: 6: 99% vacio
+     - Unnamed: 7: 96% vacio
+     - Unnamed: 8: 96% vacio
+     - Unnamed: 9: 96% vacio
+     - Unnamed: 10: 96% vacio
+     - Unnamed: 11: 96% vacio
+     - Unnamed: 12: 96% vacio
+     - Unnamed: 13: 96% vacio
+     - Unnamed: 14: 96% vacio
+     - Unnamed: 15: 96% vacio
+     - Unnamed: 16: 96% vacio
+     - Unnamed: 17: 96% vacio
+     - Unnamed: 18: 96% vacio
+
+--------------------------------------------------------------------------
+HOJA: COMPILADO
+  VEREDICTO: FUENTE DE DATOS (revisar - 1 senal dudosa)
+     - 204 celdas combinadas (layout de reporte)
+  Dimensiones: 2393 filas x 28 columnas
+  Columnas:
+      #  NOMBRE                   TIPO           VACIOS  NOTAS
+      1  # MPIO                   object         8 (0%)  
+      2  DTTO                     float64        8 (0%)  
+      3  M  u  n  i  c  i  p  i   str            8 (0%)  casing inconsistente ej. [' San Miguel Chimalapa', 'San Miguel Chimalapa']
+      4  AÑO ELECCIÓN             float64        8 (0%)  
+      5  TOTAL DE CASILLAS        float64      1097 (46%)  
+      6  Lista
+Nominal            float64      1179 (49%)  
+      7  PAN                      float64      1171 (49%)  
+      8  PRD                      float64      1189 (50%)  
+      9  CONVER                   float64      1189 (50%)  
+     10  PT                       float64      1179 (49%)  
+     11  PRI                      float64      1189 (50%)  
+     12  PVEM                     float64      1189 (50%)  
+     13  PARMEO                   float64      1179 (49%)  
+     14  PUP                      float64      1180 (49%)  
+     15  PNA                      float64      1182 (49%)  
+     16  No 
+Reg.                 float64      1181 (49%)  
+     17  T.Votos
+Válidos          float64       60 (3%)  
+     18  Nulos                    float64      1175 (49%)  
+     19  V. Total
+Emitida         object        58 (2%)  
+     20  T. de
+Abst.              float64       59 (2%)  
+     21  % 
+Vot.                  float64      1181 (49%)  
+     22  % 
+Abst.                 float64      1181 (49%)  
+     23  GANADOR                  float64        9 (0%)  
+     24  PARTIDO                  str          2391 (100%)  
+     25  co pts                   float64      2393 (100%)  
+     26  partido                  float64      2393 (100%)  
+     27  prob part                float64      2393 (100%)  
+     28  %                        float64      2393 (100%)  
+  Aviso - columnas con MUCHOS vacios (>=30%), preguntar al cliente:
+     - TOTAL DE CASILLAS: 46% vacio
+     - Lista
+Nominal: 49% vacio
+     - PAN: 49% vacio
+     - PRD: 50% vacio
+     - CONVER: 50% vacio
+     - PT: 49% vacio
+     - PRI: 50% vacio
+     - PVEM: 50% vacio
+     - PARMEO: 49% vacio
+     - PUP: 49% vacio
+     - PNA: 49% vacio
+     - No 
+Reg.: 49% vacio
+     - Nulos: 49% vacio
+     - % 
+Vot.: 49% vacio
+     - % 
+Abst.: 49% vacio
+     - PARTIDO: 100% vacio
+     - co pts: 100% vacio
+     - partido: 100% vacio
+     - prob part: 100% vacio
+     - %: 100% vacio
+
+==========================================================================
+RESUMEN - que hago con cada hoja
+==========================================================================
+  [Fuentes de datos] importar 7: ['computo dttal', 'casillas anuladas TEEM', 'CONCENTRADO', 'MOVILIZACION', 'REPRESENTANTES', 'COMITÉ', 'COMPILADO']
+  [Pivotes/reportes] ignorar 0: []
+
+  Recordatorio: los vacios se quedan como NULL. Nunca los relleno
+  con '-' en el dato. El '-' es solo para el frontend, al final.
+
+--------------------------------------------------------------------------
+Reporte generado por Martin Cortes el 2026-07-11 10:23.

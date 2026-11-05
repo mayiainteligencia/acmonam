@@ -1,0 +1,34 @@
+{
+  "fuente": "ANALISIS.xlsx",
+  "hoja": "COMITÉ",
+  "header": 2,
+  "filas": 630,
+  "columnas": [
+    "DISTRITO",
+    "MUNICIPIO",
+    "REP. DE CASILLA",
+    "Unnamed: 3",
+    "REP. GENERALES",
+    "Unnamed: 5",
+    "Unnamed: 6",
+    "DISTRITOS",
+    "AÑO ELECCIÓN",
+    "TOTAL DE CASILLAS",
+    "LISTA NOMINAL",
+    "PAN",
+    "PRD",
+    "CONVER",
+    "PT",
+    "PRI",
+    "PVEM",
+    "PUP",
+    "PNA"
+  ],
+  "n_columnas": 19,
+  "generado": "2026-07-11 21:16",
+  "autor": "Martin Cortes",
+  "avisos": [
+    "filas totalmente vacias eliminadas: 1"
+  ],
+  "nota": "Los vacios se conservan como null. No se rellenan ni se corrigen datos."
+}

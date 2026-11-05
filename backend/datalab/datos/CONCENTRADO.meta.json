@@ -1,0 +1,15 @@
+{
+  "fuente": "ANALISIS.xlsx",
+  "hoja": "CONCENTRADO",
+  "header": 1,
+  "filas": 8,
+  "columnas": [
+    "CARGO",
+    "TOTAL"
+  ],
+  "n_columnas": 2,
+  "generado": "2026-07-11 21:15",
+  "autor": "Martin Cortes",
+  "avisos": [],
+  "nota": "Los vacios se conservan como null. No se rellenan ni se corrigen datos."
+}

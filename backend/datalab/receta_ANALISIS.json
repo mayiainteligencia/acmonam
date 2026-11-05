@@ -1,0 +1,21 @@
+{
+  "archivo": "uploads/ANALISIS.xlsx",
+  "_nota": "Receta de extraccion. Cada objeto en 'extracciones' produce un datos/<out>.json. Ajusta cols/desde/hasta/nombres segun la hoja. Los vacios se quedan como null; 'descartar_*' solo quita filas de ruido (totales, bandas de seccion), no toca datos.",
+  "extracciones": [
+    {
+      "hoja": "COMPILADO",
+      "out": "COMPILADO",
+      "_desc": "Tabla unica, header en fila 0: municipios de Oaxaca por anio con votos por partido."
+    },
+    {
+      "hoja": "COMITÉ",
+      "out": "COMITE_representantes",
+      "_desc": "Tabla IZQUIERDA de una hoja con 2 tablas: representantes y montos por municipio.",
+      "cols": "A:F",
+      "desde": 6,
+      "hasta": 626,
+      "nombres": ["distrito", "municipio", "rep_casilla", "importe_casilla", "rep_generales", "importe_generales"],
+      "descartar_si_vacio": ["distrito", "municipio"]
+    }
+  ]
+}

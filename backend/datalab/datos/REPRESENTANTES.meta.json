@@ -1,0 +1,23 @@
+{
+  "fuente": "ANALISIS.xlsx",
+  "hoja": "REPRESENTANTES",
+  "header": 2,
+  "filas": 48,
+  "columnas": [
+    "TOTAL DE CASILLAS",
+    "CASILLAS URBANAS",
+    "NO. REP. GRALES.",
+    "RURALES",
+    "REP. GRALES.",
+    "REP. GRALES..1",
+    "DIA DE LA JORNADA ELECTORAL",
+    "EFECTIVO"
+  ],
+  "n_columnas": 8,
+  "generado": "2026-07-11 21:16",
+  "autor": "Martin Cortes",
+  "avisos": [
+    "filas totalmente vacias eliminadas: 21"
+  ],
+  "nota": "Los vacios se conservan como null. No se rellenan ni se corrigen datos."
+}
