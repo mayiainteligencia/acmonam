@@ -70,6 +70,12 @@ const EMISORAS_PREDEFINIDAS = [
     url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/XHFOFMAAC_SC',
     imagen: '/assets/emisoras/disney.png',
   },
+  {
+    nombre: 'Alfa',
+    frecuencia: '91.3 FM',
+    url: 'https://playerservices.streamtheworld.com/api/livestream-redirect/XHFAJ_FMAAC_SC',
+    imagen: '/assets/emisoras/alfa913.png',
+  },
 ];
 
 export const TestigosIA = () => {
