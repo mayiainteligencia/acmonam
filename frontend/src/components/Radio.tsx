@@ -5,13 +5,14 @@ import { keyframes, Tabs, useIsMobile, inner } from './shared/ui';
 import { Waveform } from './shared/viz';
 import { ACENTO, CARD, D, Btn, GrupoLogo, Logo, Modulo, selDark, td, th } from './shared/dark';
 import { FONDO_TECH } from '../config/tema';
+import { AnalisisPauta } from './AnalisisPauta';
 import { TestigosIA, AudioTestigo, urlAudioTestigo, horaMX, type Testigo } from './TestigosIA';
 import { ESTACIONES, SPOTS_RADIO, GRUPOS_RADIO, colorGrupo, rnd, PLAZAS, type SpotRadio, type TipoRadio } from '../data/medios';
 
 const { colores } = brandingConfig;
 const ANUNCIANTE: Record<string, string> = { Aurora: 'Tiendas Aurora', Nuvo: 'Banco Nuvo', Valmar: 'Grupo Valmar', Nortia: 'Nortia Telecom', Vestia: 'Vestia Moda', Meridia: 'Grupo Meridia', Lumen: 'Lumen Salud', Cobalto: 'Cobalto Bebidas' };
 const COL_TIPO: Record<TipoRadio, string> = { 'Spot Regular': ACENTO, Patrocinio: '#3B82F6', Autopromocional: '#F59E0B' };
-const VISTAS = ['Panel de radio', 'Testigos IA · en vivo (real)'];
+const VISTAS = ['Panel de radio', 'Testigos IA · en vivo (real)', 'Análisis de Pauta'];
 const Etiqueta = ({ tipo }: { tipo: TipoRadio }) => (
   <span style={{ fontSize: 11.5, fontWeight: 700, padding: '3px 9px', borderRadius: 7, color: tipo === 'Spot Regular' ? D.txt : '#fff', background: tipo === 'Spot Regular' ? 'transparent' : COL_TIPO[tipo] }}>{tipo}</span>
 );
@@ -113,7 +114,7 @@ export const Radio = () => {
 
         <Tabs tabs={VISTAS} active={vista} onChange={setVista} />
 
-        {vista === VISTAS[1] ? <div style={{ margin: m ? '0 -16px' : '0 -30px', borderRadius: 16, overflow: 'hidden', background: colores.fondoPrincipal }}><TestigosIA /></div> : <>
+        {vista === VISTAS[2] ? <div style={{ margin: m ? '0 -16px' : '0 -30px', borderRadius: 16, overflow: 'hidden', background: colores.fondoPrincipal }}><AnalisisPauta /></div> : vista === VISTAS[1] ? <div style={{ margin: m ? '0 -16px' : '0 -30px', borderRadius: 16, overflow: 'hidden', background: colores.fondoPrincipal }}><TestigosIA /></div> : <>
           <div style={g2}>
             {/* Monitoreo en vivo */}
             <Modulo id="radio-vivo" title="Monitoreo en Vivo (Estaciones Activas)" right={<>

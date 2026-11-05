@@ -1,1 +1,3 @@
 backend/monitorsol/db/audio/
+backend/monitorsol/db/*.sqlite-shm
+backend/monitorsol/db/*.sqlite-wal

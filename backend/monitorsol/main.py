@@ -14,6 +14,7 @@ from db.testigos_repo import init_db
 from api.monitor_routes import router as monitor_router
 from api.websocket import router as ws_router
 from audio_testigos import router as audio_router  # tambien instala los hooks de audio
+from pauta import router as pauta_router  # Analisis de Pauta (aislado)
 
 
 @asynccontextmanager
@@ -36,6 +37,7 @@ app.add_middleware(
 app.include_router(monitor_router, prefix="/monitor")
 app.include_router(ws_router)
 app.include_router(audio_router, prefix="/monitor")
+app.include_router(pauta_router, prefix="/monitor")
 
 
 @app.get("/health")
