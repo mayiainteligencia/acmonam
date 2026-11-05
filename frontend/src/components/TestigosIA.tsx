@@ -509,6 +509,7 @@ export const TestigosIA = () => {
                       <p style={{ margin: 0, padding: '10px 14px', borderRadius: 10, background: colores.fondoSecundario, borderLeft: `3px solid ${colores.primarioVivo}`, fontSize: 13, lineHeight: 1.6, color: colores.textoMedio, fontStyle: 'italic' }}>
                         "{t.transcripcion}"
                       </p>
+                      <AudioTestigo t={t} />
                     </div>
                   )}
                 </div>
@@ -611,3 +612,30 @@ const chipStyle = (activo: boolean): React.CSSProperties => ({
   background: activo ? colores.primarioVivo : colores.fondoSecundario,
   color: activo ? '#FFFFFF' : colores.textoMedio
 });
+
+// Clip de audio del testigo (10 s antes + chunk + 10 s despues). Existe unos segundos
+// despues de la deteccion: se sondea con HEAD hasta que el backend lo tiene.
+const AudioTestigo = ({ t }: { t: Testigo }) => {
+  const url = t.id
+    ? `/api/monitor/testigos/${t.id}/audio`
+    : `/api/monitor/audio/${t.sesion_id}/${encodeURIComponent(t.timestamp)}`;
+  const [estado, setEstado] = useState<'preparando' | 'listo' | 'sin'>('preparando');
+  useEffect(() => {
+    let vivo = true, intentos = 0, timer: ReturnType<typeof setTimeout>;
+    const reciente = Date.now() - new Date(t.timestamp).getTime() < 2 * 60_000;
+    const probar = async () => {
+      try {
+        if ((await fetch(url, { method: 'HEAD' })).ok) return vivo && setEstado('listo');
+      } catch {}
+      if (!vivo) return;
+      // detecciones viejas (o sin sesion_id) no tienen clip: no sondear para siempre
+      if (!reciente || ++intentos >= 24) return setEstado('sin');
+      timer = setTimeout(probar, 5000);
+    };
+    probar();
+    return () => { vivo = false; clearTimeout(timer); };
+  }, [url]);
+  const nota: React.CSSProperties = { margin: '8px 0 0', fontSize: 12, color: colores.textoOscuro };
+  if (estado === 'listo') return <audio controls preload="none" src={url} style={{ width: '100%', marginTop: 8 }} />;
+  return <p style={nota}>{estado === 'preparando' ? '⏳ Preparando audio… (disponible unos segundos después de la detección)' : 'Sin audio para esta detección'}</p>;
+};
