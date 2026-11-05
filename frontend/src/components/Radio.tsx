@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Download, Filter, Pause, Play, RefreshCw, SkipForward, Volume2, Radio as RadioIcon } from 'lucide-react';
+import { Download, Filter, Play, RefreshCw, Radio as RadioIcon } from 'lucide-react';
 import { brandingConfig } from '../config/branding';
 import { keyframes, Tabs, useIsMobile, inner } from './shared/ui';
 import { Waveform } from './shared/viz';
 import { ACENTO, CARD, D, Btn, GrupoLogo, Logo, Modulo, selDark, td, th } from './shared/dark';
 import { FONDO_TECH } from '../config/tema';
-import { TestigosIA } from './TestigosIA';
+import { TestigosIA, AudioTestigo, urlAudioTestigo, horaMX, type Testigo } from './TestigosIA';
 import { ESTACIONES, SPOTS_RADIO, GRUPOS_RADIO, colorGrupo, rnd, PLAZAS, type SpotRadio, type TipoRadio } from '../data/medios';
 
 const { colores } = brandingConfig;
@@ -31,10 +31,9 @@ export const Radio = () => {
   const [grupo, setGrupo] = useState('Todos');
   const [csvGrupo, setCsvGrupo] = useState(false);
   const [menciones, setMenciones] = useState<TipoRadio[]>(['Patrocinio', 'Autopromocional']);
-  const [sel, setSel] = useState(0);
-  const [playing, setPlaying] = useState(true);
-  const [prog, setProg] = useState(34);
-  const [vol, setVol] = useState(70);
+  const [testigosAudio, setTestigosAudio] = useState<Testigo[]>([]);
+  const [selAudio, setSelAudio] = useState(0);
+  const [msgAudio, setMsgAudio] = useState('');
   const [rGrupo, setRGrupo] = useState('Todos');
 
   // Los ítems del submenú lateral disparan este evento para ir a un módulo.
@@ -47,11 +46,13 @@ export const Radio = () => {
     window.addEventListener('seccion:goto', h);
     return () => window.removeEventListener('seccion:goto', h);
   }, []);
+  // Módulo 4: testigos reales (mismo endpoint que TestigosIA), se refresca cada 10 s.
   useEffect(() => {
-    if (!playing) return;
-    const t = setInterval(() => setProg(p => (p >= 100 ? 0 : p + 1)), 400);
+    const cargar = () => fetch('/api/monitor/testigos').then(r => r.json()).then(d => setTestigosAudio(d.testigos || [])).catch(() => {});
+    cargar();
+    const t = setInterval(cargar, 10000);
     return () => clearInterval(t);
-  }, [playing]);
+  }, []);
 
   const activas = ESTACIONES.filter(e => e.activa);
   const vivo = useMemo(() => {
@@ -60,8 +61,18 @@ export const Radio = () => {
   }, [rot]);
   const regulares = SPOTS_RADIO.filter(s => s.tipo === 'Spot Regular' && (grupo === 'Todos' || s.grupo === grupo));
   const especiales = SPOTS_RADIO.filter(s => s.tipo !== 'Spot Regular' && menciones.includes(s.tipo));
-  const audios = SPOTS_RADIO.slice(0, 6);
-  const actual = audios[sel];
+  const recientes = testigosAudio.slice(0, 6);
+  const actual = recientes[Math.min(selAudio, recientes.length - 1)];
+  const descargar = async (t: Testigo) => {
+    try {
+      const r = await fetch(urlAudioTestigo(t));
+      if (!r.ok) return setMsgAudio('El audio aún no está listo; intenta en unos segundos.');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(await r.blob());
+      a.download = `testigo_${t.keyword_detectada ?? t.keyword ?? 'audio'}_${t.id ?? Date.now()}.wav`.replace(/[^\w.-]+/g, '_');
+      a.click(); URL.revokeObjectURL(a.href); setMsgAudio('');
+    } catch { setMsgAudio('No se pudo descargar el audio.'); }
+  };
   const rRows = SPOTS_RADIO.filter(s => rGrupo === 'Todos' || s.grupo === rGrupo);
   const topMarcas = contar(rRows, 'marca').slice(0, 3);
   const topCats = contar(rRows, 'categoria').slice(0, 3);
@@ -179,24 +190,28 @@ export const Radio = () => {
                 ))}</tbody></table></div>
             </Modulo>
 
-            {/* Módulo 4 */}
+            {/* Módulo 4: datos reales (GET /api/monitor/testigos + clips de audio) */}
             <Modulo id="radio-audio" title="MÓDULO 4: Testigos de Audio (Reproductor + Histórico)">
-              <div style={{ fontSize: 13, color: D.sub, marginBottom: 8 }}>Reproduciendo: <span style={{ color: D.txt, fontWeight: 600 }}>Spot - {actual.marca} ({actual.estacion}) - {seg(actual, sel)}</span></div>
-              <div style={{ background: 'rgba(255, 255, 255, 0.04)', border: `1px solid ${D.fila}`, borderRadius: 12, padding: 12, marginBottom: 10 }}>
-                <Waveform seed={sel + 60} color={ACENTO} bars={70} height={64} />
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '12px 0' }}>
-                <button onClick={() => setPlaying(p => !p)} aria-label={playing ? 'Pausar' : 'Reproducir'} style={{ width: 42, height: 42, borderRadius: '50%', border: `1px solid ${ACENTO}`, background: 'rgba(56, 189, 248, 0.2)', color: '#38BDF8', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>{playing ? <Pause size={18} /> : <Play size={18} />}</button>
-                <button onClick={() => { setSel(s => (s + 1) % audios.length); setProg(0); }} aria-label="Siguiente" style={{ background: 'none', border: 'none', color: D.txt, cursor: 'pointer' }}><SkipForward size={18} /></button>
-                <input type="range" min={0} max={100} value={prog} onChange={e => setProg(+e.target.value)} style={{ flex: 1, accentColor: ACENTO, minWidth: 0 }} />
-                <Volume2 size={17} color={D.sub} /><input type="range" min={0} max={100} value={vol} onChange={e => setVol(+e.target.value)} style={{ width: 60, accentColor: ACENTO }} />
-              </div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}><Btn><Download size={14} /> Descargar Audio (.mp3)</Btn><Btn>Ver Histórico de Audio</Btn></div>
-              <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>Audios recientes listos para reproducir</div>
-              {audios.slice(0, 3).map((s, i) => (
-                <button key={i} onClick={() => { setSel(i); setPlaying(true); setProg(0); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '8px 4px', background: 'none', border: 'none', borderTop: `1px solid ${D.fila}`, color: i === sel ? ACENTO : D.txt, fontWeight: i === sel ? 700 : 500, fontSize: 12.5, cursor: 'pointer', textAlign: 'left' }}>
-                  <Play size={12} fill="currentColor" /> Spot - {s.marca} ({s.estacion}) - {seg(s, i)}</button>
-              ))}
+              <style>{'@keyframes ondaPulso{0%,100%{opacity:.5}50%{opacity:1}}'}</style>
+              {!actual ? (
+                <div style={{ color: D.sub, fontSize: 13, padding: 12 }}>Sin testigos todavía. Inicia una sesión en “Testigos IA · en vivo (real)”.</div>
+              ) : <>
+                <div style={{ fontSize: 13, color: D.sub, marginBottom: 8 }}>Reproduciendo: <span style={{ color: D.txt, fontWeight: 600 }}>{actual.keyword_detectada ?? actual.keyword} ({actual.emisora_nombre ?? actual.emisora}) - {horaMX(actual.timestamp)}</span></div>
+                <div style={{ background: 'rgba(255, 255, 255, 0.04)', border: `1px solid ${D.fila}`, borderRadius: 12, padding: 12, marginBottom: 10, animation: 'ondaPulso 1.6s ease-in-out infinite' }}>
+                  <Waveform seed={(actual.id ?? selAudio) + 60} color={ACENTO} bars={70} height={64} />
+                </div>
+                <AudioTestigo key={urlAudioTestigo(actual)} t={actual} />
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '12px 0' }}>
+                  <Btn onClick={() => descargar(actual)}><Download size={14} /> Descargar Audio (.wav)</Btn>
+                  <button disabled title="Próximamente" style={{ padding: '7px 13px', borderRadius: 9, fontSize: 12.5, fontWeight: 600, color: D.sub, background: 'transparent', border: `1px solid ${D.borde}`, opacity: 0.45, cursor: 'not-allowed' }}>Ver Histórico de Audio</button>
+                </div>
+                {msgAudio && <div style={{ fontSize: 12.5, color: '#FCA5A5', marginBottom: 8 }}>{msgAudio}</div>}
+                <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>Audios recientes</div>
+                {recientes.map((t, i) => (
+                  <button key={t.id ?? i} onClick={() => { setSelAudio(i); setMsgAudio(''); }} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '8px 4px', background: 'none', border: 'none', borderBottom: `1px solid ${D.fila}`, color: i === selAudio ? ACENTO : D.txt, fontWeight: i === selAudio ? 700 : 400, fontSize: 13, cursor: 'pointer', textAlign: 'left' }}>
+                    <Play size={12} fill="currentColor" /> {t.keyword_detectada ?? t.keyword} ({t.emisora_nombre ?? t.emisora}) - {horaMX(t.timestamp)}</button>
+                ))}
+              </>}
             </Modulo>
 
             {/* Módulo 5 */}

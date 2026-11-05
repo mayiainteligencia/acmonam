@@ -1,5 +1,11 @@
 # Reconstruido desde main.pyc (identico) + endpoint /monitor/config para exponer MAX_SESIONES.
 # Python prefiere este .py sobre main.pyc; borrar este archivo restaura el original.
+import os, time
+# Las marcas de tiempo (datetime.now) salen en hora de Mexico aunque el servidor este en UTC.
+os.environ["TZ"] = "America/Mexico_City"
+if hasattr(time, "tzset"):
+    time.tzset()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager

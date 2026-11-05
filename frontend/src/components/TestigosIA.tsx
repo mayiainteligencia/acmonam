@@ -5,6 +5,14 @@ import { Search, RotateCcw, Radio, ChevronDown, ChevronUp, ChevronLeft, ChevronR
 
 const { colores } = brandingConfig;
 
+// El backend manda ISO sin zona (hora de su servidor, fijada a Mexico en main.py).
+// Mexico no tiene horario de verano desde 2022 -> offset fijo -06:00.
+const TZ_MX = 'America/Mexico_City';
+export const fechaTestigo = (ts: string) => new Date(/(Z|[+-]\d\d:?\d\d)$/i.test(ts) ? ts : `${ts}-06:00`);
+export const horaMX = (ts: string, segundos = true) =>
+  fechaTestigo(ts).toLocaleTimeString('es-MX', { timeZone: TZ_MX, hour: '2-digit', minute: '2-digit', ...(segundos && { second: '2-digit' }) });
+const diaMX = (d: Date) => d.toLocaleDateString('en-CA', { timeZone: TZ_MX });
+
 // REST y WebSocket van por el proxy de Vite (/api/monitor y /ws), asi que el
 // mismo origen sirve en local y detras de un tunel.
 const WS_BASE = import.meta.env.VITE_MONITOR_WS_URL ??
@@ -20,7 +28,7 @@ interface Sesion {
   total_detecciones: number;
 }
 
-interface Testigo {
+export interface Testigo {
   id?: number;
   sesion_id?: string;
   emisora_nombre?: string;
@@ -213,8 +221,8 @@ export const TestigosIA = () => {
     if (tipoFiltro !== 'todos' && (tipoFiltro === 'marca') !== esMarca(kw)) return false;
     return !q || `${kw} ${t.emisora_nombre ?? t.emisora ?? ''} ${t.transcripcion ?? ''}`.toLowerCase().includes(q);
   });
-  const hoy = new Date().toDateString();
-  const testigosHoy = testigos.filter(t => new Date(t.timestamp).toDateString() === hoy).length;
+  const hoy = diaMX(new Date());
+  const testigosHoy = testigos.filter(t => diaMX(fechaTestigo(t.timestamp)) === hoy).length;
   const ultima = testigos[0];
 
   // ── Emisoras: carrusel horizontal ────────────────────────────────
@@ -491,7 +499,7 @@ export const TestigosIA = () => {
                 <div key={key} style={{ borderTop: `1px solid ${colores.borde}`, animation: 'fadeIn 0.3s ease' }}>
                   <div onClick={() => setExpandidos(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n; })}
                     style={{ display: 'grid', gridTemplateColumns: cols, gap: 8, padding: '12px 14px', alignItems: 'center', cursor: 'pointer', fontSize: 13, color: colores.textoMedio }}>
-                    <span>{new Date(t.timestamp).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+                    <span>{horaMX(t.timestamp)}</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
                       <span style={{ width: 28, height: 28, borderRadius: 8, background: colores.textoClaro, color: colores.textoEnOscuro, fontWeight: 700, fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         {kw.slice(0, 1).toUpperCase()}
@@ -553,7 +561,7 @@ export const TestigosIA = () => {
           {[
             { label: 'Estaciones activas', valor: `${sesiones.length} / ${maxSesiones ?? '…'}`, color: colores.primarioVivo, Icono: Radio },
             { label: 'Testigos hoy', valor: String(testigosHoy), color: '#A78BFA', Icono: Activity },
-            { label: 'Última detección', valor: ultima ? new Date(ultima.timestamp).toLocaleTimeString('es-MX') : '—', color: '#34D399', Icono: Clock },
+            { label: 'Última detección', valor: ultima ? horaMX(ultima.timestamp) : '—', color: '#34D399', Icono: Clock },
           ].map(k => (
             <div key={k.label} style={{ ...cardStyle, flex: '1 1 180px', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px' }}>
               <div style={{ width: 40, height: 40, borderRadius: 10, background: `${k.color}26`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -615,14 +623,16 @@ const chipStyle = (activo: boolean): React.CSSProperties => ({
 
 // Clip de audio del testigo (10 s antes + chunk + 10 s despues). Existe unos segundos
 // despues de la deteccion: se sondea con HEAD hasta que el backend lo tiene.
-const AudioTestigo = ({ t }: { t: Testigo }) => {
-  const url = t.id
-    ? `/api/monitor/testigos/${t.id}/audio`
-    : `/api/monitor/audio/${t.sesion_id}/${encodeURIComponent(t.timestamp)}`;
+export const urlAudioTestigo = (t: Testigo) => t.id
+  ? `/api/monitor/testigos/${t.id}/audio`
+  : `/api/monitor/audio/${t.sesion_id}/${encodeURIComponent(t.timestamp)}`;
+
+export const AudioTestigo = ({ t }: { t: Testigo }) => {
+  const url = urlAudioTestigo(t);
   const [estado, setEstado] = useState<'preparando' | 'listo' | 'sin'>('preparando');
   useEffect(() => {
     let vivo = true, intentos = 0, timer: ReturnType<typeof setTimeout>;
-    const reciente = Date.now() - new Date(t.timestamp).getTime() < 2 * 60_000;
+    const reciente = Date.now() - fechaTestigo(t.timestamp).getTime() < 2 * 60_000;
     const probar = async () => {
       try {
         if ((await fetch(url, { method: 'HEAD' })).ok) return vivo && setEstado('listo');
