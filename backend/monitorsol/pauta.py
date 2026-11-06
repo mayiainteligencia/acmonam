@@ -215,9 +215,9 @@ def cumplimiento(lote_id: str | None = None, semana: str | None = None):
     ini = min(p["semana"] for p in pautas)
     fin = (date.fromisoformat(max(p["semana"] for p in pautas)) + timedelta(days=7)).isoformat()
     with _db_ro() as c:
-        tests = c.execute("SELECT emisora_nombre, keyword_detectada, timestamp FROM testigos WHERE timestamp >= ? AND timestamp < ?",
+        tests = c.execute("SELECT id, sesion_id, emisora_nombre, keyword_detectada, transcripcion, timestamp FROM testigos WHERE timestamp >= ? AND timestamp < ?",
                           (ini, fin)).fetchall()
-    tests = [(t["emisora_nombre"], (t["keyword_detectada"] or "").strip().lower(), datetime.fromisoformat(t["timestamp"][:19])) for t in tests]
+    tests = [(t["emisora_nombre"], (t["keyword_detectada"] or "").strip().lower(), datetime.fromisoformat(t["timestamp"][:19]), t) for t in tests]
 
     hoy, lineas = datetime.now(), []
     for p in pautas:
@@ -226,8 +226,9 @@ def cumplimiento(lote_id: str | None = None, semana: str | None = None):
         dias = _dias_set(p["dias"])
         kws = {k for k in p["keywords"].split(",") if k}
         en_semana = [t for t in tests if d0 <= t[2] < d1 and _misma_estacion(p["estacion"], t[0])]
-        det = sum(1 for n, k, ts in en_semana
-                  if ts.weekday() in dias and p["horario_inicio"] <= ts.strftime("%H:%M") < p["horario_fin"] and (not kws or k in kws))
+        hits = [t for n, k, ts, t in en_semana
+                if ts.weekday() in dias and p["horario_inicio"] <= ts.strftime("%H:%M") < p["horario_fin"] and (not kws or k in kws)]
+        det = len(hits)
         if det >= p["requerido"]:
             est = "cumplido"
         elif det > 0:
@@ -239,7 +240,10 @@ def cumplimiento(lote_id: str | None = None, semana: str | None = None):
         lineas.append(dict(id=p["id"], lote_id=p["lote_id"], marca=p["marca"], estacion=p["estacion"],
                            horario_inicio=p["horario_inicio"], horario_fin=p["horario_fin"], dias=p["dias"],
                            programa=p["programa"], formato=p["formato"], semana=p["semana"],
-                           requerido=p["requerido"], detectado=det, estado=est))
+                           requerido=p["requerido"], detectado=det, estado=est,
+                           detecciones=[dict(id=t["id"], sesion_id=t["sesion_id"], emisora_nombre=t["emisora_nombre"],
+                                             keyword_detectada=t["keyword_detectada"], transcripcion=t["transcripcion"],
+                                             timestamp=t["timestamp"]) for t in hits]))
     resumen = {e: sum(1 for l in lineas if l["estado"] == e) for e in ("cumplido", "parcial", "incumplido", "sin_datos")}
     with _db() as c:
         todas = [r[0] for r in c.execute("SELECT DISTINCT semana FROM pautas WHERE activa=1 ORDER BY semana")]
