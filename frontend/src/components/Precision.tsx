@@ -35,8 +35,8 @@ const Medidor = ({ value, ok, id }: { value: number; ok: boolean; id: string }) 
     <svg viewBox="0 0 260 150" style={{ width: '100%', maxWidth: 235 }}>
       <defs>
         <linearGradient id={g} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor={ok ? '#0284C7' : '#B45309'} />
-          <stop offset="100%" stopColor={ok ? '#38BDF8' : '#FBBF24'} />
+          <stop offset="0%" stopColor={ok ? '#729013' : '#B45309'} />
+          <stop offset="100%" stopColor={ok ? '#DBF285' : '#FBBF24'} />
         </linearGradient>
         <filter id={`${g}-glow`} x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" /></filter>
         <radialGradient id={`${g}-bg`} cx="50%" cy="100%" r="70%"><stop offset="0%" stopColor={col} stopOpacity=".16" /><stop offset="100%" stopColor={col} stopOpacity="0" /></radialGradient>
@@ -47,13 +47,13 @@ const Medidor = ({ value, ok, id }: { value: number; ok: boolean; id: string }) 
       <path d="M30 130 A100 100 0 0 1 230 130" fill="none" stroke="rgba(255, 255, 255, 0.12)" strokeWidth={11} strokeLinecap="round" />
       <path d="M30 130 A100 100 0 0 1 230 130" fill="none" stroke={col} strokeOpacity={.4} strokeWidth={11} strokeLinecap="round" strokeDasharray={`${C * value / 100} ${C}`} filter={`url(#${g}-glow)`} />
       <path d="M30 130 A100 100 0 0 1 230 130" fill="none" stroke={`url(#${g})`} strokeWidth={11} strokeLinecap="round" strokeDasharray={`${C * value / 100} ${C}`} />
-      <circle cx={ex} cy={ey} r={6.5} fill="#0284C7" stroke="#fff" strokeWidth={2.5} />
+      <circle cx={ex} cy={ey} r={6.5} fill="#729013" stroke="#fff" strokeWidth={2.5} />
       {/* Marcador de meta contractual */}
       <line x1={m1x} y1={m1y} x2={m2x} y2={m2y} stroke="#EF4444" strokeWidth={1.8} strokeDasharray="2 2" opacity={.9} />
-      <text x={24} y={146} fontSize={10} fill="#94A3B8" fontWeight={600}>0</text>
-      <text x={236} y={146} fontSize={10} textAnchor="end" fill="#94A3B8" fontWeight={600}>100</text>
+      <text x={24} y={146} fontSize={10} fill="#9CA3AF" fontWeight={600}>0</text>
+      <text x={236} y={146} fontSize={10} textAnchor="end" fill="#9CA3AF" fontWeight={600}>100</text>
       <text x={130} y={100} textAnchor="middle" fontSize={40} fontWeight={800} fill={col} style={{ letterSpacing: '-1px' }}>{value}%</text>
-      <text x={130} y={122} textAnchor="middle" fontSize={13} fontWeight={600} fill="#CBD5E1">de Precisión</text>
+      <text x={130} y={122} textAnchor="middle" fontSize={13} fontWeight={600} fill="#D1D5DB">de Precisión</text>
     </svg>
   );
 };
@@ -99,7 +99,7 @@ export const Precision = () => {
               <Modulo key={p.id} title={`MÓDULO ${i + 1}: ${p.medio.toUpperCase()}`}>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: '100%', justifyContent: 'space-between' }}>
                   <Medidor value={p.actual} ok={ok} id={p.id} />
-                  <div style={{ color: ok ? '#38BDF8' : colores.advertencia, fontSize: 14, fontWeight: 700, marginTop: 4 }}>
+                  <div style={{ color: ok ? '#DBF285' : colores.advertencia, fontSize: 14, fontWeight: 700, marginTop: 4 }}>
                     {ok ? `Meta del ${META_PRECISION}% cumplida` : `${(META_PRECISION - p.actual).toFixed(1)} pts bajo la meta`}
                   </div>
                   <div style={{ marginTop: 12, minHeight: 46, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -119,17 +119,17 @@ export const Precision = () => {
             <div style={{ height: 215 }}><ResponsiveContainer>
               <ComposedChart data={DIAS} margin={{ top: 10, right: 12, left: -10, bottom: 0 }}>
                 <defs>
-                  <linearGradient id="tend-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#0284C7" stopOpacity={.3} /><stop offset="100%" stopColor="#0284C7" stopOpacity={0} /></linearGradient>
-                  <linearGradient id="tend-bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#38BDF8" stopOpacity={.7} /><stop offset="100%" stopColor="#38BDF8" stopOpacity={.15} /></linearGradient>
+                  <linearGradient id="tend-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#729013" stopOpacity={.3} /><stop offset="100%" stopColor="#729013" stopOpacity={0} /></linearGradient>
+                  <linearGradient id="tend-bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#DBF285" stopOpacity={.7} /><stop offset="100%" stopColor="#DBF285" stopOpacity={.15} /></linearGradient>
                 </defs>
                 <CartesianGrid stroke="rgba(255, 255, 255, 0.08)" strokeDasharray="2 4" vertical={false} />
                 <XAxis dataKey="d" tick={{ fill: D.sub, fontSize: 11 }} interval={3} axisLine={false} tickLine={false} />
                 <YAxis domain={[96, 99]} ticks={[96, 97, 98, 99]} tickFormatter={v => `${v}%`} tick={{ fill: D.sub, fontSize: 11 }} width={42} axisLine={false} tickLine={false} />
-                <Tooltip cursor={{ stroke: 'rgba(56, 189, 248, 0.4)', strokeDasharray: '3 3', fill: 'transparent' }} contentStyle={{ background: '#101F38', border: `1px solid ${D.borde}`, borderRadius: 10, fontSize: 12, color: '#FFFFFF', boxShadow: '0 8px 24px rgba(0,0,0,0.45)' }} labelStyle={{ color: D.sub }} formatter={v => [`${v}%`, 'Precisión']} />
+                <Tooltip cursor={{ stroke: 'rgba(219, 242, 133, 0.4)', strokeDasharray: '3 3', fill: 'transparent' }} contentStyle={{ background: '#0A170E', border: `1px solid ${D.borde}`, borderRadius: 10, fontSize: 12, color: '#FFFFFF', boxShadow: '0 8px 24px rgba(0,0,0,0.45)' }} labelStyle={{ color: D.sub }} formatter={v => [`${v}%`, 'Precisión']} />
                 <ReferenceLine y={META_PRECISION} stroke="#EF4444" strokeDasharray="5 4" strokeOpacity={.85} label={{ value: `Meta ${META_PRECISION}%`, fill: '#EF4444', fontSize: 10.5, position: 'insideTopRight' }} />
                 <Bar dataKey="v" name="Precisión" fill="url(#tend-bar)" barSize={5} radius={[3, 3, 0, 0]} isAnimationActive={false} />
                 <Area dataKey="v" type="monotone" stroke="none" fill="url(#tend-area)" isAnimationActive={false} />
-                <Line dataKey="v" type="monotone" stroke="#38BDF8" strokeWidth={2.4} dot={false} activeDot={{ r: 4.5, fill: '#fff', stroke: '#0284C7', strokeWidth: 2 }} />
+                <Line dataKey="v" type="monotone" stroke="#DBF285" strokeWidth={2.4} dot={false} activeDot={{ r: 4.5, fill: '#fff', stroke: '#729013', strokeWidth: 2 }} />
               </ComposedChart></ResponsiveContainer></div>
           </Modulo>
 
@@ -146,8 +146,8 @@ export const Precision = () => {
             <div style={{ marginTop: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
               <Btn onClick={exportar}><Download size={14} /> Descargar Reporte de Precisión</Btn>
               <svg viewBox="0 0 90 90" width={64} style={{ opacity: .85 }} aria-label="Sello de auditoría">
-                <circle cx={45} cy={45} r={42} fill="none" stroke="#64748B" strokeWidth={1.5} strokeDasharray="3 2" /><circle cx={45} cy={45} r={33} fill="none" stroke="#64748B" strokeWidth={1} />
-                <text x={45} y={42} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#CBD5E1">Auditoría Interna</text><text x={45} y={53} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#38BDF8">& IA - ACAM</text>
+                <circle cx={45} cy={45} r={42} fill="none" stroke="#6B7280" strokeWidth={1.5} strokeDasharray="3 2" /><circle cx={45} cy={45} r={33} fill="none" stroke="#6B7280" strokeWidth={1} />
+                <text x={45} y={42} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#D1D5DB">Auditoría Interna</text><text x={45} y={53} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#DBF285">& IA - ACAM</text>
               </svg>
             </div>
           </Modulo>
@@ -174,11 +174,11 @@ export const Precision = () => {
                     <td style={{ ...td, whiteSpace: 'nowrap', color: D.sub }}>{b.f}</td>
                     <td style={{ ...td, whiteSpace: 'nowrap', fontWeight: 600 }}>{b.medio}</td>
                     <td style={{ ...td, whiteSpace: 'nowrap', color: '#FFFFFF', fontWeight: 500 }}>{b.canal}</td>
-                    <td style={{ ...td, color: '#CBD5E1' }}>{b.ia}</td>
-                    <td style={{ ...td, color: '#94A3B8' }}>{b.hum}</td>
-                    <td style={{ ...td, color: b.res.includes('Ajustado') ? colores.advertencia : '#38BDF8', fontWeight: 600 }}>{b.res}</td>
+                    <td style={{ ...td, color: '#D1D5DB' }}>{b.ia}</td>
+                    <td style={{ ...td, color: '#9CA3AF' }}>{b.hum}</td>
+                    <td style={{ ...td, color: b.res.includes('Ajustado') ? colores.advertencia : '#DBF285', fontWeight: 600 }}>{b.res}</td>
                     <td style={{ ...td, textAlign: 'center', whiteSpace: 'nowrap' }}>
-                      <span style={{ background: 'linear-gradient(135deg, #0284C7, #0369A1)', color: '#fff', fontWeight: 700, fontSize: 11.5, padding: '4px 12px', borderRadius: 6, boxShadow: '0 2px 8px rgba(2, 132, 199, 0.35)', whiteSpace: 'nowrap', display: 'inline-block' }}>Verificado</span>
+                      <span style={{ background: 'linear-gradient(135deg, #729013, #5B7410)', color: '#fff', fontWeight: 700, fontSize: 11.5, padding: '4px 12px', borderRadius: 6, boxShadow: '0 2px 8px rgba(114, 144, 19, 0.35)', whiteSpace: 'nowrap', display: 'inline-block' }}>Verificado</span>
                     </td>
                   </tr>
                 ))}

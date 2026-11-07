@@ -1,0 +1,147 @@
+.login-page {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+  isolation: isolate;
+}
+
+.smokey-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+.login-back {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--pub-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.login-back:hover { color: var(--pub-accent); }
+
+.login-card {
+  width: 100%;
+  max-width: 24rem;
+  padding: 2rem;
+  display: grid;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+.login-card__header { text-align: center; }
+.login-card__header h1 { font-size: 1.875rem; font-weight: 700; color: #fff; }
+.login-card__header p { margin-top: 0.5rem; font-size: 0.875rem; color: #d1d5db; }
+
+.login-form { display: grid; gap: 2rem; }
+
+.float-field { position: relative; z-index: 0; }
+.float-field input {
+  display: block;
+  width: 100%;
+  padding: 0.625rem 0;
+  font-size: 0.875rem;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid #d1d5db;
+  appearance: none;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.float-field input:focus { border-bottom-color: var(--pub-accent); outline: none; }
+.float-field label {
+  position: absolute;
+  top: 0.75rem;
+  left: 0;
+  z-index: -1;
+  font-size: 0.875rem;
+  color: #d1d5db;
+  transform-origin: 0 0;
+  transition: transform 0.3s, color 0.3s;
+  pointer-events: none;
+}
+.float-field label svg { display: inline-block; margin: -0.25rem 0.5rem 0 0; vertical-align: middle; }
+.float-field input:focus + label,
+.float-field input:not(:placeholder-shown) + label {
+  transform: translateY(-1.5rem) scale(0.75);
+}
+.float-field input:focus + label { color: var(--pub-accent); }
+
+.login-form__aux { display: flex; justify-content: space-between; }
+.login-link-muted { font-size: 0.75rem; color: #d1d5db; text-decoration: none; transition: color 0.2s; }
+.login-link-muted:hover { color: #fff; }
+
+.login-error {
+  padding: 0.6rem 0.75rem;
+  font-size: 0.8rem;
+  color: #fecaca;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 0.5rem;
+}
+
+.login-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  color: var(--pub-bg);
+  background: var(--pub-accent);
+  border: 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+.login-submit:hover:not(:disabled) { background: var(--pub-accent-bright); box-shadow: 0 0 24px rgba(219, 242, 133, 0.35); }
+.login-submit:hover:not(:disabled) svg { transform: translateX(4px); }
+.login-submit svg { transition: transform 0.3s; }
+.login-submit:disabled { opacity: 0.7; cursor: progress; }
+
+.login-divider { display: flex; align-items: center; gap: 1rem; padding: 0.5rem 0; }
+.login-divider::before,
+.login-divider::after { content: ''; flex: 1; border-top: 1px solid rgba(156, 163, 175, 0.3); }
+.login-divider span { font-size: 0.7rem; color: #9ca3af; }
+
+.login-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  font-weight: 600;
+  color: #374151;
+  background: rgba(255, 255, 255, 0.9);
+  border: 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.login-google:hover:not(:disabled) { background: #fff; }
+.login-google:disabled { opacity: 0.55; cursor: not-allowed; }
+.login-google-icon { width: 1.25rem; height: 1.25rem; }
+
+.login-card__footer { text-align: center; font-size: 0.75rem; color: #9ca3af; }
+.login-link-accent { font-weight: 600; color: var(--pub-accent); text-decoration: none; transition: color 0.2s; }
+.login-link-accent:hover { color: var(--pub-accent-bright); }
+

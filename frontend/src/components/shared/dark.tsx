@@ -5,24 +5,24 @@ import { brandingConfig } from '../../config/branding';
 import { Avatar } from './viz';
 
 const { colores } = brandingConfig;
-export const ACENTO = '#38BDF8'; // Azul celeste / cian luminoso para resaltar sobre azul oscuro
+export const ACENTO = '#DBF285'; // Verde lima luminoso para resaltar sobre fondo oscuro
 export const D = { 
-  bg: '#101F38', 
-  borde: 'rgba(56, 189, 248, 0.18)', 
+  bg: '#0A170E', 
+  borde: 'rgba(219, 242, 133, 0.18)', 
   fila: 'rgba(255, 255, 255, 0.07)', 
   txt: '#FFFFFF', 
-  sub: '#94A3B8' 
+  sub: '#9CA3AF' 
 };
-export const CARD = 'linear-gradient(180deg, #132442 0%, #0E1A30 100%)';
+export const CARD = 'linear-gradient(180deg, #0F1F14 0%, #0A170E 100%)';
 export const th: React.CSSProperties = { 
   textAlign: 'left', 
   fontSize: 11.5, 
   fontWeight: 700, 
-  color: '#94A3B8', 
+  color: '#9CA3AF', 
   textTransform: 'uppercase', 
   letterSpacing: '.05em', 
   padding: '12px 14px', 
-  borderBottom: `1px solid rgba(56, 189, 248, 0.16)`, 
+  borderBottom: `1px solid rgba(219, 242, 133, 0.16)`, 
   backgroundColor: 'rgba(255, 255, 255, 0.03)',
   lineHeight: 1.3,
   whiteSpace: 'nowrap'
@@ -38,8 +38,8 @@ export const td: React.CSSProperties = {
 export const selDark: React.CSSProperties = { 
   padding: '7px 11px', 
   borderRadius: 9, 
-  border: `1px solid rgba(56, 189, 248, 0.3)`, 
-  background: '#0B1528', 
+  border: `1px solid rgba(219, 242, 133, 0.3)`, 
+  background: '#0A170E', 
   color: '#FFFFFF', 
   fontSize: 12.5, 
   colorScheme: 'dark',
@@ -52,7 +52,7 @@ export const slug = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀
 export const Logo = ({ nombre, color, size = 44 }: { nombre: string; color: string; size?: number }) => {
   const [ok, setOk] = useState(true);
   return ok
-    ? <img src={`/assets/emisoras/${slug(nombre)}.png`} alt={nombre} onError={() => setOk(false)} style={{ width: size, height: size, objectFit: 'contain', background: '#fff', borderRadius: 10, padding: 3, border: '1px solid #E2E8F0', flexShrink: 0 }} />
+    ? <img src={`/assets/emisoras/${slug(nombre)}.png`} alt={nombre} onError={() => setOk(false)} style={{ width: size, height: size, objectFit: 'contain', background: '#fff', borderRadius: 10, padding: 3, border: '1px solid #E5E7EB', flexShrink: 0 }} />
     : <Avatar name={nombre} color={color} size={size} />;
 };
 
@@ -60,7 +60,7 @@ export const Logo = ({ nombre, color, size = 44 }: { nombre: string; color: stri
 export const GrupoLogo = ({ nombre, color }: { nombre: string; color: string }) => {
   const [ok, setOk] = useState(true);
   return (
-    <div title={nombre} style={{ height: 42, borderRadius: 10, background: '#FFFFFF', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '4px 6px', boxShadow: '0 1px 3px rgba(15, 23, 42, 0.03)' }}>
+    <div title={nombre} style={{ height: 42, borderRadius: 10, background: '#FFFFFF', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '4px 6px', boxShadow: '0 1px 3px rgba(15, 23, 42, 0.03)' }}>
       {ok ? <img src={`/assets/emisoras/${slug(nombre)}.png`} alt={nombre} onError={() => setOk(false)} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
         : <span style={{ fontSize: 9.5, fontWeight: 800, color, textAlign: 'center', lineHeight: 1.1 }}>{nombre}</span>}
     </div>
@@ -89,8 +89,8 @@ export const Btn = ({ children, onClick, active }: { children: React.ReactNode; 
     fontSize: 12.5, 
     fontWeight: 600, 
     cursor: 'pointer', 
-    color: active ? '#38BDF8' : '#CBD5E1', 
-    background: active ? 'rgba(56, 189, 248, 0.16)' : 'rgba(255, 255, 255, 0.05)', 
+    color: active ? '#DBF285' : '#D1D5DB', 
+    background: active ? 'rgba(219, 242, 133, 0.16)' : 'rgba(255, 255, 255, 0.05)', 
     border: `1px solid ${active ? ACENTO : 'rgba(255, 255, 255, 0.12)'}`,
     boxShadow: '0 2px 6px rgba(0, 0, 0, 0.25)',
     transition: 'all 0.15s ease'
@@ -106,9 +106,9 @@ export const Filtro = ({ children, on, onClick }: { children: React.ReactNode; o
     fontWeight: 700, 
     cursor: 'pointer', 
     color: '#FFFFFF', 
-    background: on ? 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)' : 'rgba(255, 255, 255, 0.04)', 
+    background: on ? 'linear-gradient(135deg, #729013 0%, #5B7410 100%)' : 'rgba(255, 255, 255, 0.04)', 
     border: `1px solid ${on ? ACENTO : 'rgba(255, 255, 255, 0.12)'}`,
-    boxShadow: on ? '0 4px 14px rgba(2, 132, 199, 0.45)' : 'none',
+    boxShadow: on ? '0 4px 14px rgba(114, 144, 19, 0.45)' : 'none',
     transition: 'all 0.18s ease'
   }}>{children}</button>
 );

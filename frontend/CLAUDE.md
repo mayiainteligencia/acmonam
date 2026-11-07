@@ -4,6 +4,8 @@ Stack: React 19 + Vite 7 + TypeScript · recharts · lucide-react · estilos inl
 
 Routing: `src/App.tsx` con `useState('activeSection')` + `switch` (sin react-router). El menú vive en `src/components/Sidebar.tsx` (desktop) y `src/components/ResponsiveLayout.tsx` (bottom nav móvil) — **ambas listas se mantienen sincronizadas a mano**.
 
+**Arquitectura (landing + login)**: `src/app/` (composición: `App`, `AppRouter`, `container`, `routes`), `src/core/router/` (router mínimo por History API), `src/features/<feature>/{domain,data,application,presentation}` (auth y landing), `src/shared/` (tema público). Rutas: `/` landing pública → `/login` o `/registro` → `/app` (dashboard, `DashboardApp`, abre en la primera pestaña). Auth con puertos (`AuthRepository`, `SessionStore`) inyectados desde `app/container.ts`; `VITE_AUTH_MODE=mock|http`. Pantallas públicas en verde lima (`shared/styles/publicTheme.css`). No mencionar el motor de transcripción en textos públicos.
+
 Backends vía proxy de Vite (`vite.config.ts`): `/api/monitor` → Python `:8001`, `/api` → `:3001`.
 
 ---

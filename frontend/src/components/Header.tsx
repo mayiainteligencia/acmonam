@@ -8,7 +8,11 @@ import {
   Search,
   CalendarDays,
   CornerDownLeft,
+  LogOut,
 } from 'lucide-react';
+import { useAuth } from '../features/auth';
+import { navigate } from '../core/router';
+import { ROUTES } from '../app/routes';
 import { brandingConfig } from '../config/branding';
 import { secciones } from '../config/menu';
 import { coloresOscuros } from '../config/tema';
@@ -31,12 +35,18 @@ interface Notification {
 const notificacionesEstaticas: Notification[] = [
   { id: 1, tipo: 'urgente', titulo: 'TV: precisión bajo la meta',          mensaje: 'Televisión está en 96.8%, por debajo del 97.5% contractual. Revisa Precisión General.', tiempo: 'Hace 3 min',   leida: false },
   { id: 2, tipo: 'alerta',  titulo: 'Detección on-air · Radio',            mensaje: 'Nuevo spot detectado en W Radio 96.9 FM. Escucha el testigo en Radio.',                tiempo: 'Hace 8 min',   leida: false },
-  { id: 3, tipo: 'info',    titulo: 'Impresos: lista preliminar',          mensaje: 'ACAM aún enviará la lista definitiva de periódicos y revistas.',                       tiempo: 'Hace 1 hora',  leida: true  },
+  { id: 3, tipo: 'info',    titulo: 'Impresos: lista preliminar',          mensaje: 'El cliente aún enviará la lista definitiva de periódicos y revistas.',                       tiempo: 'Hace 1 hora',  leida: true  },
   { id: 4, tipo: 'exito',   titulo: 'Cobertura de radio completa',         mensaje: '147 de 147 estaciones AM/FM configuradas.',                                            tiempo: 'Hace 2 horas', leida: true  },
 ];
 
 export const Header: React.FC<HeaderProps> = ({ onSectionChange }) => {
   const { empresa } = brandingConfig;
+  const { logout } = useAuth();
+
+  const cerrarSesion = async () => {
+    await logout();
+    navigate(ROUTES.landing, { replace: true });
+  };
   const colores = coloresOscuros;
 
   const [notificacionesAbiertas, setNotificacionesAbiertas] = useState(false);
@@ -85,7 +95,7 @@ export const Header: React.FC<HeaderProps> = ({ onSectionChange }) => {
       case 'alerta':  return <AlertTriangle size={16} color="#F59E0B" />;
       case 'exito':   return <CheckCircle   size={16} color="#10B981" />;
       case 'urgente': return <AlertTriangle size={16} color="#EF4444" />;
-      case 'info':    return <Info          size={16} color="#3B82F6" />;
+      case 'info':    return <Info          size={16} color="#DBF285" />;
     }
   };
 
@@ -200,11 +210,11 @@ export const Header: React.FC<HeaderProps> = ({ onSectionChange }) => {
           )}
         </div>
 
-        {/* ── CENTRO: Logo ACAM con fondo negro ── */}
+        {/* ── CENTRO: Logo MAYIA con fondo negro ── */}
         <div style={{
           backgroundColor: '#000000',
           borderRadius: '12px',
-          border: '1px solid rgba(56, 189, 248, 0.25)',
+          border: '1px solid rgba(219, 242, 133, 0.25)',
           padding: '6px 18px',
           display: 'flex',
           alignItems: 'center',
@@ -325,11 +335,22 @@ export const Header: React.FC<HeaderProps> = ({ onSectionChange }) => {
             )}
           </div>
 
+          {/* Cerrar sesión */}
+          <button
+            type="button"
+            onClick={cerrarSesion}
+            title="Cerrar sesión"
+            aria-label="Cerrar sesión"
+            style={iconBtnStyle('transparent')}
+          >
+            <LogOut size={19} style={{ color: colores.textoClaro }} />
+          </button>
+
           {/* Avatar */}
           <button
             style={{
               width: '46px', height: '46px', borderRadius: '50%',
-              backgroundColor: '#000000', border: '1.5px solid rgba(56, 189, 248, 0.25)',
+              backgroundColor: '#000000', border: '1.5px solid rgba(219, 242, 133, 0.25)',
               cursor: 'pointer', display: 'flex', alignItems: 'center',
               justifyContent: 'center', overflow: 'hidden', padding: '6px',
               transition: 'transform 0.2s',
@@ -351,7 +372,7 @@ export const Header: React.FC<HeaderProps> = ({ onSectionChange }) => {
                   container.style.fontSize = '14px';
                   container.style.fontWeight = 'bold';
                   container.style.color = '#FFFFFF';
-                  container.textContent = 'ACAM';
+                  container.textContent = 'MAYIA';
                 }
               }}
             />

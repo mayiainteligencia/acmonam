@@ -80,7 +80,7 @@ export const Impresos = () => {
                 <span style={{ fontSize: 34, fontWeight: 800, color: ACENTO }}>{PUBLICACIONES.length}</span>
                 <span style={{ fontSize: 15, fontWeight: 600 }}>Medios Monitoreados</span>
               </div>
-              <span style={{ display: 'inline-block', marginTop: 10, padding: '5px 12px', borderRadius: 999, border: `1px solid rgba(56, 189, 248, 0.4)`, background: 'rgba(56, 189, 248, 0.16)', color: '#38BDF8', fontWeight: 600, fontSize: 12.5 }}>Lista Preliminar</span>
+              <span style={{ display: 'inline-block', marginTop: 10, padding: '5px 12px', borderRadius: 999, border: `1px solid rgba(219, 242, 133, 0.4)`, background: 'rgba(219, 242, 133, 0.16)', color: '#DBF285', fontWeight: 600, fontSize: 12.5 }}>Lista Preliminar</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3, 1fr)', gap: 14 }}>
               {HEADER.map(([t, l]) => (
@@ -113,9 +113,9 @@ export const Impresos = () => {
                   <div style={{ border: `1px solid ${D.fila}`, borderRadius: 12, padding: 12, display: 'flex', justifyContent: 'center', background: 'rgba(255, 255, 255, 0.04)' }}><Pagina ins={actual} alto={grande ? 360 : 250} /></div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {medios.map(i => (
-                      <button key={i.publicacion.nombre} onClick={() => setSel(filtradas.indexOf(i))} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', textAlign: 'left', padding: '10px 12px', background: i === actual ? 'rgba(56, 189, 248, 0.15)' : 'rgba(255, 255, 255, 0.02)', border: `1px solid ${i === actual ? 'rgba(56, 189, 248, 0.35)' : D.fila}`, borderRadius: 8, color: i === actual ? ACENTO : D.txt, fontWeight: i === actual ? 700 : 500, fontSize: 13, cursor: 'pointer', transition: 'all 0.15s ease' }}>
+                      <button key={i.publicacion.nombre} onClick={() => setSel(filtradas.indexOf(i))} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', textAlign: 'left', padding: '10px 12px', background: i === actual ? 'rgba(219, 242, 133, 0.15)' : 'rgba(255, 255, 255, 0.02)', border: `1px solid ${i === actual ? 'rgba(219, 242, 133, 0.35)' : D.fila}`, borderRadius: 8, color: i === actual ? ACENTO : D.txt, fontWeight: i === actual ? 700 : 500, fontSize: 13, cursor: 'pointer', transition: 'all 0.15s ease' }}>
                         <span>{i.publicacion.nombre}</span>
-                        {i === actual && <span style={{ color: ACENTO, fontSize: 10.5, fontWeight: 700, background: 'rgba(56, 189, 248, 0.2)', padding: '2px 8px', borderRadius: 4 }}>Activo</span>}
+                        {i === actual && <span style={{ color: ACENTO, fontSize: 10.5, fontWeight: 700, background: 'rgba(219, 242, 133, 0.2)', padding: '2px 8px', borderRadius: 4 }}>Activo</span>}
                       </button>
                     ))}
                   </div>
@@ -138,7 +138,7 @@ export const Impresos = () => {
                     <tr>{['Fecha', 'Medio', 'Marca / Anunciante', 'Sección', 'Página', 'Tamaño (cm²)', 'Color'].map(h => <th key={h} style={th}>{h}</th>)}</tr>
                   </thead>
                   <tbody>{tabla.slice(0, 5).map((i, k) => (
-                    <tr key={k} onClick={() => { const x = filtradas.indexOf(i); if (x >= 0) setSel(x); }} style={{ cursor: 'pointer', background: k === 0 ? 'rgba(56, 189, 248, 0.08)' : undefined }}>
+                    <tr key={k} onClick={() => { const x = filtradas.indexOf(i); if (x >= 0) setSel(x); }} style={{ cursor: 'pointer', background: k === 0 ? 'rgba(219, 242, 133, 0.08)' : undefined }}>
                       <td style={{ ...td, whiteSpace: 'nowrap' }}>{dmy(i.fecha)}</td>
                       <td style={{ ...td, whiteSpace: 'nowrap' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -175,13 +175,13 @@ export const Impresos = () => {
                   <BarChart data={gasto} margin={{ top: 6, right: 4, left: -6, bottom: 0 }}>
                     <CartesianGrid stroke="rgba(255, 255, 255, 0.08)" strokeDasharray="2 4" vertical={false} />
                     <XAxis dataKey="n" tick={{ fill: D.sub, fontSize: 10.5 }} axisLine={false} tickLine={false} /><YAxis tick={{ fill: D.sub, fontSize: 10.5 }} width={48} axisLine={false} tickLine={false} tickFormatter={v => `${Math.round(v / 1000)}k`} />
-                    <Tooltip cursor={{ fill: 'rgba(255, 255, 255, 0.04)' }} contentStyle={{ background: '#101F38', border: `1px solid ${D.borde}`, borderRadius: 10, fontSize: 12, color: D.txt, boxShadow: '0 8px 24px rgba(0, 0, 0, 0.45)' }} labelStyle={{ color: D.sub }} formatter={v => fmtMXN(Number(v))} />
+                    <Tooltip cursor={{ fill: 'rgba(255, 255, 255, 0.04)' }} contentStyle={{ background: '#0A170E', border: `1px solid ${D.borde}`, borderRadius: 10, fontSize: 12, color: D.txt, boxShadow: '0 8px 24px rgba(0, 0, 0, 0.45)' }} labelStyle={{ color: D.sub }} formatter={v => fmtMXN(Number(v))} />
                     <Bar dataKey="v" name="Gasto" radius={[5, 5, 0, 0]} barSize={26}>{gasto.map(d => <Cell key={d.n} fill={d.color} fillOpacity={.9} />)}</Bar></BarChart></ResponsiveContainer></div>
                 <div style={{ textAlign: 'center', fontSize: 11.5, color: D.sub, marginBottom: 10 }}>Gasto Estimado por Grupo Editorial</div>
                 <div style={{ border: `1px solid ${D.fila}`, borderRadius: 12, padding: 12, background: 'rgba(255, 255, 255, 0.04)' }}>
                   <div style={{ fontSize: 14 }}><b style={{ color: ACENTO, fontSize: 17 }}>Hoy: {INSERCIONES.length * 4 + 4}</b> Inserciones Detectadas</div>
                   <div style={{ fontSize: 12, color: D.sub, margin: '4px 0 8px' }}>Sujeto a cambios - Lista preliminar ACAM por confirmar</div>
-                  <div style={{ height: 7, background: 'rgba(255, 255, 255, 0.1)', borderRadius: 4 }}><div style={{ width: '45%', height: '100%', background: 'linear-gradient(90deg, #0284C7, #38BDF8)', boxShadow: '0 0 10px rgba(56, 189, 248, 0.4)', borderRadius: 4 }} /></div>
+                  <div style={{ height: 7, background: 'rgba(255, 255, 255, 0.1)', borderRadius: 4 }}><div style={{ width: '45%', height: '100%', background: 'linear-gradient(90deg, #729013, #DBF285)', boxShadow: '0 0 10px rgba(219, 242, 133, 0.4)', borderRadius: 4 }} /></div>
                   <div style={{ fontSize: 11.5, color: D.sub, marginTop: 6 }}>Procesamiento de ediciones del día</div>
                 </div>
               </Modulo>

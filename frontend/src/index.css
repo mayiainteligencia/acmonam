@@ -42,7 +42,7 @@ button {
   width: 6px;
   height: 6px;
   margin: 0 2px;
-  background: #038CAE;
+  background: #DBF285;
   border-radius: 50%;
   animation: blink 1.4s infinite both;
 }
@@ -73,23 +73,23 @@ button {
 
 .tech-card {
   position: relative;
-  background: linear-gradient(180deg, #132442 0%, #0E1A30 100%);
+  background: linear-gradient(180deg, #0F1F14 0%, #0A170E 100%);
   animation: fadeIn .45s ease both;
   transition: border-color .22s ease, box-shadow .22s ease, transform .22s ease;
 }
 .tech-card::before {
   content: '';
   position: absolute; left: 18px; right: 18px; top: 0; height: 1.5px;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.8), transparent);
+  background: linear-gradient(90deg, transparent, rgba(219, 242, 133, 0.8), transparent);
   opacity: .85;
 }
 .tech-card:hover {
-  border-color: rgba(56, 189, 248, 0.45) !important;
-  box-shadow: 0 12px 36px rgba(0,0,0,0.5), 0 0 24px rgba(2, 132, 199, 0.18) !important;
+  border-color: rgba(219, 242, 133, 0.45) !important;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.5), 0 0 24px rgba(114, 144, 19, 0.18) !important;
 }
 .tech-dot {
-  width: 8px; height: 8px; border-radius: 50%; background: #38BDF8; flex-shrink: 0;
-  box-shadow: 0 0 10px #38BDF8; animation: techPulse 2.4s ease-in-out infinite;
+  width: 8px; height: 8px; border-radius: 50%; background: #DBF285; flex-shrink: 0;
+  box-shadow: 0 0 10px #DBF285; animation: techPulse 2.4s ease-in-out infinite;
 }
 @keyframes techPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .4; transform: scale(0.85); } }
 

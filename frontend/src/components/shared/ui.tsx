@@ -72,7 +72,7 @@ export const Insight: React.FC<{ kind: InsightKind; title: string; children: Rea
       push({ kind: 'success', title: 'Plan activado', msg: plan! });
     }
   };
-  const kindColor = kind === 'Predicción' ? '#0047AB' : kind === 'Sugerencia' ? V : colores.textoClaro;
+  const kindColor = kind === 'Predicción' ? '#EDFBC1' : kind === 'Sugerencia' ? V : colores.textoClaro;
 
   if (state === 'descartado') return null;
 
@@ -122,7 +122,7 @@ export const SectionHero: React.FC<{ eyebrow: string; title: React.ReactNode; su
         {right && <div style={{ marginTop: 16 }}>{right}</div>}
       </div>
     </div>
-    <Panel title="ACAM · Análisis IA" icon={<div style={{ width: 30, height: 30, borderRadius: 9, background: `${V}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Brain size={17} color={V} /></div>} right={<LiveDot label="análisis en vivo" />}>
+    <Panel title="MAYIA · Análisis IA" icon={<div style={{ width: 30, height: 30, borderRadius: 9, background: `${V}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Brain size={17} color={V} /></div>} right={<LiveDot label="análisis en vivo" />}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>{insights}</div>
     </Panel>
   </div>
@@ -152,10 +152,10 @@ export const Tabs: React.FC<{ tabs: string[]; active: string; onChange: (t: stri
         <button key={t} onClick={() => onChange(t)}
           style={{
             padding: '9px 18px', borderRadius: 999, fontSize: 13, fontWeight: 700, cursor: 'pointer',
-            border: `1px solid ${isAct ? '#38BDF8' : 'rgba(56, 189, 248, 0.2)'}`,
-            background: isAct ? 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)' : 'rgba(255, 255, 255, 0.05)',
-            color: isAct ? '#FFFFFF' : '#CBD5E1',
-            boxShadow: isAct ? '0 4px 14px rgba(2, 132, 199, 0.35)' : 'none',
+            border: `1px solid ${isAct ? '#DBF285' : 'rgba(219, 242, 133, 0.2)'}`,
+            background: isAct ? 'linear-gradient(135deg, #729013 0%, #5B7410 100%)' : 'rgba(255, 255, 255, 0.05)',
+            color: isAct ? '#FFFFFF' : '#D1D5DB',
+            boxShadow: isAct ? '0 4px 14px rgba(114, 144, 19, 0.35)' : 'none',
             transition: 'all 0.18s ease'
           }}>{t}</button>
       );

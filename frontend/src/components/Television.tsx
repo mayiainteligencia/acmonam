@@ -8,7 +8,7 @@ import { FONDO_TECH } from '../config/tema';
 import { CANALES, SPOTS_TV, ACCIONES_TV, CANALES_PROG, TESTIGOS_VIDEO, parrilla, rnd, PLAZAS, type Plaza, type TipoCanal, type SubtipoSpot } from '../data/medios';
 
 const { colores } = brandingConfig;
-const COL_TIPO: Record<TipoCanal, string> = { 'Abierta nacional': '#4D7C0F', 'Abierta local': '#0047AB', 'De paga': '#F58025' };
+const COL_TIPO: Record<TipoCanal, string> = { 'Abierta nacional': '#4D7C0F', 'Abierta local': '#DBF285', 'De paga': '#F58025' };
 const ETIQ: [TipoCanal, string][] = [['Abierta nacional', 'Abierta Nacional'], ['Abierta local', 'Abierta Local'], ['De paga', 'Paga (SKY/DISH/Totalplay)']];
 const ANUNCIANTE: Record<string, string> = { Aurora: 'Tiendas Aurora', Nuvo: 'Banco Nuvo', Valmar: 'Grupo Valmar', Nortia: 'Nortia Telecom', Vestia: 'Vestia Moda', Meridia: 'Grupo Meridia', Lumen: 'Lumen Salud', Cobalto: 'Cobalto Bebidas' };
 const SUBTIPO_TXT: Record<SubtipoSpot, string> = { Regular: 'Spot Regular', Patrocinio: 'Patrocinio', 'Mención': 'Mención en Vivo', 'Super-imposición': 'Super-imposición (Overlay)' };
@@ -81,7 +81,7 @@ export const Television = () => {
                 <span style={{ fontSize: 15, fontWeight: 600 }}>Canales Activos</span>
               </div>
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 10 }}>
-                {PLAZAS.map(p => <span key={p} style={{ padding: '5px 12px', borderRadius: 999, border: `1px solid ${p === 'CDMX' ? 'rgba(56, 189, 248, 0.4)' : D.borde}`, background: p === 'CDMX' ? 'rgba(56, 189, 248, 0.16)' : 'rgba(255, 255, 255, 0.05)', color: p === 'CDMX' ? '#38BDF8' : D.sub, fontWeight: 600, fontSize: 12.5 }}>{p}</span>)}
+                {PLAZAS.map(p => <span key={p} style={{ padding: '5px 12px', borderRadius: 999, border: `1px solid ${p === 'CDMX' ? 'rgba(219, 242, 133, 0.4)' : D.borde}`, background: p === 'CDMX' ? 'rgba(219, 242, 133, 0.16)' : 'rgba(255, 255, 255, 0.05)', color: p === 'CDMX' ? '#DBF285' : D.sub, fontWeight: 600, fontSize: 12.5 }}>{p}</span>)}
               </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3, 1fr)', gap: 14 }}>
@@ -137,7 +137,7 @@ export const Television = () => {
                   <tr>{['Hora', 'Canal', 'Marca / Anunciante', 'Tipo', 'Subtipo', 'Duración'].map(h => <th key={h} style={th}>{h}</th>)}</tr>
                 </thead>
                 <tbody>{(filtrarGrupo ? spots : SPOTS_TV.filter(s => s.plaza === plaza)).slice(0, 5).map((s, i) => (
-                  <tr key={i} style={{ background: i === 0 ? 'rgba(56, 189, 248, 0.08)' : undefined }}>
+                  <tr key={i} style={{ background: i === 0 ? 'rgba(219, 242, 133, 0.08)' : undefined }}>
                     <td style={{ ...td, whiteSpace: 'nowrap' }}>{seg(s.hora, i)}</td>
                     <td style={{ ...td, whiteSpace: 'nowrap' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -164,7 +164,7 @@ export const Television = () => {
               <thead><tr>{['Hora', 'Canal', 'Programa / Contenido', 'Género', 'Estatus'].map(h => <th key={h} style={th}>{h}</th>)}</tr></thead>
               <tbody>{prog24.map(({ c, b, vivo }, i) => (
                 <tr key={i}><td style={td}>{hhmm(b.inicio)} - {hhmm(b.fin % 24)}</td><td style={td}>{c}</td><td style={td}>{b.programa}</td><td style={td}>{b.genero}</td>
-                  <td style={td}>{vivo ? <span style={{ background: 'linear-gradient(135deg, #0284C7, #0369A1)', color: '#fff', fontWeight: 700, fontSize: 11.5, padding: '4px 10px', borderRadius: 6, boxShadow: '0 2px 6px rgba(2, 132, 199, 0.25)' }}>En vivo</span> : b.condicion}</td></tr>
+                  <td style={td}>{vivo ? <span style={{ background: 'linear-gradient(135deg, #729013, #5B7410)', color: '#fff', fontWeight: 700, fontSize: 11.5, padding: '4px 10px', borderRadius: 6, boxShadow: '0 2px 6px rgba(114, 144, 19, 0.25)' }}>En vivo</span> : b.condicion}</td></tr>
               ))}</tbody></table></div>}
           </Modulo>
 
@@ -174,7 +174,7 @@ export const Television = () => {
             <div style={{ position: 'relative', borderRadius: 12, overflow: 'hidden', border: `1px solid ${D.borde}`, boxShadow: '0 4px 16px rgba(15, 23, 42, 0.08)' }}>
               <VideoThumb seed={sel + 3} canal={clip.canal} dur={clip.dur} height={m ? 150 : 190} />
               <button onClick={() => setPlaying(p => !p)} aria-label={playing ? 'Pausar' : 'Reproducir'} style={{ position: 'absolute', inset: 0, margin: 'auto', width: 52, height: 52, borderRadius: '50%', border: 'none', background: 'rgba(255,255,255,.94)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
-                {playing ? <Pause size={22} color="#0F172A" fill="#0F172A" /> : <Play size={22} color="#0F172A" fill="#0F172A" />}</button>
+                {playing ? <Pause size={22} color="#0A170E" fill="#0A170E" /> : <Play size={22} color="#0A170E" fill="#0A170E" />}</button>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '10px 0' }}>
               <button onClick={() => setPlaying(p => !p)} aria-label="Reproducir/Pausar" style={{ background: 'none', border: 'none', color: D.txt, cursor: 'pointer', display: 'flex' }}>{playing ? <Pause size={17} /> : <Play size={17} />}</button>

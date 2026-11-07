@@ -270,7 +270,7 @@ export const TestigosIA = () => {
               flex: '0 0 170px', scrollSnapAlign: 'start', display: 'flex', alignItems: 'center', gap: 10, padding: 10,
               borderRadius: 12, cursor: 'pointer', textAlign: 'left',
               border: seleccionada ? `2px solid ${colores.primarioVivo}` : `1px solid ${colores.borde}`,
-              background: seleccionada ? 'rgba(56,189,248,0.15)' : colores.fondoSecundario,
+              background: seleccionada ? 'rgba(219, 242, 133,0.15)' : colores.fondoSecundario,
             }}>
               <div style={{ width: 40, height: 40, borderRadius: 10, overflow: 'hidden', flexShrink: 0, background: colores.fondoTerciario, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <img src={emisora.imagen} alt={emisora.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -352,7 +352,7 @@ export const TestigosIA = () => {
               background: brandingConfig.colores.gradientePrimario, color: '#FFFFFF',
               fontWeight: 600, fontSize: 14, cursor: cargando ? 'not-allowed' : 'pointer',
               opacity: cargando ? 0.6 : 1,
-              boxShadow: '0 4px 14px rgba(2, 132, 199, 0.35)',
+              boxShadow: '0 4px 14px rgba(114, 144, 19, 0.35)',
             }}>
               {cargando ? 'Iniciando...' : '▶ Iniciar monitoreo'}
             </button>
@@ -556,7 +556,7 @@ export const TestigosIA = () => {
         {/* Header + KPIs */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'stretch', marginBottom: isMobile ? 16 : 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: '1 1 320px', minWidth: 0 }}>
-            <div style={{ width: 56, height: 56, borderRadius: 14, background: 'rgba(56,189,248,0.15)', border: `1px solid ${colores.primarioVivo}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 20px rgba(56,189,248,0.25)' }}>
+            <div style={{ width: 56, height: 56, borderRadius: 14, background: 'rgba(219, 242, 133,0.15)', border: `1px solid ${colores.primarioVivo}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 20px rgba(219, 242, 133,0.25)' }}>
               <Radio size={26} color={colores.primarioVivo} />
             </div>
             <div style={{ minWidth: 0 }}>

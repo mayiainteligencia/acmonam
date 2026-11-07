@@ -11,7 +11,7 @@ import { ESTACIONES, SPOTS_RADIO, GRUPOS_RADIO, colorGrupo, rnd, PLAZAS, type Sp
 
 const { colores } = brandingConfig;
 const ANUNCIANTE: Record<string, string> = { Aurora: 'Tiendas Aurora', Nuvo: 'Banco Nuvo', Valmar: 'Grupo Valmar', Nortia: 'Nortia Telecom', Vestia: 'Vestia Moda', Meridia: 'Grupo Meridia', Lumen: 'Lumen Salud', Cobalto: 'Cobalto Bebidas' };
-const COL_TIPO: Record<TipoRadio, string> = { 'Spot Regular': ACENTO, Patrocinio: '#3B82F6', Autopromocional: '#F59E0B' };
+const COL_TIPO: Record<TipoRadio, string> = { 'Spot Regular': ACENTO, Patrocinio: '#FFFFFF', Autopromocional: '#F59E0B' };
 const VISTAS = ['Panel de radio', 'Testigos IA · en vivo (real)', 'Análisis de Pauta'];
 const Etiqueta = ({ tipo }: { tipo: TipoRadio }) => (
   <span style={{ fontSize: 11.5, fontWeight: 700, padding: '3px 9px', borderRadius: 7, color: tipo === 'Spot Regular' ? D.txt : '#fff', background: tipo === 'Spot Regular' ? 'transparent' : COL_TIPO[tipo] }}>{tipo}</span>
@@ -104,7 +104,7 @@ export const Radio = () => {
                 <span style={{ fontSize: 15, fontWeight: 600 }}>Estaciones AM/FM</span>
               </div>
               <div style={{ fontSize: 12.5, color: D.sub, margin: '2px 0 10px' }}>{activas.length} al aire ahora</div>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>{PLAZAS.map(p => <span key={p} style={{ padding: '5px 12px', borderRadius: 999, border: `1px solid rgba(56, 189, 248, 0.3)`, background: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8', fontWeight: 600, fontSize: 12.5 }}>{p}</span>)}</div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>{PLAZAS.map(p => <span key={p} style={{ padding: '5px 12px', borderRadius: 999, border: `1px solid rgba(219, 242, 133, 0.3)`, background: 'rgba(219, 242, 133, 0.15)', color: '#DBF285', fontWeight: 600, fontSize: 12.5 }}>{p}</span>)}</div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 6, minWidth: '260px' }}>
               {GRUPOS_RADIO.concat([{ id: 'Más', color: '#6B7280' }]).slice(0, 12).map(gr => <GrupoLogo key={gr.id} nombre={gr.id} color={gr.color} />)}
@@ -224,7 +224,7 @@ export const Radio = () => {
                   {topMarcas.map(([n, v], i) => (
                     <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 7, fontSize: 12.5 }}>
                       <span style={{ fontWeight: 600, color: D.sub }}>{i + 1}.</span>
-                      <div style={{ flex: 1, background: 'rgba(255, 255, 255, 0.08)', borderRadius: 6, overflow: 'hidden' }}><div style={{ width: `${v / topMarcas[0][1] * 100}%`, background: 'linear-gradient(90deg, #0284C7, #38BDF8)', borderRadius: 6, padding: '4px 8px', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' }}>{n}</div></div>
+                      <div style={{ flex: 1, background: 'rgba(255, 255, 255, 0.08)', borderRadius: 6, overflow: 'hidden' }}><div style={{ width: `${v / topMarcas[0][1] * 100}%`, background: 'linear-gradient(90deg, #729013, #DBF285)', borderRadius: 6, padding: '4px 8px', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap' }}>{n}</div></div>
                       <b style={{ color: D.txt }}>{v}</b>
                     </div>
                   ))}</div>
@@ -234,7 +234,7 @@ export const Radio = () => {
                       <div style={{ height: 4, background: 'rgba(255, 255, 255, 0.08)', borderRadius: 2, marginTop: 4 }}><div style={{ width: `${v / topCats[0][1] * 100}%`, height: '100%', background: ACENTO, borderRadius: 2 }} /></div></div>
                   ))}</div>
               </div>
-              <div style={{ marginTop: 10, fontSize: 12.5 }}>Filtros: {['Radio Fórmula', 'Grupo ACIR', 'Estación'].map(f => <span key={f} onClick={() => f !== 'Estación' && setRGrupo(f)} style={{ display: 'inline-block', margin: '4px 6px 0 0', padding: '5px 12px', borderRadius: 8, border: `1px solid ${rGrupo === f ? ACENTO : D.borde}`, background: rGrupo === f ? 'rgba(56, 189, 248, 0.18)' : 'rgba(255, 255, 255, 0.05)', color: rGrupo === f ? '#38BDF8' : D.txt, fontWeight: rGrupo === f ? 700 : 500, cursor: 'pointer' }}>{f}</span>)}</div>
+              <div style={{ marginTop: 10, fontSize: 12.5 }}>Filtros: {['Radio Fórmula', 'Grupo ACIR', 'Estación'].map(f => <span key={f} onClick={() => f !== 'Estación' && setRGrupo(f)} style={{ display: 'inline-block', margin: '4px 6px 0 0', padding: '5px 12px', borderRadius: 8, border: `1px solid ${rGrupo === f ? ACENTO : D.borde}`, background: rGrupo === f ? 'rgba(219, 242, 133, 0.18)' : 'rgba(255, 255, 255, 0.05)', color: rGrupo === f ? '#DBF285' : D.txt, fontWeight: rGrupo === f ? 700 : 500, cursor: 'pointer' }}>{f}</span>)}</div>
             </Modulo>
           </div>
         </>}

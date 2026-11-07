@@ -25,7 +25,7 @@ interface LineaCumpl {
 interface Cumpl { lineas: LineaCumpl[]; resumen: Record<Estado, number>; semanas: string[] }
 
 const ESTADOS: Estado[] = ['cumplido', 'parcial', 'incumplido', 'sin_datos'];
-const COLOR: Record<Estado, string> = { cumplido: '#22C55E', parcial: '#F59E0B', incumplido: '#EF4444', sin_datos: '#94A3B8' };
+const COLOR: Record<Estado, string> = { cumplido: '#22C55E', parcial: '#F59E0B', incumplido: '#EF4444', sin_datos: '#9CA3AF' };
 const ETIQUETA: Record<Estado, string> = { cumplido: 'Cumplido', parcial: 'Parcial', incumplido: 'Incumplido', sin_datos: 'Sin datos aún' };
 
 const fmtFecha = (iso: string, anio = false) =>

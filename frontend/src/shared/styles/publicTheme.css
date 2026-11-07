@@ -1,0 +1,41 @@
+/* Tokens de las pantallas públicas (landing + login): estilo cyber lime sobre obsidiana. */
+.public-theme {
+  --pub-bg: #030704;
+  --pub-surface: #060f08;
+  --pub-surface-2: #0a170e;
+  --pub-surface-3: #112417;
+  --pub-line: rgba(219, 242, 133, 0.12);
+  --pub-line-strong: rgba(219, 242, 133, 0.28);
+  --pub-fg: #f3f4f6;
+  --pub-muted: #9ca3af;
+  --pub-subtle: #6b7280;
+  --pub-accent: #dbf285;
+  --pub-accent-bright: #edfbc1;
+  --pub-accent-deep: #729013;
+  --pub-font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --pub-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  background: var(--pub-bg);
+  color: var(--pub-fg);
+  font-family: var(--pub-font-sans);
+}
+
+.public-theme *:focus-visible {
+  outline: 2px solid var(--pub-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.public-theme ::selection {
+  background: var(--pub-accent);
+  color: var(--pub-bg);
+}
+
+.public-theme h1,
+.public-theme h2,
+.public-theme h3 {
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+

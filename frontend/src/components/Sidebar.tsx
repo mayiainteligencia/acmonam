@@ -71,8 +71,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
       style={{
         width: collapsed ? '78px' : '256px',
         height: '100vh',
-        backgroundColor: '#080F1E',
-        borderRight: `1px solid rgba(56, 189, 248, 0.14)`,
+        backgroundColor: '#020503',
+        borderRight: `1px solid rgba(219, 242, 133, 0.14)`,
         display: 'flex',
         flexDirection: 'column',
         transition: 'width 0.24s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -83,11 +83,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
       }}
     >
       <style>{`
-        .sb-nav { scrollbar-width: thin; scrollbar-color: rgba(56, 189, 248, 0.2) transparent; }
+        .sb-nav { scrollbar-width: thin; scrollbar-color: rgba(219, 242, 133, 0.2) transparent; }
         .sb-nav::-webkit-scrollbar { width: 4px; }
         .sb-nav::-webkit-scrollbar-track { background: transparent; }
-        .sb-nav::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.2); border-radius: 999px; }
-        .sb-nav::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.4); }
+        .sb-nav::-webkit-scrollbar-thumb { background: rgba(219, 242, 133, 0.2); border-radius: 999px; }
+        .sb-nav::-webkit-scrollbar-thumb:hover { background: rgba(219, 242, 133, 0.4); }
 
         .sub-accordion {
           transition: max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.22s ease;
@@ -101,9 +101,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
           display: 'flex',
           alignItems: 'center',
           justifyContent: collapsed ? 'center' : 'space-between',
-          borderBottom: `1px solid rgba(56, 189, 248, 0.14)`,
+          borderBottom: `1px solid rgba(219, 242, 133, 0.14)`,
           flexShrink: 0,
-          background: '#080F1E',
+          background: '#020503',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0, flex: 1, justifyContent: collapsed ? 'center' : 'flex-start' }}>
@@ -114,7 +114,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
               alignItems: 'center',
               justifyContent: 'center',
               background: '#000000',
-              border: '1px solid rgba(56, 189, 248, 0.25)',
+              border: '1px solid rgba(219, 242, 133, 0.25)',
               borderRadius: '10px',
               padding: collapsed ? '4px 6px' : '5px 12px',
               boxShadow: '0 2px 10px rgba(0, 0, 0, 0.5)',
@@ -142,9 +142,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
               width: 32,
               height: 32,
               borderRadius: 8,
-              border: `1px solid rgba(56, 189, 248, 0.18)`,
+              border: `1px solid rgba(219, 242, 133, 0.18)`,
               background: 'rgba(255, 255, 255, 0.05)',
-              color: '#CBD5E1',
+              color: '#D1D5DB',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -152,14 +152,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
               transition: 'all 0.15s ease',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.backgroundColor = 'rgba(56, 189, 248, 0.15)';
-              e.currentTarget.style.color = '#38BDF8';
-              e.currentTarget.style.borderColor = '#38BDF8';
+              e.currentTarget.style.backgroundColor = 'rgba(219, 242, 133, 0.15)';
+              e.currentTarget.style.color = '#DBF285';
+              e.currentTarget.style.borderColor = '#DBF285';
             }}
             onMouseLeave={e => {
               e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
-              e.currentTarget.style.color = '#CBD5E1';
-              e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.18)';
+              e.currentTarget.style.color = '#D1D5DB';
+              e.currentTarget.style.borderColor = 'rgba(219, 242, 133, 0.18)';
             }}
           >
             <PanelLeftClose size={16} />
@@ -177,9 +177,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
               width: 34,
               height: 34,
               borderRadius: 8,
-              border: `1px solid rgba(56, 189, 248, 0.2)`,
+              border: `1px solid rgba(219, 242, 133, 0.2)`,
               background: 'rgba(255, 255, 255, 0.05)',
-              color: '#CBD5E1',
+              color: '#D1D5DB',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -187,12 +187,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
               transition: 'all 0.15s ease',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.backgroundColor = 'rgba(56, 189, 248, 0.15)';
-              e.currentTarget.style.color = '#38BDF8';
+              e.currentTarget.style.backgroundColor = 'rgba(219, 242, 133, 0.15)';
+              e.currentTarget.style.color = '#DBF285';
             }}
             onMouseLeave={e => {
               e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
-              e.currentTarget.style.color = '#CBD5E1';
+              e.currentTarget.style.color = '#D1D5DB';
             }}
           >
             <PanelLeftOpen size={16} />
@@ -209,7 +209,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.07em',
-              color: '#94A3B8',
+              color: '#9CA3AF',
             }}
           >
             SERVICIOS DE MONITOREO
@@ -220,9 +220,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
               fontWeight: 700,
               padding: '2px 8px',
               borderRadius: 6,
-              background: 'rgba(56, 189, 248, 0.15)',
-              color: '#38BDF8',
-              border: '1px solid rgba(56, 189, 248, 0.28)',
+              background: 'rgba(219, 242, 133, 0.15)',
+              color: '#DBF285',
+              border: '1px solid rgba(219, 242, 133, 0.28)',
             }}
           >
             EN LÍNEA
@@ -260,24 +260,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
                   gap: '10px',
                   padding: collapsed ? '10px 0' : '10px 12px',
                   borderRadius: '10px',
-                  backgroundColor: isActive ? 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)' : 'transparent',
-                  background: isActive ? 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)' : 'transparent',
-                  color: isActive ? '#FFFFFF' : '#CBD5E1',
-                  border: isActive ? '1px solid rgba(56, 189, 248, 0.45)' : '1px solid transparent',
+                  backgroundColor: isActive ? 'linear-gradient(135deg, #729013 0%, #5B7410 100%)' : 'transparent',
+                  background: isActive ? 'linear-gradient(135deg, #729013 0%, #5B7410 100%)' : 'transparent',
+                  color: isActive ? '#FFFFFF' : '#D1D5DB',
+                  border: isActive ? '1px solid rgba(219, 242, 133, 0.45)' : '1px solid transparent',
                   cursor: 'pointer',
                   transition: 'all 0.18s ease',
-                  boxShadow: isActive ? '0 4px 16px rgba(2, 132, 199, 0.35)' : 'none',
+                  boxShadow: isActive ? '0 4px 16px rgba(114, 144, 19, 0.35)' : 'none',
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.backgroundColor = 'rgba(56, 189, 248, 0.10)';
-                    e.currentTarget.style.color = '#38BDF8';
+                    e.currentTarget.style.backgroundColor = 'rgba(219, 242, 133, 0.10)';
+                    e.currentTarget.style.color = '#DBF285';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) {
                     e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = '#CBD5E1';
+                    e.currentTarget.style.color = '#D1D5DB';
                   }
                 }}
               >
@@ -292,7 +292,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
-                      color: isActive ? '#FFFFFF' : '#38BDF8',
+                      color: isActive ? '#FFFFFF' : '#DBF285',
                       transition: 'all 0.15s ease',
                     }}
                   >
@@ -325,7 +325,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
                           background: 'transparent',
                           border: 'none',
                           padding: 2,
-                          color: isActive ? 'rgba(255, 255, 255, 0.85)' : '#94A3B8',
+                          color: isActive ? 'rgba(255, 255, 255, 0.85)' : '#9CA3AF',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
@@ -352,7 +352,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
                     overflow: 'hidden',
                     margin: isExpanded ? '4px 0 6px 20px' : '0 0 0 20px',
                     paddingLeft: '10px',
-                    borderLeft: `2px solid ${isActive ? '#38BDF8' : 'rgba(56, 189, 248, 0.22)'}`,
+                    borderLeft: `2px solid ${isActive ? '#DBF285' : 'rgba(219, 242, 133, 0.22)'}`,
                   }}
                 >
                   {item.sub!.map((sb) => {
@@ -369,9 +369,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
                           textAlign: 'left',
                           padding: '6px 10px',
                           fontSize: '12.5px',
-                          color: isSubActive ? '#38BDF8' : '#94A3B8',
+                          color: isSubActive ? '#DBF285' : '#9CA3AF',
                           fontWeight: isSubActive ? 600 : 400,
-                          backgroundColor: isSubActive ? 'rgba(56, 189, 248, 0.18)' : 'transparent',
+                          backgroundColor: isSubActive ? 'rgba(219, 242, 133, 0.18)' : 'transparent',
                           border: 'none',
                           borderRadius: '6px',
                           cursor: 'pointer',
@@ -380,14 +380,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
                         }}
                         onMouseEnter={(e) => {
                           if (!isSubActive) {
-                            e.currentTarget.style.backgroundColor = 'rgba(56, 189, 248, 0.08)';
-                            e.currentTarget.style.color = '#38BDF8';
+                            e.currentTarget.style.backgroundColor = 'rgba(219, 242, 133, 0.08)';
+                            e.currentTarget.style.color = '#DBF285';
                           }
                         }}
                         onMouseLeave={(e) => {
                           if (!isSubActive) {
                             e.currentTarget.style.backgroundColor = 'transparent';
-                            e.currentTarget.style.color = '#94A3B8';
+                            e.currentTarget.style.color = '#9CA3AF';
                           }
                         }}
                       >
@@ -396,7 +396,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
                             width: 5,
                             height: 5,
                             borderRadius: '50%',
-                            backgroundColor: isSubActive ? '#38BDF8' : 'rgba(255, 255, 255, 0.3)',
+                            backgroundColor: isSubActive ? '#DBF285' : 'rgba(255, 255, 255, 0.3)',
                             flexShrink: 0,
                             transition: 'all 0.15s ease',
                           }}
@@ -414,22 +414,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
         })}
       </nav>
 
-      {/* Footer Info de ACAM */}
+      {/* Footer Info de MAYIA */}
       {!collapsed ? (
         <div
           style={{
             padding: '14px 18px',
-            borderTop: `1px solid rgba(56, 189, 248, 0.14)`,
-            background: '#080F1E',
+            borderTop: `1px solid rgba(219, 242, 133, 0.14)`,
+            background: '#020503',
             flexShrink: 0,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
               <div style={{ fontSize: '12px', fontWeight: 700, color: '#FFFFFF' }}>
-                ACAM Medios
+                MAYIA Escucha
               </div>
-              <div style={{ fontSize: '11px', color: '#94A3B8' }}>
+              <div style={{ fontSize: '11px', color: '#9CA3AF' }}>
                 Auditoría 2026 en vivo
               </div>
             </div>
@@ -448,10 +448,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
         <div
           style={{
             padding: '12px 0',
-            borderTop: `1px solid rgba(56, 189, 248, 0.14)`,
+            borderTop: `1px solid rgba(219, 242, 133, 0.14)`,
             display: 'flex',
             justifyContent: 'center',
-            background: '#080F1E',
+            background: '#020503',
           }}
         >
           <span

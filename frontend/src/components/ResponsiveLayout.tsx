@@ -209,7 +209,7 @@ export const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
 
         <div style={{
           display: 'flex', alignItems: 'center',
-          background: '#000000', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: 10, padding: '5px 12px',
+          background: '#000000', border: '1px solid rgba(219, 242, 133, 0.25)', borderRadius: 10, padding: '5px 12px',
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',
         }}>
           <img
@@ -284,7 +284,7 @@ export const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{
                   height: '40px', borderRadius: '10px', overflow: 'hidden',
-                  background: '#000000', border: '1px solid rgba(56, 189, 248, 0.25)',
+                  background: '#000000', border: '1px solid rgba(219, 242, 133, 0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   padding: '4px 10px',
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',

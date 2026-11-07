@@ -1,21 +1,21 @@
 import { useState } from 'react';
-import { ResponsiveLayout } from './components/ResponsiveLayout';
-import { Sidebar } from './components/Sidebar';
-import { Header } from './components/Header';
-import { Precision } from './components/Precision';
-import { Radio } from './components/Radio';
-import { Television } from './components/Television';
-import { Impresos } from './components/Impresos';
-import { ToastProvider } from './components/shared/toast';
-import { ConfirmProvider } from './components/shared/confirm';
-import { brandingConfig } from './config/branding';
-import { secciones } from './config/menu';
-import { FONDO_OSCURO, SECCIONES_OSCURAS } from './config/tema';
+import { ResponsiveLayout } from '../components/ResponsiveLayout';
+import { Sidebar } from '../components/Sidebar';
+import { Header } from '../components/Header';
+import { Precision } from '../components/Precision';
+import { Radio } from '../components/Radio';
+import { Television } from '../components/Television';
+import { Impresos } from '../components/Impresos';
+import { ToastProvider } from '../components/shared/toast';
+import { ConfirmProvider } from '../components/shared/confirm';
+import { brandingConfig } from '../config/branding';
+import { secciones } from '../config/menu';
+import { FONDO_OSCURO, SECCIONES_OSCURAS } from '../config/tema';
 
 
-import './responsive.css';
+import '../responsive.css';
 
-function App() {
+export function DashboardApp() {
   const [activeSection, setActiveSection] = useState('precision');
   const { colores } = brandingConfig;
 
@@ -54,4 +54,3 @@ function App() {
   );
 }
 
-export default App;
