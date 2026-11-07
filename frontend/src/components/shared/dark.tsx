@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-// Módulos visuales ACAM: fondo limpio, tarjetas blancas con acento azul vibrante.
+// Módulos visuales MAYIA Escucha: fondo obsidiana con acento cyber lime.
 import { useState } from 'react';
 import { brandingConfig } from '../../config/branding';
 import { Avatar } from './viz';
@@ -68,7 +68,7 @@ export const GrupoLogo = ({ nombre, color }: { nombre: string; color: string }) 
 };
 
 export const Modulo = ({ id, title, right, children, style }: { id?: string; title: string; right?: React.ReactNode; children: React.ReactNode; style?: React.CSSProperties }) => (
-  <section id={id} className="tech-card" style={{ background: CARD, border: `1px solid ${D.borde}`, borderRadius: 16, padding: 22, color: D.txt, boxShadow: '0 8px 30px rgba(0, 0, 0, 0.35)', scrollMarginTop: 16, minWidth: 0, ...style }}>
+  <section id={id} className="tech-card" style={{ background: '#0d130a', border: `1px solid ${D.borde}`, borderRadius: 28, padding: 24, color: D.txt, boxShadow: '0 18px 40px -10px rgba(0, 0, 0, 0.6)', scrollMarginTop: 16, minWidth: 0, ...style }}>
     <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 16, borderBottom: '1px solid rgba(255, 255, 255, 0.08)', paddingBottom: 12 }}>
       <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, letterSpacing: '.01em', color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: 9 }}>
         <span className="tech-dot" />{title}

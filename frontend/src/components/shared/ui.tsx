@@ -143,7 +143,7 @@ export function useIsMobile() {
   return m;
 }
 
-// ── Pestañas ACAM ──
+// ── Pestañas MAYIA ──
 export const Tabs: React.FC<{ tabs: string[]; active: string; onChange: (t: string) => void; dark?: boolean }> = ({ tabs, active, onChange }) => (
   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
     {tabs.map(t => {

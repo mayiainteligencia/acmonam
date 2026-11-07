@@ -19,7 +19,7 @@ export interface ItemMenu {
 // se alimentan de este array. Cualquier sección nueva se agrega aquí.
 export const secciones: ItemMenu[] = [
   { id: 'precision', nombre: 'Precisión General', icono: Gauge,     estado: 'demo',   grupo: 'principal',
-    descripcion: 'Precisión de detección por medio frente al 97.5% contractual y cobertura contra lo pedido por ACAM.' },
+    descripcion: 'Precisión de detección por medio frente al 97.5% contractual y cobertura contra lo solicitado.' },
   { id: 'radio',     nombre: 'Radio',             icono: Radio,     estado: 'activo', grupo: 'principal',
     sub: [{ id: 'radio-vivo', nombre: 'Monitoreo en vivo' }, { id: 'radio-spots', nombre: 'Spots detectados' }, { id: 'radio-patro', nombre: 'Patrocinios y autopromos' }, { id: 'radio-audio', nombre: 'Testigos de audio' }, { id: 'radio-ranking', nombre: 'Ranking' }],
     descripcion: 'Monitoreo on-air en vivo (Testigos IA), spots detectados, patrocinios y autopromocionales, ranking de anunciantes.' },

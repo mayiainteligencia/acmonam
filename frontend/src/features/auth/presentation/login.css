@@ -63,14 +63,28 @@
   border-bottom: 2px solid #d1d5db;
   appearance: none;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background-color 5000s ease-in-out 0s;
 }
 .float-field input:focus { border-bottom-color: var(--pub-accent); outline: none; }
+
+/* Inmovilizar y armonizar el autofill del navegador para que no se vea feo con fondo blanco/amarillo */
+.float-field input:-webkit-autofill,
+.float-field input:-webkit-autofill:hover,
+.float-field input:-webkit-autofill:focus,
+.float-field input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #0a1109 inset !important;
+  box-shadow: 0 0 0 1000px #0a1109 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+  border-bottom: 2px solid var(--pub-accent) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .float-field label {
   position: absolute;
   top: 0.75rem;
   left: 0;
-  z-index: -1;
+  z-index: 1;
   font-size: 0.875rem;
   color: #d1d5db;
   transform-origin: 0 0;
@@ -78,11 +92,19 @@
   pointer-events: none;
 }
 .float-field label svg { display: inline-block; margin: -0.25rem 0.5rem 0 0; vertical-align: middle; }
+
+/* Flotar cuando hay foco, contenido o cuando el navegador activa autofill */
 .float-field input:focus + label,
-.float-field input:not(:placeholder-shown) + label {
+.float-field input:not(:placeholder-shown) + label,
+.float-field input:-webkit-autofill + label,
+.float-field input:autofill + label {
   transform: translateY(-1.5rem) scale(0.75);
 }
-.float-field input:focus + label { color: var(--pub-accent); }
+.float-field input:focus + label,
+.float-field input:-webkit-autofill + label,
+.float-field input:autofill + label {
+  color: var(--pub-accent);
+}
 
 .login-form__aux { display: flex; justify-content: space-between; }
 .login-link-muted { font-size: 0.75rem; color: #d1d5db; text-decoration: none; transition: color 0.2s; }
@@ -144,4 +166,103 @@
 .login-card__footer { text-align: center; font-size: 0.75rem; color: #9ca3af; }
 .login-link-accent { font-weight: 600; color: var(--pub-accent); text-decoration: none; transition: color 0.2s; }
 .login-link-accent:hover { color: var(--pub-accent-bright); }
+
+/* Cuentas recordadas en esta plataforma */
+.remembered-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 0.85rem;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(219, 242, 133, 0.15);
+  border-radius: 0.75rem;
+}
+.remembered-box__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--pub-accent);
+}
+.remembered-box__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.remembered-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+.remembered-item:hover {
+  background: rgba(219, 242, 133, 0.1);
+  border-color: rgba(219, 242, 133, 0.35);
+  transform: translateY(-1px);
+}
+.remembered-item__info {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+.remembered-item__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  background: var(--pub-accent);
+  color: #050a04;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.remembered-item__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.remembered-item__name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.remembered-item__email {
+  font-size: 0.65rem;
+  color: #9ca3af;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.remembered-item__remove {
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  padding: 0.2rem;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+.remembered-item__remove:hover {
+  color: #ef4444;
+}
 

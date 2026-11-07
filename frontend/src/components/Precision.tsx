@@ -74,20 +74,15 @@ export const Precision = () => {
   return (
     <div style={{ minHeight: '100%', padding: m ? 16 : 30, ...FONDO_TECH }}><style>{keyframes}</style>
       <div style={inner}>
-        {/* Cabecera */}
-        <div style={{ display: 'flex', flexDirection: m ? 'column' : 'row', justifyContent: 'space-between', alignItems: m ? 'flex-start' : 'center', gap: 20, marginBottom: 24 }}>
-          <div style={{ flex: 1, minWidth: 260 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: ACENTO, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Auditoría Contractual ACAM</div>
-            <h1 style={{ fontSize: m ? 26 : 34, fontWeight: 800, color: D.txt, margin: '6px 0 6px', letterSpacing: '-0.5px', lineHeight: 1.2 }}>Dashboard de Precisión y Cumplimiento</h1>
-            <p style={{ margin: 0, fontSize: 14, color: D.sub, lineHeight: 1.5, maxWidth: 640 }}>Evaluación y auditoría de precisión en la detección automática por IA (Meta Contractual: {META_PRECISION}%)</p>
+        {/* Cabecera de sección */}
+        <div style={{ display: 'flex', flexDirection: m ? 'column' : 'row', justifyContent: 'space-between', alignItems: m ? 'flex-start' : 'center', gap: 16, marginBottom: 20 }}>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: ACENTO, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Auditoría Contractual Continua</div>
+            <h2 style={{ fontSize: m ? 20 : 26, fontWeight: 800, color: '#FFFFFF', margin: '4px 0', letterSpacing: '-0.02em' }}>Módulos de Precisión por Medio</h2>
           </div>
-          <div style={{ background: CARD, border: `1px solid ${D.borde}`, borderRadius: 16, padding: '16px 22px', color: D.txt, textAlign: m ? 'left' : 'center', boxShadow: '0 8px 30px rgba(0, 0, 0, 0.35)', flexShrink: 0, minWidth: m ? '100%' : '320px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: m ? 'flex-start' : 'center', fontSize: m ? 22 : 26, fontWeight: 800 }}>
-              {cumple ? <CheckCircle2 size={28} color="#10B981" /> : <AlertTriangle size={28} color={colores.advertencia} />}
-              <span>Estado: <span style={{ color: cumple ? '#10B981' : colores.advertencia }}>{cumple ? 'Cumplido' : 'En atención'}</span></span>
-            </div>
-            <div style={{ fontSize: 13.5, fontWeight: 600, color: '#FFFFFF', marginTop: 6 }}>Contrato ACAM 2026 - Auditoría en Tiempo Real</div>
-            <div style={{ fontSize: 12, color: D.sub }}>Octubre 2026</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#0d130a', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 999, padding: '8px 18px', color: '#FFFFFF' }}>
+            {cumple ? <CheckCircle2 size={18} color="#10B981" /> : <AlertTriangle size={18} color={colores.advertencia} />}
+            <span style={{ fontSize: 13, fontWeight: 700 }}>Estado Contractual: <span style={{ color: cumple ? '#10B981' : colores.advertencia }}>{cumple ? '98.5% Cumplido' : 'En atención'}</span></span>
           </div>
         </div>
 
@@ -147,7 +142,7 @@ export const Precision = () => {
               <Btn onClick={exportar}><Download size={14} /> Descargar Reporte de Precisión</Btn>
               <svg viewBox="0 0 90 90" width={64} style={{ opacity: .85 }} aria-label="Sello de auditoría">
                 <circle cx={45} cy={45} r={42} fill="none" stroke="#6B7280" strokeWidth={1.5} strokeDasharray="3 2" /><circle cx={45} cy={45} r={33} fill="none" stroke="#6B7280" strokeWidth={1} />
-                <text x={45} y={42} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#D1D5DB">Auditoría Interna</text><text x={45} y={53} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#DBF285">& IA - ACAM</text>
+                <text x={45} y={42} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#D1D5DB">Auditoría Interna</text><text x={45} y={53} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#DBF285">& IA - MAYIA</text>
               </svg>
             </div>
           </Modulo>

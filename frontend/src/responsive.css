@@ -157,3 +157,17 @@
     display: none;
   }
 }
+/* ─── Bento Grid & Modern Dashboard Layout Responsive Overrides ─── */
+@media (max-width: 1023px) {
+  .aesthetic-bento-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .aesthetic-bento-inner-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .modern-telemetry-kpis {
+    flex-direction: column !important;
+    gap: 16px !important;
+    align-items: flex-start !important;
+  }
+}

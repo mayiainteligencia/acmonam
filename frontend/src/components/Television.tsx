@@ -67,28 +67,65 @@ export const Television = () => {
   return (
     <div style={{ minHeight: '100%', padding: m ? 16 : 30, ...FONDO_TECH }}><style>{keyframes}</style>
       <div style={inner}>
-        {/* Cabecera */}
-        <div style={{ display: 'flex', flexDirection: m ? 'column' : 'row', justifyContent: 'space-between', alignItems: m ? 'flex-start' : 'center', gap: 20, marginBottom: 22 }}>
-          <div style={{ flex: 1, minWidth: 260 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: ACENTO, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Monitoreo de Televisión – Tiempo Real</div>
-            <h1 style={{ fontSize: m ? 26 : 34, fontWeight: 800, color: D.txt, margin: '6px 0 6px', letterSpacing: '-0.5px', lineHeight: 1.2 }}>Monitoreo de Televisión IA</h1>
-            <p style={{ margin: 0, fontSize: 14, color: D.sub, maxWidth: 500, lineHeight: 1.5 }}>Verificación automática de pauta publicitaria, acciones especiales y programación 24/7 en vivo.</p>
+        {/* Cabecera de sección */}
+        <div style={{ display: 'flex', flexDirection: m ? 'column' : 'row', justifyContent: 'space-between', alignItems: m ? 'flex-start' : 'center', gap: 16, marginBottom: 20 }}>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: ACENTO, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Monitoreo de Televisión Continua</div>
+            <h2 style={{ fontSize: m ? 20 : 26, fontWeight: 800, color: '#FFFFFF', margin: '4px 0', letterSpacing: '-0.02em' }}>Pauta Publicitaria y Testigos de Video</h2>
           </div>
-          <div style={{ background: CARD, border: `1px solid ${D.borde}`, borderRadius: 16, padding: '16px 20px', color: D.txt, boxShadow: '0 8px 30px rgba(0, 0, 0, 0.35)', display: 'grid', gridTemplateColumns: m ? '1fr' : 'auto auto', gap: 20, alignItems: 'center', flexShrink: 0 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 34, fontWeight: 800, color: ACENTO }}>{CANALES.length}+</span>
-                <span style={{ fontSize: 15, fontWeight: 600 }}>Canales Activos</span>
+          <div style={{
+            background: '#0d130a',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: 24,
+            padding: '16px 20px',
+            color: '#FFFFFF',
+            boxShadow: '0 16px 36px -10px rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            flexDirection: m ? 'column' : 'row',
+            alignItems: 'center',
+            gap: 20,
+            maxWidth: '100%',
+            overflow: 'hidden',
+          }}>
+            <div style={{ flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                <span style={{ fontSize: 32, fontWeight: 800, color: ACENTO, letterSpacing: '-0.02em' }}>{CANALES.length}+</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Canales Activos</span>
               </div>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 10 }}>
-                {PLAZAS.map(p => <span key={p} style={{ padding: '5px 12px', borderRadius: 999, border: `1px solid ${p === 'CDMX' ? 'rgba(219, 242, 133, 0.4)' : D.borde}`, background: p === 'CDMX' ? 'rgba(219, 242, 133, 0.16)' : 'rgba(255, 255, 255, 0.05)', color: p === 'CDMX' ? '#DBF285' : D.sub, fontWeight: 600, fontSize: 12.5 }}>{p}</span>)}
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8 }}>
+                {PLAZAS.map(p => {
+                  const abrev = p === 'Guadalajara' ? 'GDL' : p === 'Monterrey' ? 'MTY' : p;
+                  return (
+                    <span
+                      key={p}
+                      style={{
+                        padding: '4px 10px',
+                        borderRadius: 999,
+                        border: `1px solid ${p === 'CDMX' ? 'rgba(219, 242, 133, 0.4)' : 'rgba(255, 255, 255, 0.1)'}`,
+                        background: p === 'CDMX' ? 'rgba(219, 242, 133, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+                        color: p === 'CDMX' ? '#DBF285' : '#9CA3AF',
+                        fontWeight: 700,
+                        fontSize: 11.5,
+                      }}
+                    >
+                      {abrev}
+                    </span>
+                  );
+                })}
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3, 1fr)', gap: 14 }}>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: m ? '1fr' : 'repeat(3, 1fr)',
+              gap: 10,
+              maxWidth: '100%',
+              flex: 1,
+            }}>
               {HEADER_LOGOS.map(([t, , lista]) => (
-                <div key={t}>
-                  <div style={{ fontSize: 11.5, fontWeight: 600, color: D.sub, marginBottom: 6 }}>{t}</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 5 }}>
+                <div key={t} style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#9CA3AF', marginBottom: 5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t}</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 4 }}>
                     {lista.map(n => <GrupoLogo key={n} nombre={n} color={colores.primario} />)}
                   </div>
                 </div>

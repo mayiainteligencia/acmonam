@@ -6,6 +6,7 @@ interface AuthContextValue {
   login: (credentials: Credentials) => Promise<void>;
   register: (registration: Registration) => Promise<void>;
   logout: () => Promise<void>;
+  updateUser: (data: { name?: string; email?: string }) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -44,7 +45,29 @@ export function AuthProvider({ repository, store, children }: AuthProviderProps)
     setSession(null);
   }, [repository, store, session]);
 
-  const value = useMemo(() => ({ session, login, register, logout }), [session, login, register, logout]);
+  const updateUser = useCallback(
+    (data: { name?: string; email?: string }) => {
+      setSession((prev) => {
+        if (!prev) return null;
+        const next: Session = {
+          ...prev,
+          user: {
+            ...prev.user,
+            ...(data.name ? { name: data.name } : {}),
+            ...(data.email ? { email: data.email } : {}),
+          },
+        };
+        store.save(next);
+        return next;
+      });
+    },
+    [store],
+  );
+
+  const value = useMemo(
+    () => ({ session, login, register, logout, updateUser }),
+    [session, login, register, logout, updateUser],
+  );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

@@ -15,19 +15,46 @@ export function RegisterForm() {
         <p>{t.subtitle}</p>
       </div>
 
-      <form className="login-form" onSubmit={submit} noValidate>
+      <form className="login-form" onSubmit={submit} noValidate autoComplete="off">
         <div className="float-field">
-          <input id="register-name" type="text" autoComplete="name" placeholder=" " value={name} onChange={(e) => setName(e.target.value)} required />
+          <input
+            id="register-name"
+            name="mayia_new_name"
+            type="text"
+            autoComplete="off"
+            placeholder=" "
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
           <label htmlFor="register-name"><User size={16} aria-hidden="true" />{t.nameLabel}</label>
         </div>
 
         <div className="float-field">
-          <input id="register-email" type="email" autoComplete="email" placeholder=" " value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input
+            id="register-email"
+            name="mayia_new_email"
+            type="email"
+            autoComplete="off"
+            placeholder=" "
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
           <label htmlFor="register-email"><Mail size={16} aria-hidden="true" />{t.emailLabel}</label>
         </div>
 
         <div className="float-field">
-          <input id="register-password" type="password" autoComplete="new-password" placeholder=" " value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input
+            id="register-password"
+            name="mayia_new_secret"
+            type="password"
+            autoComplete="new-password"
+            placeholder=" "
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
           <label htmlFor="register-password"><Lock size={16} aria-hidden="true" />{t.passwordLabel}</label>
         </div>
 

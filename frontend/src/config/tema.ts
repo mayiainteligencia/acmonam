@@ -4,11 +4,10 @@ import { brandingConfig } from './branding';
 /** Fondo base del dashboard: Deep Navy ejecutivo */
 export const FONDO_OSCURO = '#030704';
 
-/** Fondo de página estilo tech ACAM: Deep Navy con halo azul cian y cuadrícula sutil */
+/** Fondo de página estilo tech MAYIA: Transparente para heredar el canvas estético orgánico */
 export const FONDO_TECH: React.CSSProperties = {
-  backgroundColor: '#030704',
-  backgroundImage: 'radial-gradient(1100px 500px at 92% -6%, rgba(219, 242, 133,.14), transparent 65%), radial-gradient(800px 400px at 8% 25%, rgba(114, 144, 19,.10), transparent 60%), linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px)',
-  backgroundSize: 'auto, auto, 44px 44px, 44px 44px',
+  backgroundColor: 'transparent',
+  backgroundImage: 'radial-gradient(1100px 500px at 92% -6%, rgba(219, 242, 133,.08), transparent 65%), radial-gradient(800px 400px at 8% 25%, rgba(114, 144, 19,.08), transparent 60%)',
 };
 
 /** Secciones en tema Deep Navy */

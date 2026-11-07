@@ -3,6 +3,7 @@ import { navigate } from '../../../core/router';
 import { ROUTES } from '../../../app/routes';
 import { AuthError, validateRegistration } from '../domain/auth';
 import { useAuth } from './AuthContext';
+import { saveRememberedAccount } from './rememberedAccounts';
 
 /** Estado y acciones del formulario de registro, sin lógica de presentación. */
 export function useRegisterForm() {
@@ -27,6 +28,7 @@ export function useRegisterForm() {
     setSubmitting(true);
     try {
       await register({ name, email, password });
+      saveRememberedAccount(email, name);
       navigate(ROUTES.dashboard, { replace: true });
     } catch (cause) {
       setError(cause instanceof AuthError ? cause.message : 'Ocurrió un error inesperado.');

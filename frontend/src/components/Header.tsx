@@ -9,6 +9,7 @@ import {
   CalendarDays,
   CornerDownLeft,
   LogOut,
+  User,
 } from 'lucide-react';
 import { useAuth } from '../features/auth';
 import { navigate } from '../core/router';
@@ -41,7 +42,7 @@ const notificacionesEstaticas: Notification[] = [
 
 export const Header: React.FC<HeaderProps> = ({ onSectionChange }) => {
   const { empresa } = brandingConfig;
-  const { logout } = useAuth();
+  const { session, logout } = useAuth();
 
   const cerrarSesion = async () => {
     await logout();
@@ -347,36 +348,27 @@ export const Header: React.FC<HeaderProps> = ({ onSectionChange }) => {
           </button>
 
           {/* Avatar */}
-          <button
+          <div
+            title={session?.user?.name ? `${session.user.name} (${session.user.email})` : 'Usuario'}
             style={{
-              width: '46px', height: '46px', borderRadius: '50%',
-              backgroundColor: '#000000', border: '1.5px solid rgba(219, 242, 133, 0.25)',
-              cursor: 'pointer', display: 'flex', alignItems: 'center',
-              justifyContent: 'center', overflow: 'hidden', padding: '6px',
-              transition: 'transform 0.2s',
+              width: '40px', height: '40px', borderRadius: '50%',
+              backgroundColor: '#0A170E', border: '1.5px solid rgba(219, 242, 133, 0.4)',
+              display: 'flex', alignItems: 'center',
+              justifyContent: 'center',
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',
+              color: '#DBF285',
+              fontSize: '14px',
+              fontWeight: '700',
+              userSelect: 'none',
+              cursor: 'default',
             }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
           >
-            <img
-              src={empresa.logo}
-              alt={empresa.nombre}
-              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-              onError={e => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-                const container = target.parentElement;
-                if (container) {
-                  container.style.background = `linear-gradient(135deg, ${colores.primario}, ${colores.primarioOscuro})`;
-                  container.style.fontSize = '14px';
-                  container.style.fontWeight = 'bold';
-                  container.style.color = '#FFFFFF';
-                  container.textContent = 'MAYIA';
-                }
-              }}
-            />
-          </button>
+            {session?.user?.name ? (
+              session.user.name.charAt(0).toUpperCase()
+            ) : (
+              <User size={18} color="#DBF285" />
+            )}
+          </div>
         </div>
       </header>
     </>

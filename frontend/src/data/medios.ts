@@ -1,4 +1,4 @@
-// Datos demo del alcance ACAM (Radio, TV, Impresos). Deterministas (sin Math.random).
+// Datos demo del alcance MAYIA Escucha (Radio, TV, Impresos). Deterministas (sin Math.random).
 // ponytail: catálogos completos pero con detecciones simuladas; al conectar el
 // backend se reemplazan estos arrays y los componentes no cambian.
 

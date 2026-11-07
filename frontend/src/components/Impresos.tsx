@@ -66,27 +66,38 @@ export const Impresos = () => {
   return (
     <div style={{ minHeight: '100%', padding: m ? 16 : 30, ...FONDO_TECH }}><style>{keyframes}</style>
       <div style={inner}>
-        {/* Cabecera */}
-        {/* Cabecera */}
-        <div style={{ display: 'flex', flexDirection: m ? 'column' : 'row', justifyContent: 'space-between', alignItems: m ? 'flex-start' : 'center', gap: 20, marginBottom: 22 }}>
-          <div style={{ flex: 1, minWidth: 260 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: ACENTO, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Monitoreo de Prensa y Revistas</div>
-            <h1 style={{ fontSize: m ? 26 : 34, fontWeight: 800, color: D.txt, margin: '6px 0 6px', letterSpacing: '-0.5px', lineHeight: 1.2 }}>Monitoreo de Impresos IA</h1>
-            <p style={{ margin: 0, fontSize: 14, color: D.sub, maxWidth: 500, lineHeight: 1.5 }}>Verificación automática de inserciones publicitarias, testigos de alta resolución y análisis de tarifas en prensa y revistas.</p>
+        {/* Cabecera de sección */}
+        <div style={{ display: 'flex', flexDirection: m ? 'column' : 'row', justifyContent: 'space-between', alignItems: m ? 'flex-start' : 'center', gap: 16, marginBottom: 20 }}>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: ACENTO, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Monitoreo de Medios Impresos</div>
+            <h2 style={{ fontSize: m ? 20 : 26, fontWeight: 800, color: '#FFFFFF', margin: '4px 0', letterSpacing: '-0.02em' }}>Inserciones y Testigos a 300 DPI</h2>
           </div>
-          <div style={{ background: CARD, border: `1px solid ${D.borde}`, borderRadius: 16, padding: '16px 20px', color: D.txt, boxShadow: '0 8px 30px rgba(0, 0, 0, 0.35)', display: 'grid', gridTemplateColumns: m ? '1fr' : 'auto auto', gap: 20, alignItems: 'center', flexShrink: 0 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 34, fontWeight: 800, color: ACENTO }}>{PUBLICACIONES.length}</span>
-                <span style={{ fontSize: 15, fontWeight: 600 }}>Medios Monitoreados</span>
+          <div style={{
+            background: '#0d130a',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: 24,
+            padding: '16px 20px',
+            color: '#FFFFFF',
+            boxShadow: '0 16px 36px -10px rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            flexDirection: m ? 'column' : 'row',
+            alignItems: 'center',
+            gap: 20,
+            maxWidth: '100%',
+            overflow: 'hidden',
+          }}>
+            <div style={{ flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                <span style={{ fontSize: 32, fontWeight: 800, color: ACENTO, letterSpacing: '-0.02em' }}>{PUBLICACIONES.length}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Medios Monitoreados</span>
               </div>
-              <span style={{ display: 'inline-block', marginTop: 10, padding: '5px 12px', borderRadius: 999, border: `1px solid rgba(219, 242, 133, 0.4)`, background: 'rgba(219, 242, 133, 0.16)', color: '#DBF285', fontWeight: 600, fontSize: 12.5 }}>Lista Preliminar</span>
+              <span style={{ display: 'inline-block', marginTop: 8, padding: '4px 12px', borderRadius: 999, border: '1px solid rgba(219, 242, 133, 0.3)', background: 'rgba(219, 242, 133, 0.15)', color: '#DBF285', fontWeight: 700, fontSize: 11.5 }}>Lista Preliminar</span>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3, 1fr)', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : 'repeat(3, 1fr)', gap: 10, flex: 1, maxWidth: '100%' }}>
               {HEADER.map(([t, l]) => (
-                <div key={t}>
-                  <div style={{ fontSize: 11.5, fontWeight: 600, color: D.sub, marginBottom: 6 }}>{t}</div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 5 }}>
+                <div key={t} style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#9CA3AF', marginBottom: 5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t}</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 4 }}>
                     {l.map(n => <GrupoLogo key={n} nombre={n} color={colores.primario} />)}
                   </div>
                 </div>
@@ -180,7 +191,7 @@ export const Impresos = () => {
                 <div style={{ textAlign: 'center', fontSize: 11.5, color: D.sub, marginBottom: 10 }}>Gasto Estimado por Grupo Editorial</div>
                 <div style={{ border: `1px solid ${D.fila}`, borderRadius: 12, padding: 12, background: 'rgba(255, 255, 255, 0.04)' }}>
                   <div style={{ fontSize: 14 }}><b style={{ color: ACENTO, fontSize: 17 }}>Hoy: {INSERCIONES.length * 4 + 4}</b> Inserciones Detectadas</div>
-                  <div style={{ fontSize: 12, color: D.sub, margin: '4px 0 8px' }}>Sujeto a cambios - Lista preliminar ACAM por confirmar</div>
+                  <div style={{ fontSize: 12, color: D.sub, margin: '4px 0 8px' }}>Sujeto a cambios - Lista preliminar por confirmar</div>
                   <div style={{ height: 7, background: 'rgba(255, 255, 255, 0.1)', borderRadius: 4 }}><div style={{ width: '45%', height: '100%', background: 'linear-gradient(90deg, #729013, #DBF285)', boxShadow: '0 0 10px rgba(219, 242, 133, 0.4)', borderRadius: 4 }} /></div>
                   <div style={{ fontSize: 11.5, color: D.sub, marginTop: 6 }}>Procesamiento de ediciones del día</div>
                 </div>

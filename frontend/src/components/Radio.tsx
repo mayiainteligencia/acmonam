@@ -90,23 +90,55 @@ export const Radio = () => {
   return (
     <div style={{ minHeight: '100%', padding: m ? 16 : 30, ...FONDO_TECH }}><style>{keyframes}</style>
       <div style={inner}>
-        {/* Cabecera */}
-        <div style={{ display: 'flex', flexDirection: m ? 'column' : 'row', justifyContent: 'space-between', alignItems: m ? 'flex-start' : 'center', gap: 20, marginBottom: 22 }}>
-          <div style={{ flex: 1, minWidth: 260 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: ACENTO, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Monitoreo de Radio – Cobertura Nacional</div>
-            <h1 style={{ fontSize: m ? 26 : 34, fontWeight: 800, color: D.txt, margin: '6px 0 6px', letterSpacing: '-0.5px', lineHeight: 1.2 }}>Monitoreo de Radio IA</h1>
-            <p style={{ margin: 0, fontSize: 14, color: D.sub, maxWidth: 520, lineHeight: 1.5 }}>Verificación automática de marcas, spots, patrocinios y autopromocionales en tiempo real.</p>
+        {/* Cabecera de sección */}
+        <div style={{ display: 'flex', flexDirection: m ? 'column' : 'row', justifyContent: 'space-between', alignItems: m ? 'flex-start' : 'center', gap: 16, marginBottom: 20 }}>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: ACENTO, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Monitoreo On-Air en Vivo</div>
+            <h2 style={{ fontSize: m ? 20 : 26, fontWeight: 800, color: '#FFFFFF', margin: '4px 0', letterSpacing: '-0.02em' }}>Emisoras y Testigos de Audio</h2>
           </div>
-          <div style={{ background: CARD, border: `1px solid ${D.borde}`, borderRadius: 16, padding: '16px 20px', color: D.txt, boxShadow: '0 8px 30px rgba(0, 0, 0, 0.35)', display: 'grid', gridTemplateColumns: m ? '1fr' : 'auto auto', gap: 20, alignItems: 'center', flexShrink: 0 }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 34, fontWeight: 800, color: ACENTO }}>{ESTACIONES.length}</span>
-                <span style={{ fontSize: 15, fontWeight: 600 }}>Estaciones AM/FM</span>
+          <div style={{
+            background: '#0d130a',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: 24,
+            padding: '16px 20px',
+            color: '#FFFFFF',
+            boxShadow: '0 16px 36px -10px rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            flexDirection: m ? 'column' : 'row',
+            alignItems: 'center',
+            gap: 20,
+            maxWidth: '100%',
+            overflow: 'hidden',
+          }}>
+            <div style={{ flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                <span style={{ fontSize: 32, fontWeight: 800, color: ACENTO, letterSpacing: '-0.02em' }}>{ESTACIONES.length}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Estaciones AM/FM</span>
               </div>
-              <div style={{ fontSize: 12.5, color: D.sub, margin: '2px 0 10px' }}>{activas.length} al aire ahora</div>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>{PLAZAS.map(p => <span key={p} style={{ padding: '5px 12px', borderRadius: 999, border: `1px solid rgba(219, 242, 133, 0.3)`, background: 'rgba(219, 242, 133, 0.15)', color: '#DBF285', fontWeight: 600, fontSize: 12.5 }}>{p}</span>)}</div>
+              <div style={{ fontSize: 12, color: '#9CA3AF', margin: '2px 0 8px' }}>{activas.length} al aire ahora</div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {PLAZAS.map(p => {
+                  const abrev = p === 'Guadalajara' ? 'GDL' : p === 'Monterrey' ? 'MTY' : p;
+                  return (
+                    <span
+                      key={p}
+                      style={{
+                        padding: '4px 10px',
+                        borderRadius: 999,
+                        border: '1px solid rgba(219, 242, 133, 0.3)',
+                        background: 'rgba(219, 242, 133, 0.15)',
+                        color: '#DBF285',
+                        fontWeight: 700,
+                        fontSize: 11.5,
+                      }}
+                    >
+                      {abrev}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 6, minWidth: '260px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: m ? 'repeat(3, 1fr)' : 'repeat(6, 1fr)', gap: 6, flex: 1, maxWidth: '100%' }}>
               {GRUPOS_RADIO.concat([{ id: 'Más', color: '#6B7280' }]).slice(0, 12).map(gr => <GrupoLogo key={gr.id} nombre={gr.id} color={gr.color} />)}
             </div>
           </div>
