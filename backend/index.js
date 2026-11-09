@@ -12,9 +12,10 @@ const PORT = process.env.PORT || 3001;
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'DELETE'],  // ← agregamos DELETE
-    allowedHeaders: ['Content-Type'],
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
@@ -62,21 +63,25 @@ app.get('/health', (req, res) => {
 
 async function startServer() {
   try {
-    console.log('Iniciando servidor...\n');
+    console.log('Iniciando servidor API...\n');
 
-    if (!process.env.GEMINI_API_KEY) {
-      throw new Error('GEMINI_API_KEY no está configurada');
+    if (process.env.GEMINI_API_KEY) {
+      try {
+        initGeminiClient();
+        console.log('Cliente Gemini inicializado correctamente.');
+      } catch (err) {
+        console.warn('⚠️ No se pudo inicializar Gemini:', err.message);
+      }
+    } else {
+      console.warn('⚠️ GEMINI_API_KEY no configurada. Las rutas de chat operarán en modo asistivo.');
     }
 
-    initGeminiClient();
-
-    app.listen(PORT, () => {
-      console.log(`\nServidor corriendo en http://localhost:${PORT}`);
-      console.log(`API disponible en http://localhost:${PORT}/api`);
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`\nServidor corriendo en puerto ${PORT}`);
+      console.log(`API disponible en http://0.0.0.0:${PORT}/api`);
     });
   } catch (error) {
     console.error('❌ Error al iniciar el servidor:', error.message);
-    process.exit(1);
   }
 }
 

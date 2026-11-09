@@ -89,7 +89,9 @@ export function LoginForm({ onGoogleLogin }: LoginFormProps) {
           <input
             id="login-email"
             name="mayia_account_identifier"
-            type="email"
+            type="text"
+            autoCapitalize="none"
+            spellCheck={false}
             autoComplete="off"
             data-lpignore="true"
             data-1p-ignore="true"

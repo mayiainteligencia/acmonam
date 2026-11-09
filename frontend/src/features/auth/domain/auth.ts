@@ -39,11 +39,32 @@ export class AuthError extends Error {
   }
 }
 
+/** Genera un token único y seguro, tolerante a entornos HTTP (IP de VM / redes sin SSL) donde crypto.randomUUID no existe. */
+export function generateAuthToken(prefix = 'token'): string {
+  try {
+    if (typeof window !== 'undefined' && window.crypto && typeof window.crypto.randomUUID === 'function') {
+      return `${prefix}-${window.crypto.randomUUID()}`;
+    }
+  } catch {
+    // Entorno no seguro o sin soporte nativo de Web Crypto
+  }
+  const timestamp = Date.now().toString(36);
+  const r1 = Math.random().toString(36).substring(2, 9);
+  const r2 = Math.random().toString(36).substring(2, 9);
+  return `${prefix}-${timestamp}-${r1}-${r2}`;
+}
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Devuelve el mensaje de error de validación o null si las credenciales son válidas. */
+/** Devuelve el mensaje de error de validación o null si las credenciales son válidas.
+ * Admite tanto correo electrónico corporativo como nombres de usuario directos (ej. admin, auditor).
+ */
 export function validateCredentials({ email, password }: Credentials): string | null {
-  if (!EMAIL_PATTERN.test(email.trim())) return 'Ingresa un correo electrónico válido.';
+  const trimmed = email.trim();
+  if (!trimmed) return 'Ingresa tu usuario o correo electrónico.';
+  if (trimmed.includes('@') && !EMAIL_PATTERN.test(trimmed)) {
+    return 'Ingresa un correo electrónico con formato válido.';
+  }
   if (password.length === 0) return 'Ingresa tu contraseña.';
   return null;
 }

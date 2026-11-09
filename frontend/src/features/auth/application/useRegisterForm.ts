@@ -31,7 +31,8 @@ export function useRegisterForm() {
       saveRememberedAccount(email, name);
       navigate(ROUTES.dashboard, { replace: true });
     } catch (cause) {
-      setError(cause instanceof AuthError ? cause.message : 'Ocurrió un error inesperado.');
+      console.error('[Register Error]', cause);
+      setError(cause instanceof AuthError ? cause.message : (cause instanceof Error ? cause.message : 'Ocurrió un error inesperado al registrar.'));
       setSubmitting(false);
     }
   };

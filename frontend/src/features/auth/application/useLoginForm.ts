@@ -30,7 +30,8 @@ export function useLoginForm() {
       saveRememberedAccount(email);
       navigate(ROUTES.dashboard, { replace: true });
     } catch (cause) {
-      setError(cause instanceof AuthError ? cause.message : 'Ocurrió un error inesperado.');
+      console.error('[Login Error]', cause);
+      setError(cause instanceof AuthError ? cause.message : (cause instanceof Error ? cause.message : 'Ocurrió un error inesperado al iniciar sesión.'));
       setSubmitting(false);
     }
   };
