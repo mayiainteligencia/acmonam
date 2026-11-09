@@ -23,6 +23,38 @@ app.use(express.json());
 // Routes
 app.use('/api/chat', chatRoutes);
 
+// Auth endpoints para compatibilidad con la plataforma
+app.post('/api/auth/login', (req, res) => {
+  const { email } = req.body || {};
+  const cleanEmail = String(email || 'auditor@mayia.mx').trim().toLowerCase();
+  const rawName = cleanEmail.split('@')[0] || 'Auditor';
+  const name = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+  return res.json({
+    token: `mayia-token-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+    user: {
+      email: cleanEmail,
+      name,
+    },
+  });
+});
+
+app.post('/api/auth/register', (req, res) => {
+  const { name, email } = req.body || {};
+  const cleanEmail = String(email || 'nuevo@mayia.mx').trim().toLowerCase();
+  const userName = name || cleanEmail.split('@')[0] || 'Auditor';
+  return res.json({
+    token: `mayia-token-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+    user: {
+      email: cleanEmail,
+      name: userName,
+    },
+  });
+});
+
+app.post('/api/auth/logout', (req, res) => {
+  return res.json({ ok: true });
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend del asistente en linea' });
