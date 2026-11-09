@@ -5,6 +5,9 @@ import { Precision } from '../components/Precision';
 import { Radio } from '../components/Radio';
 import { Television } from '../components/Television';
 import { Impresos } from '../components/Impresos';
+import { Academia } from '../components/Academia';
+import { NocMesaAyuda } from '../components/NocMesaAyuda';
+import { Innovacion } from '../components/Innovacion';
 import { ToastProvider } from '../components/shared/toast';
 import { ConfirmProvider } from '../components/shared/confirm';
 import '../responsive.css';
@@ -20,6 +23,12 @@ export function DashboardApp() {
         return <Television />;
       case 'impresos':
         return <Impresos />;
+      case 'academia':
+        return <Academia />;
+      case 'noc':
+        return <NocMesaAyuda />;
+      case 'innovacion':
+        return <Innovacion />;
       default:
         return (
           <>

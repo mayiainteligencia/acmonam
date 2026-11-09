@@ -22,56 +22,54 @@ export const PRECISION = [
 ];
 
 // ───────── Radio ─────────
+import { ESTACIONES_147, GRUPOS_CATALOGO, type EstacionOficial, type BandaRadio } from './catalogo147';
+export { ESTACIONES_147, GRUPOS_CATALOGO, type EstacionOficial, type BandaRadio };
+
 export interface GrupoRadio { id: string; color: string }
-export const GRUPOS_RADIO: GrupoRadio[] = [
-  { id: 'Radio Fórmula', color: '#2563EB' }, { id: 'Grupo ACIR', color: '#DC2626' }, { id: 'MVS Radio', color: '#7C3AED' },
-  { id: 'Radiópolis', color: '#F59E0B' }, { id: 'NRM Comunicaciones', color: '#0D9488' }, { id: 'Radiorama', color: '#DB2777' },
-  { id: 'Grupo Radio Centro', color: '#EA580C' }, { id: 'Multimedios Radio', color: '#16A34A' }, { id: 'IMER', color: '#4D7C0F' },
-  { id: 'Universitarias', color: '#0891B2' }, { id: 'Gobierno', color: '#6B7280' },
-];
-export const colorGrupo = (g: string) => GRUPOS_RADIO.find(x => x.id === g)?.color ?? '#6B7280';
+export const GRUPOS_RADIO: GrupoRadio[] = GRUPOS_CATALOGO.map(g => ({ id: g.id, color: g.color }));
 
-export interface Estacion { nombre: string; dial: string; plaza: Plaza; grupo: string; activa: boolean; spotsHoy: number }
-
-// 'Nombre|dial|grupo' — destacadas por plaza; el resto se completa hasta 49 por plaza (147 en total).
-const DESTACADAS: Record<Plaza, string[]> = {
-  CDMX: [
-    'Radio Fórmula 1|970 AM|Radio Fórmula', 'Radio Fórmula 2|1500 AM|Radio Fórmula', 'Radio Fórmula|103.3 FM|Radio Fórmula',
-    'W Radio|96.9 FM|Radiópolis', 'W Radio|900 AM|Radiópolis', 'Los 40|101.7 FM|Radiópolis', 'Ke Buena|92.9 FM|Radiópolis', 'Alfa|91.3 FM|Radiópolis',
-    'La Mejor|97.7 FM|Grupo ACIR', 'Amor|95.3 FM|Grupo ACIR', 'Mix|106.5 FM|Grupo ACIR', 'Radio Disney|99.3 FM|Grupo ACIR',
-    'Exa FM|104.9 FM|MVS Radio', 'Stereo Joya|93.7 FM|MVS Radio', 'MVS Noticias|102.5 FM|MVS Radio',
-    'Radio Centro|1030 AM|Grupo Radio Centro', 'Universal Stereo|92.1 FM|Grupo Radio Centro', 'Beat|100.9 FM|Grupo Radio Centro',
-    'Reactor|105.7 FM|IMER', 'Opus|94.5 FM|IMER', 'Radio UNAM|96.1 FM|Universitarias', 'Radio IPN|95.7 FM|Universitarias', 'Radio UAM|94.1 FM|Universitarias',
-    'Radio Capital|1110 AM|Gobierno', 'Radio Ciudadana|660 AM|Gobierno',
-  ],
-  Guadalajara: [
-    'La Mejor GDL|93.9 FM|Grupo ACIR', 'Amor GDL|98.7 FM|Grupo ACIR', 'W Radio GDL|1130 AM|Radiópolis', 'Los 40 GDL|88.7 FM|Radiópolis',
-    'Exa GDL|91.1 FM|MVS Radio', 'Radio Fórmula GDL|1550 AM|Radio Fórmula', 'Radiorama Jalisco|1010 AM|Radiorama', 'Stereo Cien|100.3 FM|Radiorama',
-    'NRM GDL|102.7 FM|NRM Comunicaciones', 'Multimedios Radio GDL|105.1 FM|Multimedios Radio', 'Radio U de G|104.3 FM|Universitarias',
-    'Radio Jalisco|90.7 FM|Gobierno', 'Radio Metrópoli|1360 AM|Radiorama',
-  ],
-  Monterrey: [
-    'Multimedios Radio|1220 AM|Multimedios Radio', 'Multimedios Stereo|101.7 FM|Multimedios Radio', 'La Caliente|94.9 FM|Multimedios Radio',
-    'W Radio MTY|96.9 FM|Radiópolis', 'Los 40 MTY|89.7 FM|Radiópolis', 'La Mejor MTY|90.1 FM|Grupo ACIR', 'Amor MTY|107.7 FM|Grupo ACIR',
-    'Exa MTY|99.7 FM|MVS Radio', 'Radio Fórmula MTY|1540 AM|Radio Fórmula', 'NRM MTY|88.9 FM|NRM Comunicaciones', 'Radiorama MTY|105.3 FM|Radiorama',
-    'Radio UANL|89.7 FM|Universitarias', 'Radio Nuevo León|1170 AM|Gobierno',
-  ],
+export const colorGrupo = (g: string) => {
+  const norm = (g || '').trim().toLowerCase();
+  const c = GRUPOS_CATALOGO.find(x => x.id.toLowerCase() === norm);
+  if (c) return c.color;
+  let hash = 0;
+  for (let i = 0; i < g.length; i++) hash = g.charCodeAt(i) + ((hash << 5) - hash);
+  const colors = ['#2563EB', '#DC2626', '#7C3AED', '#F59E0B', '#0D9488', '#DB2777', '#EA580C', '#16A34A', '#4D7C0F', '#0891B2'];
+  return colors[Math.abs(hash) % colors.length];
 };
 
-const FILL = ['Radio Fórmula', 'Grupo ACIR', 'MVS Radio', 'Radiópolis', 'NRM Comunicaciones', 'Radiorama', 'Grupo Radio Centro', 'Multimedios Radio', 'IMER'];
-export const ESTACIONES: Estacion[] = PLAZAS.flatMap((plaza, pi) => {
-  const lista = DESTACADAS[plaza].map(s => s.split('|'));
-  for (let k = lista.length; k < 49; k++) {
-    const g = FILL[(k + pi) % FILL.length];
-    const am = k % 3 === 0;
-    lista.push([`${g.split(' ').slice(-1)[0]} ${plaza === 'CDMX' ? 'CDMX' : plaza === 'Guadalajara' ? 'GDL' : 'MTY'} ${k}`, am ? `${600 + k * 13} AM` : `${88 + (k * 7) % 20}.${(k * 3) % 10} FM`, g]);
-  }
-  return lista.map(([nombre, dial, grupo], k) => ({
-    nombre, dial, grupo, plaza,
-    activa: (pi * 49 + k) % 19 !== 0,
-    spotsHoy: 12 + rnd(pi * 49 + k, 90),
-  }));
-});
+export interface Estacion {
+  id?: string;
+  siglas?: string;
+  nombre: string;
+  dial: string;
+  banda?: BandaRadio;
+  plaza: Plaza;
+  grupo: string;
+  activa: boolean;
+  spotsHoy: number;
+  streamUrl?: string;
+  estado?: string;
+  ciudad?: string;
+  estacionRaw?: string;
+}
+
+// Catálogo oficial de las 147 estaciones activas de radio (CDMX: 62, Guadalajara: 45, Monterrey: 40)
+export const ESTACIONES: Estacion[] = ESTACIONES_147.map(e => ({
+  id: e.id,
+  siglas: e.siglas,
+  nombre: e.nombre,
+  dial: e.dial,
+  banda: e.banda,
+  plaza: e.plaza,
+  grupo: e.grupo,
+  activa: e.activa,
+  spotsHoy: e.spotsHoy,
+  streamUrl: e.streamUrl,
+  estado: e.estado,
+  ciudad: e.ciudad,
+  estacionRaw: e.estacionRaw,
+}));
 
 export type TipoRadio = 'Spot Regular' | 'Patrocinio' | 'Autopromocional';
 export interface SpotRadio { estacion: string; plaza: Plaza; grupo: string; marca: string; anunciante: string; categoria: string; hora: string; dur: number; tipo: TipoRadio }

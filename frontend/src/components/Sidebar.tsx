@@ -412,6 +412,189 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange
             </div>
           );
         })}
+
+        {/* Separador entre Principales y Extras */}
+        {extraSections.length > 0 && (
+          <>
+            <div style={{
+              height: '1px',
+              backgroundColor: 'rgba(219, 242, 133, 0.14)',
+              margin: '14px 8px 10px',
+            }} />
+            {!collapsed && (
+              <div style={{
+                fontSize: '10px',
+                fontWeight: 800,
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                color: '#DBF285',
+                padding: '2px 12px 8px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}>
+                <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#DBF285' }} />
+                Módulos Extra & Soporte
+              </div>
+            )}
+            {extraSections.map((item) => {
+              const Icon = item.icono;
+              const isActive = activeSection === item.id;
+              const isExpanded = !!expandedSections[item.id];
+              const hasSub = !!item.sub && item.sub.length > 0;
+
+              return (
+                <div key={item.id} style={{ marginBottom: '4px' }}>
+                  <div
+                    onClick={() => handleItemClick(item.id)}
+                    title={collapsed ? item.nombre : undefined}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: collapsed ? 'center' : 'space-between',
+                      gap: '10px',
+                      padding: collapsed ? '10px 0' : '10px 12px',
+                      borderRadius: '10px',
+                      background: isActive ? 'linear-gradient(135deg, #729013 0%, #5B7410 100%)' : 'rgba(255, 255, 255, 0.02)',
+                      color: isActive ? '#FFFFFF' : '#D1D5DB',
+                      border: isActive ? '1px solid rgba(219, 242, 133, 0.45)' : '1px solid rgba(255, 255, 255, 0.06)',
+                      cursor: 'pointer',
+                      transition: 'all 0.18s ease',
+                      boxShadow: isActive ? '0 4px 16px rgba(114, 144, 19, 0.35)' : 'none',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.backgroundColor = 'rgba(219, 242, 133, 0.10)';
+                        e.currentTarget.style.color = '#DBF285';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.02)';
+                        e.currentTarget.style.color = '#D1D5DB';
+                      }
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: 1 }}>
+                      <div
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '8px',
+                          backgroundColor: isActive ? 'rgba(255, 255, 255, 0.22)' : 'rgba(255, 255, 255, 0.05)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                          color: isActive ? '#FFFFFF' : '#DBF285',
+                          transition: 'all 0.15s ease',
+                        }}
+                      >
+                        <Icon size={17} />
+                      </div>
+                      {!collapsed && (
+                        <span
+                          style={{
+                            fontSize: '13.5px',
+                            fontWeight: isActive ? 600 : 500,
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {item.nombre}
+                        </span>
+                      )}
+                    </div>
+
+                    {!collapsed && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                        <PuntoEstado estado={item.estado} />
+                        {hasSub && (
+                          <button
+                            onClick={(e) => toggleAccordion(item.id, e)}
+                            title={isExpanded ? 'Ocultar opciones' : 'Ver opciones'}
+                            aria-label="Alternar submenú"
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              padding: 2,
+                              color: isActive ? 'rgba(255, 255, 255, 0.85)' : '#9CA3AF',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              borderRadius: 4,
+                              transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                              transition: 'transform 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
+                            }}
+                          >
+                            <ChevronDown size={14} />
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Subitems */}
+                  {!collapsed && hasSub && (
+                    <div
+                      style={{
+                        maxHeight: isExpanded ? `${item.sub!.length * 36 + 10}px` : '0px',
+                        opacity: isExpanded ? 1 : 0,
+                        overflow: 'hidden',
+                        margin: isExpanded ? '4px 0 6px 20px' : '0 0 0 20px',
+                        paddingLeft: '10px',
+                        borderLeft: `2px solid ${isActive ? '#DBF285' : 'rgba(219, 242, 133, 0.22)'}`,
+                      }}
+                    >
+                      {item.sub!.map((sb) => {
+                        const isSubActive = activeSubId === sb.id;
+                        return (
+                          <button
+                            key={sb.id}
+                            onClick={() => handleSubItemClick(sb.id)}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 8,
+                              width: '100%',
+                              textAlign: 'left',
+                              padding: '6px 10px',
+                              fontSize: '12.5px',
+                              color: isSubActive ? '#DBF285' : '#9CA3AF',
+                              fontWeight: isSubActive ? 600 : 400,
+                              backgroundColor: isSubActive ? 'rgba(219, 242, 133, 0.18)' : 'transparent',
+                              border: 'none',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              transition: 'all 0.15s ease',
+                              marginBottom: '2px',
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: 5,
+                                height: 5,
+                                borderRadius: '50%',
+                                backgroundColor: isSubActive ? '#DBF285' : 'rgba(255, 255, 255, 0.3)',
+                                flexShrink: 0,
+                              }}
+                            />
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {sb.nombre}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </>
+        )}
       </nav>
 
       {/* Footer Info de MAYIA */}

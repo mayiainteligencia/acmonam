@@ -70,12 +70,16 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
         <div className="pricing__grid">
           {pricing.plans.map((plan, index) => (
             <article key={plan.id} className={`plan${positionClass(index, pricing.plans.length, plan)}`}>
-              {plan.isPopular && (
+              {plan.isPopular ? (
                 <div className="plan__badge">
                   <Star size={14} aria-hidden="true" />
                   {pricing.popular}
                 </div>
-              )}
+              ) : plan.tag ? (
+                <div className="plan__badge plan__badge--tag">
+                  {plan.tag}
+                </div>
+              ) : null}
 
               <p className="plan__name">{plan.name}</p>
 

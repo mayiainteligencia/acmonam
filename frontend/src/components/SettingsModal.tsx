@@ -160,60 +160,41 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           <div>
             <div style={{
               fontSize: '11px',
-              fontWeight: 800,
-              letterSpacing: '0.14em',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
               color: '#DBF285',
               textTransform: 'uppercase',
-              marginBottom: '10px',
-              fontFamily: 'monospace',
+              marginBottom: '8px',
             }}>
-              Configuración de Cuenta · MAYIA Escucha
+              Ajustes de Perfil
             </div>
 
             <h2 style={{
-              fontSize: '28px',
+              fontSize: '26px',
               fontWeight: 800,
               color: '#FFFFFF',
               letterSpacing: '-0.02em',
               lineHeight: 1.15,
-              margin: '0 0 10px',
+              margin: '0 0 8px',
             }}>
-              Perfil y Credenciales de Acceso
+              Tu Cuenta
             </h2>
 
             <p style={{
               fontSize: '13px',
               color: '#9CA3AF',
-              lineHeight: 1.6,
-              margin: '0 0 20px',
+              lineHeight: 1.5,
+              margin: '0 0 24px',
             }}>
-              Modifica la identidad del operador asignado, correo de notificaciones oficiales y contraseña de acceso al sistema de auditoría.
+              Administra tu información personal y credenciales de acceso a la plataforma.
             </p>
-
-            {/* Banner de alerta y prevención de errores */}
-            <div style={{
-              background: 'rgba(245, 158, 11, 0.08)',
-              border: '1px solid rgba(245, 158, 11, 0.28)',
-              borderRadius: '16px',
-              padding: '12px 16px',
-              marginBottom: '20px',
-              display: 'flex',
-              gap: '12px',
-              alignItems: 'flex-start',
-            }}>
-              <AlertTriangle size={18} color="#F59E0B" style={{ flexShrink: 0, marginTop: '2px' }} />
-              <div style={{ fontSize: '12px', color: '#F3F4F6', lineHeight: 1.45 }}>
-                <span style={{ fontWeight: 700, color: '#FCD34D' }}>Cuidado con tus credenciales: </span>
-                Modificar tu correo o contraseña alterará tus llaves de acceso a las sesiones de telemetría y auditoría en tiempo real. Verifica detenidamente antes de guardar.
-              </div>
-            </div>
 
             {mensajeExito && (
               <div style={{
                 background: 'rgba(16, 185, 129, 0.12)',
-                border: '1px solid #10B981',
-                borderRadius: '16px',
-                padding: '12px 16px',
+                border: '1px solid rgba(16, 185, 129, 0.4)',
+                borderRadius: '14px',
+                padding: '10px 16px',
                 color: '#10B981',
                 fontSize: '13px',
                 fontWeight: 600,
@@ -222,7 +203,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 gap: '8px',
                 marginBottom: '20px',
               }}>
-                <Check size={16} /> ¡Datos de cuenta actualizados exitosamente!
+                <Check size={16} /> Cambios guardados correctamente.
               </div>
             )}
 
@@ -424,76 +405,88 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
             alignItems: 'center',
             textAlign: 'center',
           }}>
-            {/* Foto con halo rojo/naranja/verde como en la imagen */}
+            {/* Foto sobria, minimalista y sofisticada sin halos invasivos */}
             <div style={{
-              width: '92px',
-              height: '92px',
+              position: 'relative',
+              width: '84px',
+              height: '84px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #EF4444 0%, #DBF285 100%)',
-              padding: '3px',
-              boxShadow: '0 8px 30px rgba(239, 68, 68, 0.3)',
+              padding: '2px',
+              background: 'linear-gradient(135deg, rgba(219, 242, 133, 0.35) 0%, rgba(255, 255, 255, 0.08) 100%)',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
               marginBottom: '16px',
             }}>
               <div style={{
                 width: '100%',
                 height: '100%',
                 borderRadius: '50%',
-                background: '#141d0e',
+                background: '#101319',
                 color: '#DBF285',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '34px',
-                fontWeight: 900,
-                border: '2px solid #0b0f08',
+                fontSize: '28px',
+                fontWeight: 700,
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+                letterSpacing: '-0.02em',
               }}>
                 {inicial}
               </div>
+              <div style={{
+                position: 'absolute',
+                bottom: '2px',
+                right: '2px',
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                backgroundColor: '#22c55e',
+                border: '2px solid #101319',
+              }} />
             </div>
 
-            <div style={{ fontSize: '20px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.01em' }}>
+            <div style={{ fontSize: '18px', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.01em' }}>
               {name || 'Martín Cortés'}
             </div>
 
             <div style={{
-              fontSize: '10.5px',
-              fontWeight: 700,
-              letterSpacing: '0.15em',
+              fontSize: '11px',
+              fontWeight: 600,
+              letterSpacing: '0.06em',
               color: '#9CA3AF',
               textTransform: 'uppercase',
-              margin: '6px 0 14px',
+              margin: '4px 0 8px',
             }}>
-              DIRECTOR DE MONITOREO · MAYIA ESCUCHA
+              Usuario Autorizado
             </div>
 
             <p style={{
               fontSize: '12px',
-              color: '#9CA3AF',
+              color: 'rgba(255, 255, 255, 0.55)',
               lineHeight: 1.5,
-              margin: '0 0 24px',
+              margin: '0 0 18px',
+              maxWidth: '240px',
             }}>
-              Supervisando la detección y transcripción en tiempo real sobre radio, TV y prensa con servidores propios de IA.
+              Cuenta corporativa activa para consulta y seguimiento de telemetría.
             </p>
 
-            {/* Lista estilo enlaces Twitter, LinkedIn, GitHub con flecha ↗ */}
+            {/* Metadatos discretos y profesionales (sin revelar arquitectura interna) */}
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '10px 14px',
-                borderRadius: '14px',
-                background: 'rgba(255, 255, 255, 0.03)',
+                padding: '9px 12px',
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.025)',
                 border: '1px solid rgba(255, 255, 255, 0.05)',
                 fontSize: '12px',
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#FFFFFF', fontWeight: 600 }}>
-                  <Shield size={15} color="#DBF285" />
-                  <span>Rol del Sistema</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.9)', fontWeight: 500 }}>
+                  <Shield size={14} color="#DBF285" />
+                  <span>Nivel de Acceso</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#9CA3AF' }}>
-                  <span>Auditor Senior</span>
-                  <ArrowUpRight size={14} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#9CA3AF', fontSize: '11.5px' }}>
+                  <span>Supervisión</span>
                 </div>
               </div>
 
@@ -501,19 +494,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '10px 14px',
-                borderRadius: '14px',
-                background: 'rgba(255, 255, 255, 0.03)',
+                padding: '9px 12px',
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.025)',
                 border: '1px solid rgba(255, 255, 255, 0.05)',
                 fontSize: '12px',
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#FFFFFF', fontWeight: 600 }}>
-                  <Mail size={15} color="#DBF285" />
-                  <span>Contacto</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.9)', fontWeight: 500 }}>
+                  <Mail size={14} color="#DBF285" />
+                  <span>Organización</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#9CA3AF' }}>
-                  <span>Verificado</span>
-                  <ArrowUpRight size={14} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#9CA3AF', fontSize: '11.5px' }}>
+                  <span>Enterprise</span>
                 </div>
               </div>
 
@@ -521,19 +513,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '10px 14px',
-                borderRadius: '14px',
-                background: 'rgba(255, 255, 255, 0.03)',
+                padding: '9px 12px',
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.025)',
                 border: '1px solid rgba(255, 255, 255, 0.05)',
                 fontSize: '12px',
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#FFFFFF', fontWeight: 600 }}>
-                  <Cpu size={15} color="#DBF285" />
-                  <span>Motor IA</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.9)', fontWeight: 500 }}>
+                  <Cpu size={14} color="#DBF285" />
+                  <span>Cobertura</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#9CA3AF' }}>
-                  <span>IA en Servidor Propio</span>
-                  <ArrowUpRight size={14} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#9CA3AF', fontSize: '11.5px' }}>
+                  <span>Nacional</span>
                 </div>
               </div>
 
@@ -541,19 +532,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '10px 14px',
-                borderRadius: '14px',
-                background: 'rgba(255, 255, 255, 0.03)',
+                padding: '9px 12px',
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.025)',
                 border: '1px solid rgba(255, 255, 255, 0.05)',
                 fontSize: '12px',
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#FFFFFF', fontWeight: 600 }}>
-                  <Lock size={15} color="#DBF285" />
-                  <span>Seguridad</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.9)', fontWeight: 500 }}>
+                  <Lock size={14} color="#DBF285" />
+                  <span>Estado de Cuenta</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#9CA3AF' }}>
-                  <span>JWT Cifrado</span>
-                  <ArrowUpRight size={14} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#22c55e', fontSize: '11.5px', fontWeight: 600 }}>
+                  <span>Verificada</span>
                 </div>
               </div>
             </div>
@@ -564,14 +554,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
       {/* Modal de confirmación para descartar cambios pendientes */}
       <ConfirmDialog
         isOpen={confirmDiscardOpen}
-        title="¿Descartar los cambios pendientes?"
-        subtitle="Alerta de Formulario"
-        description="Has realizado modificaciones en tus datos o contraseñas que aún no has guardado."
-        warnings={[
-          "Los datos editados no guardados se perderán inmediatamente.",
-          "Tus credenciales actuales seguirán activas sin modificaciones.",
-        ]}
-        confirmText="Descartar y salir"
+        title="Descartar cambios"
+        subtitle="Ajustes"
+        description="Hay modificaciones sin guardar. ¿Deseas descartarlas y cerrar?"
+        confirmText="Descartar"
         cancelText="Seguir editando"
         danger={true}
         onConfirm={handleConfirmDiscard}

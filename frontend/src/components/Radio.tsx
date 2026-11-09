@@ -40,12 +40,20 @@ export const Radio = () => {
   // Los ítems del submenú lateral disparan este evento para ir a un módulo.
   useEffect(() => {
     const h = (e: Event) => {
-      setVista(VISTAS[0]);
+      setVista('Panel de radio');
       const id = (e as CustomEvent<string>).detail;
       setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
     };
+    const hVista = (e: Event) => {
+      const v = (e as CustomEvent<string>).detail;
+      if (v && VISTAS.includes(v)) setVista(v);
+    };
     window.addEventListener('seccion:goto', h);
-    return () => window.removeEventListener('seccion:goto', h);
+    window.addEventListener('radio:cambiar-vista', hVista);
+    return () => {
+      window.removeEventListener('seccion:goto', h);
+      window.removeEventListener('radio:cambiar-vista', hVista);
+    };
   }, []);
   // Módulo 4: testigos reales (mismo endpoint que TestigosIA), se refresca cada 10 s.
   useEffect(() => {
@@ -111,17 +119,24 @@ export const Radio = () => {
             overflow: 'hidden',
           }}>
             <div style={{ flexShrink: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+              <div
+                onClick={() => setVista('Testigos IA · en vivo (real)')}
+                style={{ display: 'flex', alignItems: 'baseline', gap: 8, cursor: 'pointer' }}
+                title="Abrir Testigos IA y catálogo de estaciones"
+              >
                 <span style={{ fontSize: 32, fontWeight: 800, color: ACENTO, letterSpacing: '-0.02em' }}>{ESTACIONES.length}</span>
                 <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Estaciones AM/FM</span>
               </div>
-              <div style={{ fontSize: 12, color: '#9CA3AF', margin: '2px 0 8px' }}>{activas.length} al aire ahora</div>
+              <div style={{ fontSize: 12, color: '#9CA3AF', margin: '2px 0 8px' }}>
+                {activas.length} al aire ahora · <span onClick={() => setVista('Testigos IA · en vivo (real)')} style={{ color: ACENTO, cursor: 'pointer', fontWeight: 600 }}>Testigos IA ↗</span>
+              </div>
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                 {PLAZAS.map(p => {
-                  const abrev = p === 'Guadalajara' ? 'GDL' : p === 'Monterrey' ? 'MTY' : p;
+                  const abrev = p === 'Guadalajara' ? 'GDL (45)' : p === 'Monterrey' ? 'MTY (40)' : 'CDMX (62)';
                   return (
                     <span
                       key={p}
+                      onClick={() => setVista('Testigos IA · en vivo (real)')}
                       style={{
                         padding: '4px 10px',
                         borderRadius: 999,
@@ -130,6 +145,7 @@ export const Radio = () => {
                         color: '#DBF285',
                         fontWeight: 700,
                         fontSize: 11.5,
+                        cursor: 'pointer'
                       }}
                     >
                       {abrev}
@@ -146,12 +162,20 @@ export const Radio = () => {
 
         <Tabs tabs={VISTAS} active={vista} onChange={setVista} />
 
-        {vista === VISTAS[2] ? <div style={{ margin: m ? '0 -16px' : '0 -30px', borderRadius: 16, overflow: 'hidden', background: colores.fondoPrincipal }}><AnalisisPauta /></div> : vista === VISTAS[1] ? <div style={{ margin: m ? '0 -16px' : '0 -30px', borderRadius: 16, overflow: 'hidden', background: colores.fondoPrincipal }}><TestigosIA /></div> : <>
+        {vista === 'Análisis de Pauta' ? (
+          <div style={{ margin: m ? '0 -16px' : '0 -30px', borderRadius: 16, overflow: 'hidden', background: colores.fondoPrincipal }}>
+            <AnalisisPauta />
+          </div>
+        ) : vista === 'Testigos IA · en vivo (real)' ? (
+          <div style={{ margin: m ? '0 -16px' : '0 -30px', borderRadius: 16, overflow: 'hidden', background: colores.fondoPrincipal }}>
+            <TestigosIA />
+          </div>
+        ) : <>
           <div style={g2}>
             {/* Monitoreo en vivo */}
             <Modulo id="radio-vivo" title="Monitoreo en Vivo (Estaciones Activas)" right={<>
               <Btn onClick={() => setRot(r => r + 1)}><RefreshCw size={14} /></Btn>
-              <Btn onClick={() => setVista(VISTAS[1])}><RadioIcon size={14} /> Abrir Testigos IA</Btn></>}>
+              <Btn onClick={() => setVista('Testigos IA · en vivo (real)')}><RadioIcon size={14} /> Abrir Testigos IA</Btn></>}>
               {vivo.map(({ e, i }) => (
                 <div key={e.nombre + e.dial} style={{ display: 'flex', flexDirection: m ? 'column' : 'row', alignItems: m ? 'flex-start' : 'center', justifyContent: 'space-between', gap: 12, padding: '12px 14px', marginBottom: 8, background: 'rgba(255, 255, 255, 0.04)', border: `1px solid ${D.fila}`, borderRadius: 12 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: m ? '100%' : '170px' }}>

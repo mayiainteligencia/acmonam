@@ -9,14 +9,23 @@ import {
   AlertTriangle,
   CheckCircle,
   Info,
+  Scale,
+  ChevronDown,
+  Radio,
+  CheckCheck,
+  Sparkles,
+  ExternalLink,
+  Activity,
+  Clock,
 } from 'lucide-react';
 import logoMayia from '../assets/logo/mayiaEscuchaTrim.png';
 import { useAuth } from '../features/auth';
 import { navigate } from '../core/router';
 import { ROUTES } from '../app/routes';
-import { secciones, type ItemMenu } from '../config/menu';
+import { secciones, seccionesPrincipales, seccionesExtra, type ItemMenu } from '../config/menu';
 import { SettingsModal } from './SettingsModal';
 import { ConfirmDialog } from './ConfirmDialog';
+import { LegalModal } from './LegalModal';
 
 const sectionFilterPills: Record<string, string[]> = {
   precision: [
@@ -57,22 +66,97 @@ const sectionFilterPills: Record<string, string[]> = {
     'Color / B&N',
     '300 DPI Legal',
   ],
+  academia: [
+    'Todos los módulos',
+    'Rutas por rol',
+    'Guías operativas',
+    'Tutoriales en video',
+    'Manuales en PDF',
+    'Preguntas frecuentes',
+  ],
+  noc: [
+    'Centro NOC',
+    'Salud de 147 streams',
+    'Clusters de IA',
+    'Log en vivo',
+    'Mesa de Ayuda 24/7',
+    'Levantar ticket',
+  ],
+  innovacion: [
+    'Visión general',
+    'Grafos de conocimiento',
+    'Gemelos digitales',
+    'Simulación What-If',
+    'Brand Safety IA',
+    'Roadmap 2027',
+  ],
 };
 
 interface Notification {
   id: number;
-  tipo: 'alerta' | 'exito' | 'info' | 'urgente';
+  tipo: 'alerta' | 'exito' | 'info' | 'urgente' | 'radio';
   titulo: string;
   mensaje: string;
   tiempo: string;
   leida: boolean;
+  categoria?: 'radio' | 'tv' | 'impresos' | 'sistema';
+  plaza?: string;
+  linkSeccion?: string;
 }
 
 const notificacionesEstaticas: Notification[] = [
-  { id: 1, tipo: 'urgente', titulo: 'TV: precisión bajo la meta', mensaje: 'Televisión está en 96.8%, por debajo del 97.5% contractual.', tiempo: 'Hace 3 min', leida: false },
-  { id: 2, tipo: 'alerta',  titulo: 'Detección on-air · Radio',   mensaje: 'Nuevo spot detectado en W Radio 96.9 FM. Testigo registrado.', tiempo: 'Hace 8 min', leida: false },
-  { id: 3, tipo: 'info',    titulo: 'Impresos: lista preliminar', mensaje: 'El cliente aún enviará la lista definitiva de periódicos.', tiempo: 'Hace 1 hora', leida: true },
-  { id: 4, tipo: 'exito',   titulo: 'Cobertura de radio completa', mensaje: '147 de 147 estaciones AM/FM configuradas.', tiempo: 'Hace 2 horas', leida: true },
+  {
+    id: 1,
+    tipo: 'radio',
+    titulo: 'Detección On-Air · XEW-FM 96.9',
+    mensaje: 'Spot de 20s para "Tiendas Aurora" verificado con 99.4% de coincidencia acústica.',
+    tiempo: 'Hace 2 min',
+    leida: false,
+    categoria: 'radio',
+    plaza: 'CDMX',
+    linkSeccion: 'radio'
+  },
+  {
+    id: 2,
+    tipo: 'urgente',
+    titulo: 'Televisión: Meta de precisión',
+    mensaje: 'Canal Las Estrellas registró 96.8% en franja matutina (umbral contractual: 97.5%).',
+    tiempo: 'Hace 8 min',
+    leida: false,
+    categoria: 'tv',
+    plaza: 'Nacional',
+    linkSeccion: 'tv'
+  },
+  {
+    id: 3,
+    tipo: 'exito',
+    titulo: 'Catálogo Radio 147 Estaciones',
+    mensaje: 'Sincronización completa de los 147 flujos AM/FM (CDMX: 62, GDL: 45, MTY: 40).',
+    tiempo: 'Hace 45 min',
+    leida: true,
+    categoria: 'radio',
+    linkSeccion: 'radio'
+  },
+  {
+    id: 4,
+    tipo: 'info',
+    titulo: 'Impresos: Pauta de periódicos',
+    mensaje: 'Digitalización OCR de 70 publicaciones diarias procesada sin discrepancias.',
+    tiempo: 'Hace 2 horas',
+    leida: true,
+    categoria: 'impresos',
+    linkSeccion: 'impresos'
+  },
+  {
+    id: 5,
+    tipo: 'exito',
+    titulo: 'Motor Whisper Local v3 Activo',
+    mensaje: 'Inferencia paralela en GPU local con latencia media de 1.4s por chunk de audio.',
+    tiempo: 'Hace 3 horas',
+    leida: true,
+    categoria: 'sistema',
+    linkSeccion: 'noc'
+  }
 ];
 
 interface ModernDashboardLayoutProps {
@@ -90,6 +174,7 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
   const currentPills = sectionFilterPills[activeSection] || sectionFilterPills.precision;
   const [activeFilterPill, setActiveFilterPill] = useState(currentPills[0]);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [legalOpen, setLegalOpen] = useState(false);
   const [confirmLogoutOpen, setConfirmLogoutOpen] = useState(false);
   const [toastAlerta, setToastAlerta] = useState<{ visible: boolean; mensaje: string; tipo: 'exito' | 'advertencia' }>({
     visible: false,
@@ -99,6 +184,19 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
   const [notificacionesAbiertas, setNotificacionesAbiertas] = useState(false);
   const [notificaciones, setNotificaciones] = useState<Notification[]>(notificacionesEstaticas);
   const notifRef = useRef<HTMLDivElement>(null);
+
+  const [menuExtrasAbierto, setMenuExtrasAbierto] = useState(false);
+  const menuExtrasRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (menuExtrasRef.current && !menuExtrasRef.current.contains(e.target as Node)) {
+        setMenuExtrasAbierto(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   useEffect(() => {
     const pills = sectionFilterPills[activeSection] || sectionFilterPills.precision;
@@ -115,6 +213,8 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  const [filtroNotif, setFiltroNotif] = useState<'todas' | 'noleidas' | 'radio' | 'sistema'>('todas');
+
   const notificacionesNoLeidas = notificaciones.filter(n => !n.leida).length;
 
   const marcarComoLeida = (id: number) =>
@@ -123,12 +223,71 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
   const marcarTodasComoLeidas = () =>
     setNotificaciones(notificaciones.map(n => ({ ...n, leida: true })));
 
+  const notificacionesFiltradas = notificaciones.filter(n => {
+    if (filtroNotif === 'noleidas') return !n.leida;
+    if (filtroNotif === 'radio') return n.categoria === 'radio';
+    if (filtroNotif === 'sistema') return n.categoria === 'sistema' || n.categoria === 'tv' || n.categoria === 'impresos';
+    return true;
+  });
+
   const getIconoPorTipo = (tipo: Notification['tipo']) => {
     switch (tipo) {
-      case 'alerta':  return <AlertTriangle size={15} color="#F59E0B" />;
-      case 'exito':   return <CheckCircle   size={15} color="#10B981" />;
-      case 'urgente': return <AlertTriangle size={15} color="#EF4444" />;
-      case 'info':    return <Info          size={15} color="#DBF285" />;
+      case 'radio':
+        return (
+          <div style={{
+            width: 34, height: 34, borderRadius: '50%',
+            background: 'rgba(219, 242, 133, 0.15)',
+            border: '1px solid rgba(219, 242, 133, 0.35)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#DBF285'
+          }}>
+            <Radio size={16} />
+          </div>
+        );
+      case 'urgente':
+        return (
+          <div style={{
+            width: 34, height: 34, borderRadius: '50%',
+            background: 'rgba(239, 68, 68, 0.15)',
+            border: '1px solid rgba(239, 68, 68, 0.35)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F87171'
+          }}>
+            <AlertTriangle size={16} />
+          </div>
+        );
+      case 'alerta':
+        return (
+          <div style={{
+            width: 34, height: 34, borderRadius: '50%',
+            background: 'rgba(245, 158, 11, 0.15)',
+            border: '1px solid rgba(245, 158, 11, 0.35)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FBBF24'
+          }}>
+            <AlertTriangle size={16} />
+          </div>
+        );
+      case 'exito':
+        return (
+          <div style={{
+            width: 34, height: 34, borderRadius: '50%',
+            background: 'rgba(52, 211, 153, 0.15)',
+            border: '1px solid rgba(52, 211, 153, 0.35)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34D399'
+          }}>
+            <CheckCircle size={16} />
+          </div>
+        );
+      case 'info':
+      default:
+        return (
+          <div style={{
+            width: 34, height: 34, borderRadius: '50%',
+            background: 'rgba(56, 189, 248, 0.15)',
+            border: '1px solid rgba(56, 189, 248, 0.35)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38BDF8'
+          }}>
+            <Info size={16} />
+          </div>
+        );
     }
   };
 
@@ -153,7 +312,7 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
     link.href = URL.createObjectURL(blob);
     link.download = `reporte-monitoreo-${activeSection}.csv`;
     link.click();
-    mostrarToast('Bitácora descargada. Precaución: los registros contienen telemetría sensible.', 'advertencia');
+    mostrarToast('Bitácora descargada correctamente.', 'exito');
   };
 
   const pedirConfirmacionLogout = () => {
@@ -174,6 +333,12 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
         return 'Televisión 24/7';
       case 'impresos':
         return 'Prensa e Impresos';
+      case 'academia':
+        return 'Academia & Capacitación';
+      case 'noc':
+        return 'NOC & Mesa de Ayuda';
+      case 'innovacion':
+        return 'Innovación & Futuro';
       default:
         return 'Monitoreo en Vivo';
     }
@@ -227,25 +392,30 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
           />
         </div>
 
-        {/* CENTRO: BARRA FLOTANTE DE PESTAÑAS (PILL NAVBAR) */}
+        {/* CENTRO: BARRA FLOTANTE DE PESTAÑAS (PILL NAVBAR LIMPIA + MENÚ DESPLEGABLE EXTRAS) */}
         <nav style={{
-          background: 'rgba(20, 28, 14, 0.65)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
+          background: 'rgba(20, 28, 14, 0.7)',
+          backdropFilter: 'blur(18px)',
+          WebkitBackdropFilter: 'blur(18px)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
           borderRadius: '999px',
-          padding: '5px',
+          padding: '5px 7px',
           display: 'flex',
           alignItems: 'center',
           gap: '4px',
-          boxShadow: '0 8px 30px -10px rgba(0, 0, 0, 0.5)',
+          boxShadow: '0 8px 30px -10px rgba(0, 0, 0, 0.55)',
+          position: 'relative',
         }}>
-          {secciones.map((sec: ItemMenu) => {
+          {/* Secciones Principales de Uso Operativo Directo */}
+          {seccionesPrincipales.map((sec: ItemMenu) => {
             const isActive = activeSection === sec.id;
             return (
               <button
                 key={sec.id}
-                onClick={() => onSectionChange(sec.id)}
+                onClick={() => {
+                  onSectionChange(sec.id);
+                  setMenuExtrasAbierto(false);
+                }}
                 style={{
                   border: 'none',
                   cursor: 'pointer',
@@ -264,6 +434,158 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
               </button>
             );
           })}
+
+          {/* Separador vertical sutil */}
+          <div style={{
+            width: '1px',
+            height: '20px',
+            background: 'rgba(255, 255, 255, 0.15)',
+            margin: '0 4px',
+          }} />
+
+          {/* Botón de Menú Desplegable: Opciones Extra */}
+          <div ref={menuExtrasRef} style={{ position: 'relative' }}>
+            {(() => {
+              const seccionExtraActiva = seccionesExtra.find(s => s.id === activeSection);
+              return (
+                <>
+                  <button
+                    onClick={() => setMenuExtrasAbierto(!menuExtrasAbierto)}
+                    style={{
+                      border: seccionExtraActiva ? '1px solid rgba(219, 242, 133, 0.45)' : '1px solid rgba(255, 255, 255, 0.1)',
+                      cursor: 'pointer',
+                      padding: '8px 18px',
+                      borderRadius: '999px',
+                      fontSize: '13px',
+                      fontWeight: seccionExtraActiva ? 700 : 600,
+                      background: seccionExtraActiva ? '#0d130a' : menuExtrasAbierto ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.04)',
+                      color: seccionExtraActiva ? '#DBF285' : 'rgba(255, 255, 255, 0.85)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      boxShadow: seccionExtraActiva ? '0 4px 14px rgba(219, 242, 133, 0.2)' : 'none',
+                      transition: 'all 0.18s ease',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    <span>{seccionExtraActiva ? seccionExtraActiva.nombre : 'Opciones Extra'}</span>
+                    <ChevronDown
+                      size={14}
+                      style={{
+                        transform: menuExtrasAbierto ? 'rotate(180deg)' : 'none',
+                        transition: 'transform 0.2s ease',
+                        color: seccionExtraActiva ? '#DBF285' : 'rgba(255, 255, 255, 0.6)',
+                      }}
+                    />
+                  </button>
+
+                  {/* Popover Dropdown de Opciones Extra */}
+                  {menuExtrasAbierto && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '48px',
+                      right: '0',
+                      width: '320px',
+                      background: '#0d130a',
+                      border: '1px solid rgba(219, 242, 133, 0.25)',
+                      borderRadius: '22px',
+                      boxShadow: '0 25px 60px -10px rgba(0, 0, 0, 0.85), 0 0 30px rgba(219, 242, 133, 0.08)',
+                      padding: '8px',
+                      zIndex: 1000,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '4px',
+                      animation: 'fadeIn 0.15s ease',
+                    }}>
+                      <div style={{
+                        padding: '10px 14px 6px',
+                        fontSize: '10.5px',
+                        fontWeight: 800,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
+                        color: '#9CA3AF',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+                        marginBottom: '4px',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}>
+                        <span>Servicios & Herramientas Extra</span>
+                        <span style={{ color: '#DBF285', fontSize: '10px' }}>3 módulos</span>
+                      </div>
+
+                      {seccionesExtra.map((extra) => {
+                        const Icon = extra.icono;
+                        const isAct = activeSection === extra.id;
+                        return (
+                          <button
+                            key={extra.id}
+                            onClick={() => {
+                              onSectionChange(extra.id);
+                              setMenuExtrasAbierto(false);
+                            }}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '12px',
+                              padding: '10px 12px',
+                              borderRadius: '14px',
+                              border: isAct ? '1px solid rgba(219, 242, 133, 0.35)' : '1px solid transparent',
+                              background: isAct ? 'rgba(219, 242, 133, 0.1)' : 'transparent',
+                              textAlign: 'left',
+                              cursor: 'pointer',
+                              transition: 'all 0.15s ease',
+                              width: '100%',
+                            }}
+                            onMouseEnter={(e) => {
+                              if (!isAct) e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                            }}
+                            onMouseLeave={(e) => {
+                              if (!isAct) e.currentTarget.style.backgroundColor = 'transparent';
+                            }}
+                          >
+                            <div style={{
+                              width: '38px',
+                              height: '38px',
+                              borderRadius: '12px',
+                              background: isAct ? '#DBF285' : 'rgba(255, 255, 255, 0.06)',
+                              color: isAct ? '#0d130a' : '#DBF285',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0,
+                            }}>
+                              <Icon size={18} />
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{
+                                fontSize: '13px',
+                                fontWeight: 700,
+                                color: isAct ? '#DBF285' : '#FFFFFF',
+                                marginBottom: '2px',
+                              }}>
+                                {extra.nombre}
+                              </div>
+                              <div style={{
+                                fontSize: '11px',
+                                color: '#9CA3AF',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                lineHeight: 1.3,
+                              }}>
+                                {extra.descripcion}
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+          </div>
         </nav>
 
         {/* DERECHA: PERFIL DE USUARIO Y BOTONES RÁPIDOS */}
@@ -307,18 +629,18 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
           <div ref={notifRef} style={{ position: 'relative' }}>
             <button
               onClick={() => setNotificacionesAbiertas(!notificacionesAbiertas)}
-              title="Notificaciones"
+              title="Centro de Alertas & Telemetría"
               style={{
                 width: '38px',
                 height: '38px',
                 borderRadius: '50%',
                 background: notificacionesAbiertas ? '#0d130a' : 'rgba(20, 28, 14, 0.5)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                border: notificacionesAbiertas ? '1px solid #DBF285' : '1px solid rgba(255, 255, 255, 0.1)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                color: '#FFFFFF',
+                color: notificacionesAbiertas ? '#DBF285' : '#FFFFFF',
                 position: 'relative',
                 transition: 'all 0.15s ease',
               }}
@@ -327,38 +649,40 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
               {notificacionesNoLeidas > 0 && (
                 <span style={{
                   position: 'absolute',
-                  top: '4px',
-                  right: '4px',
+                  top: '2px',
+                  right: '2px',
                   minWidth: '16px',
                   height: '16px',
-                  borderRadius: '50%',
-                  background: '#EF4444',
-                  color: '#FFFFFF',
-                  fontSize: '9px',
-                  fontWeight: 800,
+                  borderRadius: '999px',
+                  background: '#DBF285',
+                  color: '#0d130a',
+                  fontSize: '9.5px',
+                  fontWeight: 900,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  border: '1.5px solid #141d0e',
-                  padding: '0 2px',
+                  border: '1.5px solid #0d130a',
+                  padding: '0 3px',
+                  boxShadow: '0 0 10px rgba(219, 242, 133, 0.6)'
                 }}>
                   {notificacionesNoLeidas}
                 </span>
               )}
             </button>
 
-            {/* Popover Dropdown de Notificaciones */}
+            {/* Popover Dropdown de Notificaciones Mejorado */}
             {notificacionesAbiertas && (
               <div style={{
                 position: 'absolute',
                 top: '48px',
                 right: '0',
-                width: '360px',
-                maxHeight: '460px',
-                background: '#0d130a',
+                width: '390px',
+                maxHeight: '520px',
+                background: 'rgba(13, 19, 10, 0.96)',
+                backdropFilter: 'blur(20px)',
                 borderRadius: '24px',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
-                boxShadow: '0 20px 50px -10px rgba(0,0,0,0.7)',
+                boxShadow: '0 24px 60px -10px rgba(0,0,0,0.85), 0 0 1px 1px rgba(219, 242, 133, 0.15)',
                 overflow: 'hidden',
                 zIndex: 1000,
                 display: 'flex',
@@ -371,73 +695,246 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
+                  background: 'rgba(255, 255, 255, 0.02)'
                 }}>
-                  <div>
-                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#FFFFFF' }}>Notificaciones</div>
-                    <div style={{ fontSize: '11px', color: '#9CA3AF' }}>{notificacionesNoLeidas} alertas sin leer</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      background: 'rgba(219, 242, 133, 0.15)',
+                      border: '1px solid rgba(219, 242, 133, 0.3)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#DBF285'
+                    }}>
+                      <Bell size={15} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.01em' }}>
+                        Alertas & Telemetría
+                      </div>
+                      <div style={{ fontSize: '11px', color: '#9CA3AF' }}>
+                        {notificacionesNoLeidas} alertas sin leer · Monitoreo 24/7
+                      </div>
+                    </div>
                   </div>
+
                   {notificacionesNoLeidas > 0 && (
                     <button
                       onClick={marcarTodasComoLeidas}
                       style={{
-                        background: 'transparent',
-                        border: 'none',
+                        background: 'rgba(219, 242, 133, 0.1)',
+                        border: '1px solid rgba(219, 242, 133, 0.25)',
                         color: '#DBF285',
-                        fontSize: '11.5px',
+                        fontSize: '11px',
                         fontWeight: 700,
                         cursor: 'pointer',
-                        padding: '4px 8px',
+                        padding: '4px 10px',
+                        borderRadius: '999px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        transition: 'all 0.15s ease'
                       }}
                     >
-                      Marcar leídas
+                      <CheckCheck size={12} /> Marcar leídas
                     </button>
                   )}
                 </div>
 
+                {/* Filtros de notificaciones */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '10px 18px',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+                  background: 'rgba(0,0,0,0.2)'
+                }}>
+                  {[
+                    { id: 'todas', label: 'Todas', count: notificaciones.length },
+                    { id: 'noleidas', label: 'Sin leer', count: notificacionesNoLeidas },
+                    { id: 'radio', label: 'Radio (147)', count: notificaciones.filter(n => n.categoria === 'radio').length },
+                    { id: 'sistema', label: 'Sistema & TV', count: notificaciones.filter(n => n.categoria !== 'radio').length },
+                  ].map(f => {
+                    const activo = filtroNotif === f.id;
+                    return (
+                      <button
+                        key={f.id}
+                        onClick={() => setFiltroNotif(f.id as any)}
+                        style={{
+                          padding: '4px 10px',
+                          borderRadius: '999px',
+                          fontSize: '11px',
+                          fontWeight: activo ? 800 : 500,
+                          cursor: 'pointer',
+                          border: activo ? '1px solid #DBF285' : '1px solid rgba(255, 255, 255, 0.08)',
+                          background: activo ? 'rgba(219, 242, 133, 0.15)' : 'transparent',
+                          color: activo ? '#DBF285' : '#9CA3AF',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        {f.label}
+                        <span style={{ fontSize: '9.5px', opacity: activo ? 0.9 : 0.6 }}>({f.count})</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
                 {/* Lista de alertas */}
-                <div style={{ maxHeight: '340px', overflowY: 'auto' }}>
-                  {notificaciones.map((notif) => (
-                    <div
-                      key={notif.id}
-                      onClick={() => marcarComoLeida(notif.id)}
-                      style={{
-                        padding: '12px 18px',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-                        background: notif.leida ? 'transparent' : 'rgba(219, 242, 133, 0.04)',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        gap: '12px',
-                        alignItems: 'flex-start',
-                        transition: 'background-color 0.15s ease',
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.04)'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = notif.leida ? 'transparent' : 'rgba(219, 242, 133, 0.04)'; }}
-                    >
-                      <div style={{ marginTop: '2px', flexShrink: 0 }}>
-                        {getIconoPorTipo(notif.tipo)}
-                      </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ fontSize: '12.5px', fontWeight: notif.leida ? 600 : 700, color: '#FFFFFF' }}>
-                            {notif.titulo}
-                          </div>
-                          {!notif.leida && (
-                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#DBF285', flexShrink: 0 }} />
-                          )}
-                        </div>
-                        <div style={{ fontSize: '11.5px', color: '#9CA3AF', margin: '2px 0 4px', lineHeight: 1.35 }}>
-                          {notif.mensaje}
-                        </div>
-                        <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>
-                          {notif.tiempo}
-                        </div>
-                      </div>
+                <div style={{ maxHeight: '330px', overflowY: 'auto' }}>
+                  {notificacionesFiltradas.length === 0 ? (
+                    <div style={{ padding: '30px 20px', textAlign: 'center', color: '#6B7280', fontSize: '12.5px' }}>
+                      Sin notificaciones en esta vista.
                     </div>
-                  ))}
+                  ) : (
+                    notificacionesFiltradas.map((notif) => (
+                      <div
+                        key={notif.id}
+                        onClick={() => marcarComoLeida(notif.id)}
+                        style={{
+                          padding: '13px 18px',
+                          borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                          borderLeft: notif.leida ? '3px solid transparent' : '3px solid #DBF285',
+                          background: notif.leida ? 'transparent' : 'rgba(219, 242, 133, 0.04)',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          gap: '12px',
+                          alignItems: 'flex-start',
+                          transition: 'background-color 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = notif.leida ? 'transparent' : 'rgba(219, 242, 133, 0.04)'; }}
+                      >
+                        <div style={{ marginTop: '1px', flexShrink: 0 }}>
+                          {getIconoPorTipo(notif.tipo)}
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+                            <div style={{ fontSize: '13px', fontWeight: notif.leida ? 600 : 700, color: '#FFFFFF' }}>
+                              {notif.titulo}
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              {notif.plaza && (
+                                <span style={{
+                                  fontSize: '10px',
+                                  fontWeight: 700,
+                                  color: '#DBF285',
+                                  background: 'rgba(219, 242, 133, 0.12)',
+                                  padding: '1px 6px',
+                                  borderRadius: '4px'
+                                }}>
+                                  {notif.plaza}
+                                </span>
+                              )}
+                              {!notif.leida && (
+                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#DBF285', flexShrink: 0 }} className="animate-pulse" />
+                              )}
+                            </div>
+                          </div>
+
+                          <div style={{ fontSize: '12px', color: '#D1D5DB', margin: '3px 0 6px', lineHeight: 1.4 }}>
+                            {notif.mensaje}
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <div style={{ fontSize: '10.5px', color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <Clock size={11} /> {notif.tiempo}
+                            </div>
+
+                            {notif.linkSeccion && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  marcarComoLeida(notif.id);
+                                  onSectionChange(notif.linkSeccion!);
+                                  setNotificacionesAbiertas(false);
+                                }}
+                                style={{
+                                  background: 'none',
+                                  border: 'none',
+                                  color: '#DBF285',
+                                  fontSize: '11px',
+                                  fontWeight: 700,
+                                  cursor: 'pointer',
+                                  padding: '2px 0',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '3px'
+                                }}
+                              >
+                                Ver módulo <ExternalLink size={10} />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Footer del dropdown */}
+                <div style={{
+                  padding: '12px 18px',
+                  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                  background: 'rgba(0,0,0,0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: '11px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#9CA3AF' }}>
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#34D399' }} className="animate-pulse" />
+                    <span>147 flujos activos en CDMX, GDL y MTY</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      onSectionChange('noc');
+                      setNotificacionesAbiertas(false);
+                    }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#DBF285',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      fontSize: '11px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    NOC & Salud ↗
+                  </button>
                 </div>
               </div>
             )}
           </div>
+
+          {/* Marco Legal & Confidencialidad */}
+          <button
+            onClick={() => setLegalOpen(true)}
+            title="Marco Legal, Confidencialidad & Términos ACAM"
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              background: legalOpen ? '#0d130a' : 'rgba(20, 28, 14, 0.5)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              color: '#FFFFFF',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <Scale size={16} />
+          </button>
 
           {/* Ajustes / Configuración de Perfil */}
           <button
@@ -682,22 +1179,23 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
       {/* Modal de Configuración y Credenciales de Cuenta */}
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
-      {/* Diálogo de Confirmación de Cierre de Sesión con Advertencias Claras */}
+      {/* Diálogo de Confirmación de Cierre de Sesión Minimalista */}
       <ConfirmDialog
         isOpen={confirmLogoutOpen}
-        title="¿Seguro que quieres cerrar sesión?"
-        subtitle="Alerta de Seguridad · MAYIA Escucha"
-        description="Estás a punto de salir de la consola de telemetría y auditoría en tiempo real de medios."
-        warnings={[
-          "Se detendrá la recepción de alertas y monitoreo on-air en este navegador.",
-          "Cualquier filtro o consulta no guardada se restablecerá.",
-          "El motor de detección en servidor continuará operando y registrando testigos 24/7.",
-        ]}
-        confirmText="Sí, cerrar sesión"
-        cancelText="Permanecer conectado"
+        title="Cerrar sesión"
+        subtitle="Sesión"
+        description="¿Deseas salir de tu cuenta? Podrás volver a ingresar en cualquier momento con tus credenciales."
+        confirmText="Cerrar sesión"
+        cancelText="Cancelar"
         danger={true}
         onConfirm={confirmarLogout}
         onCancel={() => setConfirmLogoutOpen(false)}
+      />
+
+      {/* Modal de Información Legal, Confidencialidad & Términos ACAM */}
+      <LegalModal
+        isOpen={legalOpen}
+        onClose={() => setLegalOpen(false)}
       />
 
       {/* Banner flotante de precaución y confirmación de acciones del operador */}

@@ -44,39 +44,53 @@ export interface PricingPlan {
   features: string[];
   buttonText: string;
   isPopular: boolean;
+  tag?: string;
 }
 
 export const pricing = {
   id: 'precios',
-  title: 'Precios simples y transparentes',
-  description: 'Elige el plan que se ajusta a tu operación.\nTodos incluyen acceso a la plataforma y soporte dedicado.',
+  title: 'Tabla de Precios',
+  description: 'Elige el plan que se ajusta a tu operación de monitoreo y auditoría.\nTodos los planes incluyen telemetría en tiempo real y soporte dedicado.',
   currency: 'MXN',
   locale: 'es-MX',
   /** Descuento aplicado al pagar anualmente (0.2 = 20%). */
   annualDiscount: 0.2,
   billing: { monthly: 'Facturación mensual', annual: 'Facturación anual', save: 'Ahorra' },
   period: 'mes',
-  billedMonthly: 'facturado mensualmente',
-  billedAnnually: 'facturado anualmente',
-  quote: 'A cotizar',
+  billedMonthly: 'MNX al mes + IVA',
+  billedAnnually: 'MNX al mes facturado anual + IVA',
+  quote: 'Precio Personalizado',
   popular: 'Popular',
-  // TODO(precios): valores provisionales; reemplazar por los precios reales.
   plans: [
     {
-      id: 'essential',
-      name: 'Essential',
-      monthlyPrice: 4900,
-      description: 'Para equipos que empiezan a monitorear sus medios.',
-      features: ['Monitoreo de radio en vivo', 'Transcripción en tiempo real', 'Testigos de audio por mención', 'Soporte por correo'],
-      buttonText: 'Comenzar',
+      id: 'basico',
+      name: 'Básico',
+      monthlyPrice: 6900,
+      description: 'Monitoreo esencial en tiempo real para marcas y supervisión focalizada.',
+      features: [
+        'Monitoreo de 50 temas o búsqueda',
+        'Monitoreo en vivo',
+        '20 estaciones de radio',
+        'Alertas y testigo de cada búsqueda',
+        'Histórico de 2 meses',
+        'Dashboard básico',
+      ],
+      buttonText: 'Elegir Básico',
       isPopular: false,
     },
     {
       id: 'profesional',
       name: 'Profesional',
-      monthlyPrice: 12900,
-      description: 'Cobertura multimedia con reportes de precisión.',
-      features: ['Todo lo de Essential', 'Televisión e impresos', 'Reportes de precisión', 'Ranking de anunciantes', 'Soporte prioritario'],
+      monthlyPrice: 19900,
+      description: 'Mayor capacidad y alcance para agencias, marcas y campañas activas.',
+      features: [
+        'Monitoreo de 150 temas o búsqueda',
+        'Monitoreo en vivo',
+        '50 estaciones de radio',
+        'Alertas y testigo de cada búsqueda',
+        'Histórico de 2 meses',
+        'Dashboard avanzado con telemetría',
+      ],
       buttonText: 'Elegir Profesional',
       isPopular: true,
     },
@@ -84,10 +98,19 @@ export const pricing = {
       id: 'enterprise',
       name: 'Enterprise',
       monthlyPrice: null,
-      description: 'Solución a la medida con inteligencia electoral y SLA.',
-      features: ['Todo lo de Profesional', 'Inteligencia electoral', 'Integraciones a la medida', 'SLA y gerente de cuenta'],
+      description: 'Cobertura nacional total en radio, televisión y medios impresos con APIs dedicadas.',
+      features: [
+        'Monitoreo de 147 estaciones de radio',
+        'TV: 100 canales en tiempo real',
+        'Impresos: 70 publicaciones y diarios',
+        'Monitoreo en vivo',
+        'Comparación de pauta y Share of Voice',
+        'Alertas y resumen en tiempo real',
+        'APIs y dashboard personal',
+      ],
       buttonText: 'Contactar ventas',
       isPopular: false,
+      tag: 'NEW',
     },
   ] satisfies PricingPlan[],
 } as const;

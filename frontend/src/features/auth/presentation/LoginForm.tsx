@@ -10,6 +10,7 @@ import {
 } from '../application/rememberedAccounts';
 import { GoogleIcon } from './GoogleIcon';
 import { loginContent as t } from './loginContent';
+import { LegalModal } from '../../../components/LegalModal';
 
 interface LoginFormProps {
   /** Si no se provee, el botón de Google se muestra deshabilitado. */
@@ -20,6 +21,7 @@ interface LoginFormProps {
 export function LoginForm({ onGoogleLogin }: LoginFormProps) {
   const { email, setEmail, password, setPassword, error, submitting, submit } = useLoginForm();
   const [remembered, setRemembered] = useState<RememberedAccount[]>([]);
+  const [legalOpen, setLegalOpen] = useState(false);
 
   useEffect(() => {
     setRemembered(getRememberedAccounts());
@@ -151,6 +153,31 @@ export function LoginForm({ onGoogleLogin }: LoginFormProps) {
       <p className="login-card__footer">
         {t.noAccount} <Link to={ROUTES.register} className="login-link-accent">{t.createAccount}</Link>
       </p>
+
+      <div style={{ textAlign: 'center', marginTop: '12px', fontSize: '0.72rem', color: 'rgba(255, 255, 255, 0.55)', lineHeight: 1.4 }}>
+        Al iniciar sesión, aceptas el{' '}
+        <button
+          type="button"
+          onClick={() => setLegalOpen(true)}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            color: '#DBF285',
+            textDecoration: 'underline',
+            cursor: 'pointer',
+            fontSize: 'inherit',
+            fontWeight: 600,
+          }}
+        >
+          Aviso Legal, Confidencialidad & Términos ACAM
+        </button>
+      </div>
+
+      <LegalModal
+        isOpen={legalOpen}
+        onClose={() => setLegalOpen(false)}
+      />
     </div>
   );
 }

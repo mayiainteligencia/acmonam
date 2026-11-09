@@ -1,12 +1,27 @@
+import { useState } from 'react';
 import { ArrowRight, Lock, Mail, User } from 'lucide-react';
 import { Link } from '../../../core/router';
 import { ROUTES } from '../../../app/routes';
 import { useRegisterForm } from '../application/useRegisterForm';
 import { registerContent as t } from './registerContent';
+import { LegalModal } from '../../../components/LegalModal';
 
 /** Formulario de registro; reutiliza el estilo glass del login. */
 export function RegisterForm() {
   const { name, setName, email, setEmail, password, setPassword, error, submitting, submit } = useRegisterForm();
+  const [legalOpen, setLegalOpen] = useState(false);
+  const [aceptoTerminos, setAceptoTerminos] = useState(false);
+  const [legalError, setLegalError] = useState<string | null>(null);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!aceptoTerminos) {
+      setLegalError('Debes aceptar los Términos de Servicio y el Acuerdo de Confidencialidad.');
+      return;
+    }
+    setLegalError(null);
+    submit(e);
+  };
 
   return (
     <div className="login-card">
@@ -15,7 +30,7 @@ export function RegisterForm() {
         <p>{t.subtitle}</p>
       </div>
 
-      <form className="login-form" onSubmit={submit} noValidate autoComplete="off">
+      <form className="login-form" onSubmit={handleSubmit} noValidate autoComplete="off">
         <div className="float-field">
           <input
             id="register-name"
@@ -58,7 +73,58 @@ export function RegisterForm() {
           <label htmlFor="register-password"><Lock size={16} aria-hidden="true" />{t.passwordLabel}</label>
         </div>
 
-        {error && <p className="login-error" role="alert">{error}</p>}
+        {/* Checkbox Legal y de Confidencialidad */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: '10px',
+          margin: '6px 0 14px',
+          fontSize: '0.78rem',
+          color: 'rgba(255, 255, 255, 0.75)',
+          lineHeight: 1.4,
+        }}>
+          <input
+            type="checkbox"
+            id="acepto-terminos"
+            checked={aceptoTerminos}
+            onChange={(e) => {
+              setAceptoTerminos(e.target.checked);
+              if (e.target.checked) setLegalError(null);
+            }}
+            style={{
+              marginTop: '3px',
+              accentColor: '#DBF285',
+              width: '16px',
+              height: '16px',
+              cursor: 'pointer',
+              flexShrink: 0,
+            }}
+          />
+          <label htmlFor="acepto-terminos" style={{ cursor: 'pointer' }}>
+            Acepto el{' '}
+            <button
+              type="button"
+              onClick={() => setLegalOpen(true)}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                color: '#DBF285',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                fontSize: 'inherit',
+                fontWeight: 600,
+              }}
+            >
+              Acuerdo de Confidencialidad (NDA), Términos de Servicio y Política LFPDPPP
+            </button>{' '}
+            de ACAM.
+          </label>
+        </div>
+
+        {(error || legalError) && (
+          <p className="login-error" role="alert">{error || legalError}</p>
+        )}
 
         <button type="submit" className="login-submit" disabled={submitting}>
           {submitting ? t.submitting : t.submit}
@@ -69,6 +135,12 @@ export function RegisterForm() {
       <p className="login-card__footer">
         {t.hasAccount} <Link to={ROUTES.login} className="login-link-accent">{t.signIn}</Link>
       </p>
+
+      <LegalModal
+        isOpen={legalOpen}
+        onClose={() => setLegalOpen(false)}
+        onAccept={() => setAceptoTerminos(true)}
+      />
     </div>
   );
 }

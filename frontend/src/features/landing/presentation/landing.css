@@ -236,6 +236,14 @@
   background: var(--pub-accent);
   border-radius: 0 0.75rem 0 0.75rem;
 }
+.plan__badge--tag {
+  background: rgba(255, 255, 255, 0.12);
+  color: #DBF285;
+  border: 1px solid rgba(219, 242, 133, 0.3);
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
 .plan__badge svg { fill: currentColor; }
 .plan__name { font-size: 1rem; font-weight: 600; color: var(--pub-muted); }
 .plan__price { display: flex; align-items: baseline; justify-content: center; gap: 0.5rem; margin-top: 1.5rem; }
