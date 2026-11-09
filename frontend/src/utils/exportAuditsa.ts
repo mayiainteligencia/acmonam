@@ -362,7 +362,7 @@ export async function descargarReporteAuditsa(
     const res = await fetch('/api/monitor/export/auditsa.xlsx', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ids: ids.length ? ids : undefined }),
+      body: JSON.stringify({ ids: ids.length ? ids : undefined, base_url: `${window.location.origin}/api` }),
     });
     const tipo = res.headers.get('content-type') || '';
     if (res.ok && tipo.includes('spreadsheetml')) {

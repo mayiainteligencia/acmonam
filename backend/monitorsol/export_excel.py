@@ -8,6 +8,7 @@ Estructura:
 - Esquema colapsable nativo de Excel (outline_level=1 y outline_level=2).
 """
 import io
+import os
 import re
 import sqlite3
 from datetime import datetime
@@ -392,11 +393,18 @@ def exportar_auditsa_post(
     keyword = body.get("keyword")
     testigos, pautas = _obtener_datos_testigos(ids=ids, keyword=keyword)
 
-    base_url = str(request.base_url).rstrip("/")
-    host_header = request.headers.get("host") or ""
-    if host_header:
-        proto = request.headers.get("x-forwarded-proto") or request.url.scheme or "http"
-        base_url = f"{proto}://{host_header}"
+    # Los links de audio del Excel deben apuntar a donde el usuario abre la app (VPN/IP de la VM),
+    # no a localhost:8001 (el proxy de Vite reescribe Host). Prioridad: env > base_url del navegador > Host.
+    base_url = os.environ.get("MONITOR_PUBLIC_URL") or ""
+    cliente = str(body.get("base_url") or "")
+    if not base_url and cliente.startswith(("http://", "https://")):
+        base_url = cliente
+    if not base_url:
+        base_url = str(request.base_url).rstrip("/")
+        host_header = request.headers.get("host") or ""
+        if host_header:
+            proto = request.headers.get("x-forwarded-proto") or request.url.scheme or "http"
+            base_url = f"{proto}://{host_header}"
 
     excel_bytes = generar_excel_auditsa(testigos, pautas, host_url=base_url)
     nombre_archivo = f"reporte_monitoreo_mayia_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"

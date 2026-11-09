@@ -2,7 +2,8 @@
 // Carga una pauta (.xlsx), la previsualiza, la activa y muestra su cumplimiento con evidencia en audio.
 // Aislado: solo usa /api/monitor/pauta/*; reutiliza AudioTestigo (solo lectura) de TestigosIA.
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Upload, Check, Trash2, RefreshCw, ChevronDown, ChevronUp, Clock, FileSpreadsheet, Download } from 'lucide-react';
+import { Upload, Check, Trash2, RefreshCw, ChevronDown, ChevronUp, Clock, FileSpreadsheet, Download, Eye } from 'lucide-react';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { brandingConfig } from '../config/branding';
 import { useIsMobile } from './shared/ui';
 import { AudioTestigo, fechaTestigo, horaMX, type Testigo } from './TestigosIA';
@@ -38,6 +39,24 @@ const semanaDefault = (semanas: string[]) => {
   return [...semanas].reverse().find(s => s <= hoy) ?? semanas[0] ?? '';
 };
 
+// ponytail: datos FALSOS solo para enseñar al cliente cómo se ve la campaña (25 spots pagados). Botón "Ver demo".
+const AUDIENCIA_DEMO = 18_500; // impactos estimados por spot (inventado)
+const datosDemo = (): Cumpl => {
+  const hoy = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'America/Mexico_City' }) + 'T12:00:00');
+  const dia = (atras: number) => { const d = new Date(hoy); d.setDate(d.getDate() - atras); return d.toLocaleDateString('en-CA'); };
+  const lunes = new Date(hoy); lunes.setDate(lunes.getDate() - ((lunes.getDay() + 6) % 7));
+  const semana = lunes.toLocaleDateString('en-CA');
+  const horas = ['07:42:10', '09:15:33', '11:05:48', '13:20:07', '16:48:21', '18:30:55'];
+  const hacer = (id: number, estacion: string, programa: string, requerido: number, detectado: number): LineaCumpl => ({
+    id, lote_id: 'demo', marca: 'Demo', estacion, horario_inicio: '07:00', horario_fin: '19:00', dias: 'L-V', programa, formato: 'Spot 20"', semana,
+    requerido, detectado, estado: detectado >= requerido ? 'cumplido' : detectado ? 'parcial' : 'incumplido',
+    detecciones: Array.from({ length: detectado }, (_, i) => ({ id: undefined, timestamp: `${dia(i % 5)} ${horas[(i + id) % 6]}`, keyword_detectada: 'Marca Demo', emisora_nombre: estacion,
+      transcripcion: 'Descubre lo nuevo de Marca Demo, ahora en tu tienda más cercana.' })),
+  });
+  const lineas = [hacer(-1, 'Alfa 91.3', 'Mañanas Alfa', 10, 10), hacer(-2, 'La Z 107.9', 'Tarde Z', 8, 7), hacer(-3, 'Exa FM 104.9', 'Exa Noticias', 7, 4)];
+  return { lineas, semanas: [semana], resumen: { cumplido: 1, parcial: 2, incumplido: 0, sin_datos: 0 } };
+};
+
 const card: React.CSSProperties = { background: colores.fondoClaro, borderRadius: 16, border: `1px solid ${colores.borde}`, boxShadow: colores.sombra };
 const campo: React.CSSProperties = { padding: '10px 12px', borderRadius: 10, border: `1px solid ${colores.borde}`, background: colores.fondoPrincipal, color: colores.textoClaro, fontSize: 13.5, minWidth: 0, width: '100%', boxSizing: 'border-box' };
 const boton = (relleno = false, color: string = colores.primarioVivo): React.CSSProperties => ({
@@ -69,8 +88,12 @@ export const AnalisisPauta = () => {
   const [error, setError] = useState('');
   const [preview, setPreview] = useState<Lote | null>(null);
   const [lotes, setLotes] = useState<Lote[]>([]);
-  const [cumpl, setCumpl] = useState<Cumpl | null>(null);
-  const [semana, setSemana] = useState('');
+  const [cumplReal, setCumpl] = useState<Cumpl | null>(null);
+  const [semanaSel, setSemana] = useState('');
+  const [demo, setDemo] = useState(false);
+  const demoData = useMemo(() => (demo ? datosDemo() : null), [demo]);
+  const cumpl = demoData ?? cumplReal;
+  const semana = demoData ? demoData.semanas[0] : semanaSel;
   const [loteSel, setLoteSel] = useState('');
   const [filtro, setFiltro] = useState<Estado | ''>('');
   const [abierta, setAbierta] = useState<number | null>(null);
@@ -151,6 +174,15 @@ export const AnalisisPauta = () => {
   const req = filasSemana.reduce((a, l) => a + l.requerido, 0);
   const cubierto = filasSemana.reduce((a, l) => a + Math.min(l.detectado, l.requerido), 0);
   const pct = req ? Math.round((cubierto / req) * 100) : 0;
+  const todas = cumpl?.lineas ?? [];
+  const totalPagados = todas.reduce((a, l) => a + l.requerido, 0);
+  const totalAire = todas.reduce((a, l) => a + Math.min(l.detectado, l.requerido), 0);
+  const acumulado = useMemo(() => {
+    const porDia: Record<string, number> = {};
+    todas.forEach(l => l.detecciones.forEach(d => { const k = fechaTestigo(d.timestamp).toLocaleDateString('en-CA', { timeZone: 'America/Mexico_City' }); porDia[k] = (porDia[k] ?? 0) + 1; }));
+    let t = 0;
+    return Object.keys(porDia).sort().map(k => ({ dia: fmtFecha(k), total: (t += porDia[k]) }));
+  }, [todas]);
   const visibles = filasSemana.filter(l => !filtro || l.estado === filtro);
   const activos = lotes.filter(l => l.activa);
   const grid = (cols: string): React.CSSProperties => ({ display: 'grid', gridTemplateColumns: m ? '1fr' : cols, gap: 12 });
@@ -236,6 +268,7 @@ export const AnalisisPauta = () => {
             <select style={{ ...campo, width: 'auto' }} value={semana} onChange={e => { setSemana(e.target.value); setAbierta(null); }}>
               {(cumpl?.semanas ?? []).map(s => <option key={s} value={s}>Semana del {fmtFecha(s, true)}</option>)}
             </select>
+            <button style={boton(demo, COLOR.parcial)} onClick={() => { setDemo(d => !d); setAbierta(null); setFiltro(''); }} title="Datos de ejemplo para mostrar al cliente"><Eye size={15} />{!m && (demo ? 'Salir de demo' : 'Ver demo')}</button>
             <button style={boton()} onClick={cargarCumpl} title="Actualizar"><RefreshCw size={15} />{!m && 'Actualizar'}</button>
             <button style={boton()} onClick={exportarAuditsa} disabled={exportando} title="Exportar reporte AUDITSA (.xlsx)"><Download size={15} />{!m && (exportando ? 'Exportando…' : 'Exportar')}</button>
             {(loteSel || activos.length === 1) && <button style={boton(false, COLOR.incumplido)} onClick={() => borrar(loteSel || activos[0].lote_id)} title="Eliminar pauta"><Trash2 size={15} /></button>}
@@ -246,6 +279,29 @@ export const AnalisisPauta = () => {
           <p style={{ padding: '36px 0', textAlign: 'center', color: colores.textoOscuro, fontSize: 14 }}>Aún no hay pautas activas. Sube un .xlsx y actívalo para ver aquí si se cumplió.</p>
         ) : (
           <>
+            {demo && <p style={{ margin: '14px 0 0', fontSize: 12.5, color: COLOR.parcial }}>DEMO · datos de ejemplo, no son detecciones reales.</p>}
+            <div style={{ ...grid('repeat(4, 1fr)'), margin: '16px 0' }}>
+              {[[totalPagados, 'spots pagados', null], [totalAire, 'salieron al aire', COLOR.cumplido], [Math.max(0, totalPagados - totalAire), 'por transmitir', COLOR.parcial],
+                [demo ? (totalAire * AUDIENCIA_DEMO).toLocaleString('es-MX') : '—', demo ? 'impactos acumulados (est.)' : 'impactos (requiere datos de audiencia)', null]].map(([n, t, c]) => (
+                <div key={String(t)} style={{ padding: '12px 16px', borderRadius: 12, background: colores.fondoPrincipal }}>
+                  <div style={{ fontSize: 26, fontWeight: 800, color: (c as string) ?? colores.textoClaro }}>{n}</div>
+                  <div style={{ fontSize: 12.5, color: colores.textoOscuro }}>{t}</div>
+                </div>
+              ))}
+            </div>
+            {acumulado.length > 0 && (
+              <div style={{ height: 180, marginBottom: 6 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={acumulado} margin={{ top: 6, right: 8, left: -18, bottom: 0 }}>
+                    <CartesianGrid stroke={colores.borde} vertical={false} />
+                    <XAxis dataKey="dia" tick={{ fill: colores.textoOscuro, fontSize: 11 }} />
+                    <YAxis allowDecimals={false} tick={{ fill: colores.textoOscuro, fontSize: 11 }} />
+                    <Tooltip contentStyle={{ background: colores.fondoClaro, border: `1px solid ${colores.borde}`, borderRadius: 8 }} formatter={(v) => [v, 'Spots acumulados']} />
+                    <Area type="monotone" dataKey="total" stroke={COLOR.cumplido} fill={`${COLOR.cumplido}33`} strokeWidth={2} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            )}
             <div style={{ display: 'flex', gap: 20, alignItems: 'center', flexWrap: 'wrap', margin: '18px 0' }}>
               <Aro pct={pct} color={pct >= 100 ? COLOR.cumplido : pct >= 50 ? COLOR.parcial : COLOR.incumplido} />
               <div>
@@ -293,13 +349,13 @@ export const AnalisisPauta = () => {
                         {abre && (
                           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 12, maxHeight: 360, overflowY: 'auto' }}>
                             {l.detecciones.map(t => (
-                              <div key={t.id} style={{ padding: 12, borderRadius: 10, background: colores.fondoClaro }}>
+                              <div key={t.id ?? t.timestamp} style={{ padding: 12, borderRadius: 10, background: colores.fondoClaro }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 13 }}>
                                   <b style={{ color: colores.textoClaro }}>{fmtDiaHora(t.timestamp)}</b>
                                   <span style={{ color: colores.primarioVivo, fontWeight: 600 }}>{t.keyword_detectada}</span>
                                 </div>
                                 {t.transcripcion && <p style={{ margin: '6px 0 0', fontSize: 12.5, color: colores.textoMedio, lineHeight: 1.45 }}>«{t.transcripcion}»</p>}
-                                <AudioTestigo t={t} />
+                                {!demo && <AudioTestigo t={t} />}
                               </div>
                             ))}
                           </div>
