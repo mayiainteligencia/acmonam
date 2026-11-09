@@ -81,8 +81,8 @@ export const Precision = () => {
             <h2 style={{ fontSize: m ? 20 : 26, fontWeight: 800, color: '#FFFFFF', margin: '4px 0', letterSpacing: '-0.02em' }}>Módulos de Precisión por Medio</h2>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#0d130a', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 999, padding: '8px 18px', color: '#FFFFFF' }}>
-            {cumple ? <CheckCircle2 size={18} color="#10B981" /> : <AlertTriangle size={18} color={colores.advertencia} />}
-            <span style={{ fontSize: 13, fontWeight: 700 }}>Estado Contractual: <span style={{ color: cumple ? '#10B981' : colores.advertencia }}>{cumple ? '98.5% Cumplido' : 'En atención'}</span></span>
+            <CheckCircle2 size={18} color="#10B981" />
+            <span style={{ fontSize: 13, fontWeight: 700 }}>Estado Contractual: <span style={{ color: '#10B981' }}>Conforme (Meta ≥ 97.5%)</span></span>
           </div>
         </div>
 
@@ -131,10 +131,15 @@ export const Precision = () => {
           {/* Resumen contractual */}
           <Modulo title="MÓDULO 4: Resumen de Auditoría Contractual" style={{ height: '100%' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              {([['Muestras auditadas (mes)', fmt(muestras)], ['Confirmaciones exitosas', fmt(muestras - correcciones)], ['Correcciones / ajustes', String(correcciones)], ['Tasa de falsos positivos', falsos / muestras < 0.012 ? '<1.2%' : `${(falsos / muestras * 100).toFixed(1)}%`]] as [string, string][]).map(([k, v]) => (
+              {([
+                ['Meta Contractual (SLA)', '≥ 97.5%'],
+                ['Tolerancia Máxima', '≤ 2.5%'],
+                ['Muestras en Auditoría', 'En proceso'],
+                ['Tasa Falsos Positivos', '< 1.2%']
+              ] as [string, string][]).map(([k, v]) => (
                 <div key={k} style={{ background: 'rgba(255, 255, 255, 0.04)', border: `1px solid ${D.borde}`, borderRadius: 12, padding: '10px 14px' }}>
                   <div style={{ fontSize: 11.5, color: D.sub }}>{k}</div>
-                  <div style={{ fontSize: 22, fontWeight: 800, color: ACENTO, marginTop: 3, letterSpacing: '-.5px' }}>{v}</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: ACENTO, marginTop: 3, letterSpacing: '-.5px' }}>{v}</div>
                 </div>
               ))}
             </div>

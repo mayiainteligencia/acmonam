@@ -62,7 +62,7 @@ export const AestheticBentoGrid: React.FC<BentoGridProps> = ({ onExploreSection 
   const totalDiasMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate(); // 30
 
   const [selectedDay, setSelectedDay] = useState(diaHoy);
-  const [selectedMode, setSelectedMode] = useState<'auto' | 'audit' | 'electoral'>('audit');
+  const [selectedMode, setSelectedMode] = useState<'auto' | 'audit'>('audit');
   const [whiteCard1Active, setWhiteCard1Active] = useState(true);
   const [whiteCard2Active, setWhiteCard2Active] = useState(true);
   const [activePlaza, setActivePlaza] = useState<'CDMX' | 'GDL' | 'MTY'>('CDMX');
@@ -101,22 +101,18 @@ export const AestheticBentoGrid: React.FC<BentoGridProps> = ({ onExploreSection 
   // Días del calendario (hasta 28 o 30)
   const days = Array.from({ length: Math.min(28, totalDiasMes) }, (_, i) => i + 1);
 
-  // KPIs dinámicos según modo
+  // KPIs dinámicos y objetivos según modo
   const kpiModo = {
-    audit: { precision: '98.5%', label: '/ precisión', desc: 'Conciliación comercial forense' },
-    auto: { precision: '99.2%', label: '/ detección', desc: 'Detección continua Whisper 24/7' },
-    electoral: { precision: '99.9%', label: '/ cumplimiento', desc: 'Fiscalización tiempos INE' }
+    audit: { precision: '≥ 97.5%', label: '/ meta SLA', desc: 'Auditoría comercial forense ACAM' },
+    auto: { precision: 'Activo', label: '/ telemetría', desc: 'Detección continua Whisper 24/7' }
   }[selectedMode];
 
-  // Datos de plaza activa
+  // Datos reales de plaza activa
   const infoPlaza = {
-    CDMX: { estaciones: '62', horas: '28,420 h', detalle: '42 FM · 20 AM al aire' },
-    GDL: { estaciones: '45', horas: '26,150 h', detalle: '38 FM · 7 AM (Jalisco/Zapopan)' },
-    MTY: { estaciones: '40', horas: '24,320 h', detalle: '38 FM · 2 AM (Nuevo León)' }
+    CDMX: { estaciones: '62', estado: '24/7 En directo', detalle: '42 FM · 20 AM al aire' },
+    GDL: { estaciones: '45', estado: '24/7 En directo', detalle: '38 FM · 7 AM (Jalisco/Zapopan)' },
+    MTY: { estaciones: '40', estado: '24/7 En directo', detalle: '38 FM · 2 AM (Nuevo León)' }
   }[activePlaza];
-
-  // Spots dinámicos según el día seleccionado
-  const spotsDelDia = selectedDay === diaHoy ? 375 : 1250 + ((selectedDay * 37) % 480);
 
   return (
     <div
@@ -383,7 +379,7 @@ export const AestheticBentoGrid: React.FC<BentoGridProps> = ({ onExploreSection 
                     <button
                       key={d}
                       onClick={() => setSelectedDay(d)}
-                      title={isToday ? `Hoy (${d} de ${mesNombreLargo}): ${spotsDelDia} spots registrados` : `Día ${d}: auditoría completa`}
+                      title={isToday ? `Hoy (${d} de ${mesNombreLargo}): Auditoría en curso` : `Día ${d}: Auditoría de emisiones`}
                       style={{
                         width: '24px',
                         height: '24px',
@@ -438,19 +434,18 @@ export const AestheticBentoGrid: React.FC<BentoGridProps> = ({ onExploreSection 
               <div style={{ fontSize: '12px', color: '#9CA3AF', marginBottom: '10px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '5px' }}>
                 <Sliders size={13} color="#DBF285" /> Modo de monitoreo
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {[
-                  { id: 'auto', label: 'Automático' },
                   { id: 'audit', label: 'Auditoría' },
-                  { id: 'electoral', label: 'Electoral' }
+                  { id: 'auto', label: 'Automático' }
                 ].map(m => {
                   const activo = selectedMode === m.id;
                   return (
                     <button
                       key={m.id}
-                      onClick={() => setSelectedMode(m.id as any)}
+                      onClick={() => setSelectedMode(m.id as 'auto' | 'audit')}
                       style={{
-                        padding: '6px 12px',
+                        padding: '8px 12px',
                         borderRadius: '999px',
                         fontSize: '11px',
                         fontWeight: activo ? 800 : 500,
@@ -504,7 +499,7 @@ export const AestheticBentoGrid: React.FC<BentoGridProps> = ({ onExploreSection 
                   <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#DBF285' }} className="animate-pulse" />
                   Señal activa
                 </span>
-                <span>{infoPlaza.horas}</span>
+                <span>{infoPlaza.estado}</span>
               </div>
 
               {/* Espectro / Ecualizador dinámico en vivo */}
@@ -607,8 +602,8 @@ export const AestheticBentoGrid: React.FC<BentoGridProps> = ({ onExploreSection 
             <div style={{ fontSize: '11px', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Spots detectados
             </div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: '#FFFFFF' }}>
-              {spotsDelDia}
+            <div style={{ fontSize: '24px', fontWeight: 800, color: '#FFFFFF', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+              --- <span style={{ fontSize: '11px', fontWeight: 600, color: '#9CA3AF' }}>(En captura)</span>
             </div>
           </div>
 
@@ -707,11 +702,11 @@ export const AestheticBentoGrid: React.FC<BentoGridProps> = ({ onExploreSection 
 
           <div style={{ margin: '18px 0 6px' }}>
             <div style={{ fontSize: '12px', color: '#6B7280', fontWeight: 600 }}>
-              Detecciones hoy, en tiempo real
+              Detecciones de pauta hoy
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
-              <div style={{ fontSize: '46px', fontWeight: 900, color: '#111810', letterSpacing: '-0.03em', lineHeight: 1 }}>
-                {spotsDelDia}<span style={{ fontSize: '20px', fontWeight: 600, color: '#6B7280' }}>/sp</span>
+              <div style={{ fontSize: '42px', fontWeight: 900, color: '#111810', letterSpacing: '-0.03em', lineHeight: 1 }}>
+                ---<span style={{ fontSize: '15px', fontWeight: 600, color: '#6B7280', marginLeft: '6px' }}>en proceso</span>
               </div>
 
               {/* Cápsula Toggle Switch con × y ✓ */}
@@ -783,10 +778,10 @@ export const AestheticBentoGrid: React.FC<BentoGridProps> = ({ onExploreSection 
               </div>
               <div>
                 <div style={{ fontSize: '15px', fontWeight: 800, color: '#111810' }}>
-                  Almacenamiento FLAI
+                  Cobertura Multimedia
                 </div>
                 <div style={{ fontSize: '12px', color: '#6B7280' }}>
-                  Evidencias & Testigos Legales
+                  Radio 147 · TV 100 · Impresos 70
                 </div>
               </div>
             </div>
@@ -809,11 +804,11 @@ export const AestheticBentoGrid: React.FC<BentoGridProps> = ({ onExploreSection 
 
           <div style={{ margin: '18px 0 6px' }}>
             <div style={{ fontSize: '12px', color: '#6B7280', fontWeight: 600 }}>
-              Horas registradas sin costo extra
+              Canales y medios en telemetría continua
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px' }}>
               <div style={{ fontSize: '46px', fontWeight: 900, color: '#111810', letterSpacing: '-0.03em', lineHeight: 1 }}>
-                2,566<span style={{ fontSize: '20px', fontWeight: 600, color: '#6B7280' }}>h</span>
+                317<span style={{ fontSize: '18px', fontWeight: 600, color: '#6B7280', marginLeft: '4px' }}>medios</span>
               </div>
 
               {/* Cápsula Toggle Switch con × y ✓ */}

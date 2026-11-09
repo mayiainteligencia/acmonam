@@ -1039,20 +1039,20 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
                   strokeLinecap="round"
                 />
               </svg>
-              <span style={{ fontSize: '13px', fontWeight: 800, color: '#FFFFFF' }}>
-                98%
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#DBF285', letterSpacing: '0.04em' }} title="Meta Contractual ACAM: ≥97.5%">
+                SLA
               </span>
             </div>
           </div>
 
-          {/* 3 Métricas Grandes al estilo de la referencia */}
+          {/* 3 Métricas Grandes de Telemetría */}
           <div className="modern-telemetry-kpis" style={{ display: 'flex', alignItems: 'center', gap: '48px' }}>
             <div>
               <div style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', fontWeight: 500, marginBottom: '4px' }}>
                 Total menciones
               </div>
-              <div style={{ fontSize: '42px', fontWeight: 800, letterSpacing: '-0.03em', color: '#FFFFFF', lineHeight: 1 }}>
-                256,612<span style={{ fontSize: '20px', fontWeight: 500, color: 'rgba(255,255,255,0.6)' }}>$</span>
+              <div style={{ fontSize: '40px', fontWeight: 800, letterSpacing: '-0.03em', color: '#FFFFFF', lineHeight: 1, display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                ---<span style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.5)' }}>en captura</span>
               </div>
             </div>
 
@@ -1060,8 +1060,8 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
               <div style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', fontWeight: 500, marginBottom: '4px' }}>
                 Spots detectados
               </div>
-              <div style={{ fontSize: '42px', fontWeight: 800, letterSpacing: '-0.03em', color: '#FFFFFF', lineHeight: 1 }}>
-                167,612<span style={{ fontSize: '20px', fontWeight: 500, color: 'rgba(255,255,255,0.6)' }}>$</span>
+              <div style={{ fontSize: '40px', fontWeight: 800, letterSpacing: '-0.03em', color: '#FFFFFF', lineHeight: 1, display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                ---<span style={{ fontSize: '13px', fontWeight: 600, color: 'rgba(255,255,255,0.5)' }}>por auditar</span>
               </div>
             </div>
 
@@ -1069,8 +1069,8 @@ export const ModernDashboardLayout: React.FC<ModernDashboardLayoutProps> = ({
               <div style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', fontWeight: 500, marginBottom: '4px' }}>
                 Testigos en vivo
               </div>
-              <div style={{ fontSize: '42px', fontWeight: 800, letterSpacing: '-0.03em', color: '#FFFFFF', lineHeight: 1 }}>
-                25,612<span style={{ fontSize: '20px', fontWeight: 500, color: 'rgba(255,255,255,0.6)' }}>$</span>
+              <div style={{ fontSize: '40px', fontWeight: 800, letterSpacing: '-0.03em', color: '#FFFFFF', lineHeight: 1, display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                24/7<span style={{ fontSize: '13px', fontWeight: 700, color: '#DBF285' }}>on-air</span>
               </div>
             </div>
           </div>

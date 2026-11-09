@@ -5,7 +5,7 @@ import { brandingConfig } from '../config/branding';
 import { keyframes, useIsMobile, inner } from './shared/ui';
 import { ACENTO, CARD, D, Btn, Filtro, GrupoLogo, Logo, Modulo, td, th } from './shared/dark';
 import { FONDO_TECH } from '../config/tema';
-import { PUBLICACIONES, INSERCIONES, fmt, fmtMXN, type Insercion, type TipoImpreso } from '../data/medios';
+import { PUBLICACIONES, INSERCIONES, fmt, type Insercion, type TipoImpreso } from '../data/medios';
 
 const { colores } = brandingConfig;
 const ANUNCIANTE: Record<string, string> = { Aurora: 'Tiendas Aurora', Nuvo: 'Banco Nuvo', Valmar: 'Grupo Valmar', Nortia: 'Nortia Telecom', Vestia: 'Vestia Moda', Meridia: 'Grupo Meridia', Lumen: 'Lumen Salud', Cobalto: 'Cobalto Bebidas' };
@@ -49,9 +49,13 @@ export const Impresos = () => {
   const tabla = soloFiltro ? filtradas : INSERCIONES;
   const actual = filtradas[sel] ?? filtradas[0];
   const medios = [...new Map(filtradas.map(i => [i.publicacion.nombre, i])).values()].slice(0, 3);
-  const gasto = useMemo(() => {
+  const volumenGrupo = useMemo(() => {
     const c: Record<string, { n: string; v: number; color: string }> = {};
-    INSERCIONES.forEach(i => { const k = i.publicacion.grupo; c[k] = c[k] ?? { n: k.replace('Grupo ', ''), v: 0, color: i.publicacion.color }; c[k].v += i.tarifaMXN; });
+    INSERCIONES.forEach(i => {
+      const k = i.publicacion.grupo;
+      c[k] = c[k] ?? { n: k.replace('Grupo ', ''), v: 0, color: i.publicacion.color };
+      c[k].v += 1;
+    });
     return Object.values(c).sort((a, b) => b.v - a.v).slice(0, 4);
   }, []);
   const reiniciar = () => { setGrupo('Todos'); setTipo('Periódico'); setSel(0); };
@@ -171,29 +175,34 @@ export const Impresos = () => {
 
             <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : '1.1fr 1fr', gap: 16 }}>
               {/* Módulo 4 */}
-              <Modulo id="imp-tarifas" title="MÓDULO 4: Tarifas Estimadas vs. Tamaño de Anuncio">
+              <Modulo id="imp-tarifas" title="MÓDULO 4: Formato de Inserción y Conciliación">
                 {filtradas.length === 0 ? vacio : <div style={{ overflowX: 'auto' }}><table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead><tr>{['Tamaño', 'Ubicación', 'Tarifa Lista Est.', 'Costo Calculado'].map(h => <th key={h} style={th}>{h}</th>)}</tr></thead>
+                  <thead><tr>{['Formato / Tamaño', 'Ubicación', 'Tarifa Contractual', 'Estatus de Auditoría'].map(h => <th key={h} style={th}>{h}</th>)}</tr></thead>
                   <tbody>{filtradas.slice(0, 3).map((i, k) => (
-                    <tr key={k}><td style={td}>{PLANA[i.cm2]}</td><td style={td}>{i.pagina < 10 ? `Pág. ${i.pagina}` : i.seccion === 'Negocios' ? 'Sección A' : 'Interior'}</td>
-                      <td style={td}>{fmtMXN(lista(i.tarifaMXN))} MXN</td><td style={{ ...td, color: ACENTO, fontWeight: 700 }}>{fmtMXN(i.tarifaMXN)} MXN</td></tr>
+                    <tr key={k}>
+                      <td style={td}>{PLANA[i.cm2]} <span style={{ color: D.sub, fontSize: 11 }}>({fmt(i.cm2)} cm²)</span></td>
+                      <td style={td}>{i.pagina < 10 ? `Pág. ${i.pagina}` : i.seccion === 'Negocios' ? 'Sección A' : 'Interior'}</td>
+                      <td style={{ ...td, color: D.sub, fontFamily: 'monospace' }}>---</td>
+                      <td style={{ ...td, color: ACENTO, fontWeight: 700 }}>En conciliación</td>
+                    </tr>
                   ))}</tbody></table></div>}
               </Modulo>
 
               {/* Módulo 5 */}
-              <Modulo id="imp-actividad" title="MÓDULO 5: Panel de Actividad y Estatus">
+              <Modulo id="imp-actividad" title="MÓDULO 5: Volumen de Inserciones por Grupo Editorial">
                 <div style={{ height: 150 }}><ResponsiveContainer>
-                  <BarChart data={gasto} margin={{ top: 6, right: 4, left: -6, bottom: 0 }}>
+                  <BarChart data={volumenGrupo} margin={{ top: 6, right: 4, left: -6, bottom: 0 }}>
                     <CartesianGrid stroke="rgba(255, 255, 255, 0.08)" strokeDasharray="2 4" vertical={false} />
-                    <XAxis dataKey="n" tick={{ fill: D.sub, fontSize: 10.5 }} axisLine={false} tickLine={false} /><YAxis tick={{ fill: D.sub, fontSize: 10.5 }} width={48} axisLine={false} tickLine={false} tickFormatter={v => `${Math.round(v / 1000)}k`} />
-                    <Tooltip cursor={{ fill: 'rgba(255, 255, 255, 0.04)' }} contentStyle={{ background: '#0A170E', border: `1px solid ${D.borde}`, borderRadius: 10, fontSize: 12, color: D.txt, boxShadow: '0 8px 24px rgba(0, 0, 0, 0.45)' }} labelStyle={{ color: D.sub }} formatter={v => fmtMXN(Number(v))} />
-                    <Bar dataKey="v" name="Gasto" radius={[5, 5, 0, 0]} barSize={26}>{gasto.map(d => <Cell key={d.n} fill={d.color} fillOpacity={.9} />)}</Bar></BarChart></ResponsiveContainer></div>
-                <div style={{ textAlign: 'center', fontSize: 11.5, color: D.sub, marginBottom: 10 }}>Gasto Estimado por Grupo Editorial</div>
+                    <XAxis dataKey="n" tick={{ fill: D.sub, fontSize: 10.5 }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fill: D.sub, fontSize: 10.5 }} width={32} axisLine={false} tickLine={false} allowDecimals={false} />
+                    <Tooltip cursor={{ fill: 'rgba(255, 255, 255, 0.04)' }} contentStyle={{ background: '#0A170E', border: `1px solid ${D.borde}`, borderRadius: 10, fontSize: 12, color: D.txt, boxShadow: '0 8px 24px rgba(0, 0, 0, 0.45)' }} labelStyle={{ color: D.sub }} formatter={(v: any) => [`${v} inserciones`, 'Detectadas']} />
+                    <Bar dataKey="v" name="Inserciones" radius={[5, 5, 0, 0]} barSize={26}>{volumenGrupo.map(d => <Cell key={d.n} fill={d.color} fillOpacity={.9} />)}</Bar></BarChart></ResponsiveContainer></div>
+                <div style={{ textAlign: 'center', fontSize: 11.5, color: D.sub, marginBottom: 10 }}>Distribución de Inserciones por Grupo Editorial</div>
                 <div style={{ border: `1px solid ${D.fila}`, borderRadius: 12, padding: 12, background: 'rgba(255, 255, 255, 0.04)' }}>
-                  <div style={{ fontSize: 14 }}><b style={{ color: ACENTO, fontSize: 17 }}>Hoy: {INSERCIONES.length * 4 + 4}</b> Inserciones Detectadas</div>
-                  <div style={{ fontSize: 12, color: D.sub, margin: '4px 0 8px' }}>Sujeto a cambios - Lista preliminar por confirmar</div>
-                  <div style={{ height: 7, background: 'rgba(255, 255, 255, 0.1)', borderRadius: 4 }}><div style={{ width: '45%', height: '100%', background: 'linear-gradient(90deg, #729013, #DBF285)', boxShadow: '0 0 10px rgba(219, 242, 133, 0.4)', borderRadius: 4 }} /></div>
-                  <div style={{ fontSize: 11.5, color: D.sub, marginTop: 6 }}>Procesamiento de ediciones del día</div>
+                  <div style={{ fontSize: 14 }}><b style={{ color: ACENTO, fontSize: 17 }}>70</b> Publicaciones en Monitoreo</div>
+                  <div style={{ fontSize: 12, color: D.sub, margin: '4px 0 8px' }}>16 Periódicos · 34 Revistas · 20 Especiales</div>
+                  <div style={{ height: 7, background: 'rgba(255, 255, 255, 0.1)', borderRadius: 4 }}><div style={{ width: '100%', height: '100%', background: 'linear-gradient(90deg, #729013, #DBF285)', boxShadow: '0 0 10px rgba(219, 242, 133, 0.4)', borderRadius: 4 }} /></div>
+                  <div style={{ fontSize: 11.5, color: D.sub, marginTop: 6 }}>Cobertura OCR activa a 300 DPI</div>
                 </div>
               </Modulo>
             </div>
