@@ -104,6 +104,7 @@ export const TestigosIA = ({ initialEmisora }: TestigosIAProps = {}) => {
   const [isMobile, setIsMobile] = useState(false);
   const [formColapsado, setFormColapsado] = useState(false);
   const [busqueda, setBusqueda] = useState('');
+  const [filtroEmisora, setFiltroEmisora] = useState('');
   const [busqEmisora, setBusqEmisora] = useState('');
   const [tipoFiltro, setTipoFiltro] = useState<'todos' | 'marca' | 'palabra'>('todos');
   const [expandidos, setExpandidos] = useState<Set<string>>(new Set());
@@ -240,7 +241,7 @@ export const TestigosIA = ({ initialEmisora }: TestigosIAProps = {}) => {
     if (!datos.length || exportando) return;
     setExportando(true);
     try {
-      await descargarReporteAuditsa(datos, 'REPORTE_MONITOREO_ACAM_NESTLE');
+      await descargarReporteAuditsa(datos, 'reporte_monitoreo_mayia');
     } catch (err) {
       console.error('[Export Error]', err);
     } finally {
@@ -285,10 +286,13 @@ export const TestigosIA = ({ initialEmisora }: TestigosIAProps = {}) => {
   const conteoKw: Record<string, number> = {};
   testigos.forEach(t => { const k = kwDe(t); if (k) conteoKw[k] = (conteoKw[k] ?? 0) + 1; });
   const keywordsVisibles = keywordsUnicas.filter(k => tipoFiltro === 'todos' || (tipoFiltro === 'marca') === esMarca(k));
+  const emisoraDe = (t: Testigo) => t.emisora_nombre ?? t.emisora ?? '';
+  const emisorasUnicas = Array.from(new Set(testigos.map(emisoraDe).filter(Boolean))).sort();
   const q = busqueda.trim().toLowerCase();
   const testigosFiltrados = testigos.filter(t => {
     const kw = kwDe(t);
     if (filtroKeyword && kw !== filtroKeyword) return false;
+    if (filtroEmisora && emisoraDe(t) !== filtroEmisora) return false;
     if (tipoFiltro !== 'todos' && (tipoFiltro === 'marca') !== esMarca(kw)) return false;
     return !q || `${kw} ${t.emisora_nombre ?? t.emisora ?? ''} ${t.transcripcion ?? ''}`.toLowerCase().includes(q);
   });
@@ -961,6 +965,10 @@ export const TestigosIA = ({ initialEmisora }: TestigosIAProps = {}) => {
         {([['todos', 'Todas'], ['marca', 'Marcas'], ['palabra', 'Palabras']] as const).map(([id, label]) => (
           <button key={id} onClick={() => { setTipoFiltro(id); setFiltroKeyword(''); }} style={chipStyle(tipoFiltro === id)}>{label}</button>
         ))}
+        <select value={filtroEmisora} onChange={e => setFiltroEmisora(e.target.value)} style={{ ...inputStyle, width: 'auto', padding: '6px 10px' }}>
+          <option value="">Todas las emisoras</option>
+          {emisorasUnicas.map(e => <option key={e} value={e}>{e}</option>)}
+        </select>
         <span style={{ width: 1, height: 20, background: colores.borde }} />
         {keywordsVisibles.map(kw => (
           <button key={kw} onClick={() => setFiltroKeyword(filtroKeyword === kw ? '' : kw)} style={chipStyle(filtroKeyword === kw)}>

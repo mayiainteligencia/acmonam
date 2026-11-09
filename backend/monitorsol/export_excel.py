@@ -373,7 +373,7 @@ def exportar_auditsa_get(
         base_url = f"{proto}://{host_header}"
 
     excel_bytes = generar_excel_auditsa(testigos, pautas, host_url=base_url)
-    nombre_archivo = f"REPORTE_MONITOREO_ACAM_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    nombre_archivo = f"reporte_monitoreo_mayia_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
 
     return StreamingResponse(
         io.BytesIO(excel_bytes),
@@ -399,7 +399,7 @@ def exportar_auditsa_post(
         base_url = f"{proto}://{host_header}"
 
     excel_bytes = generar_excel_auditsa(testigos, pautas, host_url=base_url)
-    nombre_archivo = f"REPORTE_MONITOREO_ACAM_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    nombre_archivo = f"reporte_monitoreo_mayia_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
 
     return StreamingResponse(
         io.BytesIO(excel_bytes),

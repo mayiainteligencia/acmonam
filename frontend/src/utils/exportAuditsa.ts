@@ -352,7 +352,7 @@ function descargarBlob(blob: Blob, nombre: string) {
  * 2) Si no está disponible o no devuelve un .xlsx válido, lo genera en el navegador. */
 export async function descargarReporteAuditsa(
   testigos: TestigoExportable[],
-  nombreArchivoBase = 'REPORTE_MONITOREO_ACAM',
+  nombreArchivoBase = 'reporte_monitoreo_mayia',
 ) {
   if (!testigos.length) return;
   const nombre = `${nombreArchivoBase}_${new Date().toLocaleDateString('en-CA', { timeZone: 'America/Mexico_City' })}.xlsx`;
