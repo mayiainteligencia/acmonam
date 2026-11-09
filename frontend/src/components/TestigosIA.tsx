@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { brandingConfig } from '../config/branding';
 import { Search, RotateCcw, Radio, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Download, Activity, Clock, Play, Square, Volume2, VolumeX, Sparkles, Check } from 'lucide-react';
 import { ESTACIONES_147, type EstacionOficial } from '../data/catalogo147';
+import { descargarReporteAuditsa } from '../utils/exportAuditsa';
 
 const { colores } = brandingConfig;
 
@@ -232,21 +233,19 @@ export const TestigosIA = ({ initialEmisora }: TestigosIAProps = {}) => {
     setFiltroKeyword('');
   };
 
-  const exportarCSV = () => {
+  const [exportando, setExportando] = useState(false);
+
+  const exportarReporte = async () => {
     const datos = testigosFiltrados;
-    if (!datos.length) return;
-    const BOM = '\uFEFF';
-    const headers = 'ID,Emisora,Keyword,Transcripción,Timestamp\n';
-    const rows = datos.map((t, i) =>
-      `${t.id ?? i + 1},"${t.emisora_nombre ?? t.emisora ?? ''}","${t.keyword_detectada ?? t.keyword ?? ''}","${(t.transcripcion ?? '').replace(/"/g, '""')}","${t.timestamp}"`
-    ).join('\n');
-    const blob = new Blob([BOM + headers + rows], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `testigos_${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    if (!datos.length || exportando) return;
+    setExportando(true);
+    try {
+      await descargarReporteAuditsa(datos, 'REPORTE_MONITOREO_ACAM_NESTLE');
+    } catch (err) {
+      console.error('[Export Error]', err);
+    } finally {
+      setExportando(false);
+    }
   };
 
   const keywordsUnicas = Array.from(new Set(
@@ -943,9 +942,9 @@ export const TestigosIA = ({ initialEmisora }: TestigosIAProps = {}) => {
         </h2>
         <div style={{ display: 'flex', gap: 8 }}>
           <button onClick={reiniciarVista} style={btnStyle}><RotateCcw size={13} /> Reiniciar</button>
-          <button onClick={exportarCSV} disabled={testigosFiltrados.length === 0}
-            style={{ ...btnStyle, opacity: testigosFiltrados.length === 0 ? 0.5 : 1, cursor: testigosFiltrados.length === 0 ? 'not-allowed' : 'pointer' }}>
-            <Download size={13} /> Exportar
+          <button onClick={exportarReporte} disabled={testigosFiltrados.length === 0 || exportando}
+            style={{ ...btnStyle, opacity: (testigosFiltrados.length === 0 || exportando) ? 0.5 : 1, cursor: (testigosFiltrados.length === 0 || exportando) ? 'not-allowed' : 'pointer' }}>
+            <Download size={13} /> {exportando ? 'Exportando…' : 'Exportar'}
           </button>
         </div>
       </div>

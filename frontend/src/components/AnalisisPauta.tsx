@@ -2,10 +2,11 @@
 // Carga una pauta (.xlsx), la previsualiza, la activa y muestra su cumplimiento con evidencia en audio.
 // Aislado: solo usa /api/monitor/pauta/*; reutiliza AudioTestigo (solo lectura) de TestigosIA.
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Upload, Check, Trash2, RefreshCw, ChevronDown, ChevronUp, Clock, FileSpreadsheet } from 'lucide-react';
+import { Upload, Check, Trash2, RefreshCw, ChevronDown, ChevronUp, Clock, FileSpreadsheet, Download } from 'lucide-react';
 import { brandingConfig } from '../config/branding';
 import { useIsMobile } from './shared/ui';
 import { AudioTestigo, fechaTestigo, horaMX, type Testigo } from './TestigosIA';
+import { descargarReporteAuditsa } from '../utils/exportAuditsa';
 
 const { colores } = brandingConfig;
 const API = '/api/monitor/pauta';
@@ -73,6 +74,26 @@ export const AnalisisPauta = () => {
   const [loteSel, setLoteSel] = useState('');
   const [filtro, setFiltro] = useState<Estado | ''>('');
   const [abierta, setAbierta] = useState<number | null>(null);
+  const [exportando, setExportando] = useState(false);
+
+  const exportarAuditsa = async () => {
+    if (exportando) return;
+    setExportando(true);
+    try {
+      const todosTestigos = cumpl?.lineas.flatMap(l =>
+        l.detecciones.map(d => ({
+          ...d,
+          grupo_comercial: l.marca,
+          spot_tipo: l.formato,
+        }))
+      ) ?? [];
+      await descargarReporteAuditsa(todosTestigos, 'REPORTE_CUMPLIMIENTO_ACAM_NESTLE');
+    } catch (err) {
+      console.warn('[Export] Falló la exportación en Análisis de Pauta:', err);
+    } finally {
+      setExportando(false);
+    }
+  };
 
   const cargarLotes = useCallback(async () => {
     try { const r = await fetch(`${API}/lotes`); if (r.ok) setLotes(await r.json()); } catch { /* monitor apagado */ }
@@ -216,6 +237,7 @@ export const AnalisisPauta = () => {
               {(cumpl?.semanas ?? []).map(s => <option key={s} value={s}>Semana del {fmtFecha(s, true)}</option>)}
             </select>
             <button style={boton()} onClick={cargarCumpl} title="Actualizar"><RefreshCw size={15} />{!m && 'Actualizar'}</button>
+            <button style={boton()} onClick={exportarAuditsa} disabled={exportando} title="Exportar reporte AUDITSA (.xlsx)"><Download size={15} />{!m && (exportando ? 'Exportando…' : 'Exportar')}</button>
             {(loteSel || activos.length === 1) && <button style={boton(false, COLOR.incumplido)} onClick={() => borrar(loteSel || activos[0].lote_id)} title="Eliminar pauta"><Trash2 size={15} /></button>}
           </div>
         </div>
