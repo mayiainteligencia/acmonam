@@ -4,3 +4,4 @@ backend/monitorsol/db/*.sqlite-shm
 backend/monitorsol/db/*.sqlite-wal
 bench_*.txt
 bench_audio.wav
+backend/monitorsol/__pycache__/*.pyc
