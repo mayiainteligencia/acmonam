@@ -2,3 +2,5 @@ backend/monitorsol/db/audio/
 backend/monitorsol/db/testigos.sqlite
 backend/monitorsol/db/*.sqlite-shm
 backend/monitorsol/db/*.sqlite-wal
+bench_*.txt
+bench_audio.wav
