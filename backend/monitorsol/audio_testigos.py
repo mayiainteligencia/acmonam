@@ -11,8 +11,8 @@ from collections import deque
 from pathlib import Path
 
 import aiosqlite
-from fastapi import APIRouter, HTTPException
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import FileResponse, Response
 
 import core.session_manager as sm
 from config import DB_PATH
@@ -101,18 +101,28 @@ if AUDIO_TESTIGOS:
 
 
 @router.api_route("/audio/{sesion_id}/{timestamp}", methods=["GET", "HEAD"])
-async def audio_por_timestamp(sesion_id: str, timestamp: str):
+async def audio_por_timestamp(sesion_id: str, timestamp: str, request: Request):
     ruta = _ruta(sesion_id, timestamp)
     if not ruta.exists():
         raise HTTPException(status_code=404, detail="Audio no disponible")
-    return FileResponse(ruta, media_type="audio/wav")
+    # ponytail: Range a mano (starlette 0.37 no lo soporta); Safari/iOS exigen 206. Clips ~1 MB.
+    m = re.fullmatch(r"bytes=(\d*)-(\d*)", request.headers.get("range", ""))
+    if request.method == "GET" and m and (m[1] or m[2]):
+        data = ruta.read_bytes()
+        n = len(data)
+        ini, fin = (int(m[1]), min(int(m[2] or n - 1), n - 1)) if m[1] else (max(n - int(m[2]), 0), n - 1)
+        if ini > fin:
+            return Response(status_code=416, headers={"Content-Range": f"bytes */{n}"})
+        return Response(data[ini:fin + 1], 206, media_type="audio/wav", headers={
+            "Content-Range": f"bytes {ini}-{fin}/{n}", "Accept-Ranges": "bytes"})
+    return FileResponse(ruta, media_type="audio/wav", headers={"Accept-Ranges": "bytes"})
 
 
 @router.api_route("/testigos/{testigo_id}/audio", methods=["GET", "HEAD"])
-async def audio_por_id(testigo_id: int):
+async def audio_por_id(testigo_id: int, request: Request):
     async with aiosqlite.connect(DB_PATH) as db:
         cur = await db.execute("SELECT sesion_id, timestamp FROM testigos WHERE id = ?", (testigo_id,))
         fila = await cur.fetchone()
     if not fila:
         raise HTTPException(status_code=404, detail="Testigo no encontrado")
-    return await audio_por_timestamp(fila[0], fila[1])
+    return await audio_por_timestamp(fila[0], fila[1], request)
