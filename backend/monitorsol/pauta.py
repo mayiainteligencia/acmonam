@@ -193,6 +193,32 @@ def _misma_estacion(pauta: str, testigo: str) -> bool:
     return bool(a and b and (a in b or b in a))
 
 
+VENTANA_DUP_S = 10  # ponytail: ventana fija; un chunk son 5 s. Ajustar si el equipo define otra regla.
+
+
+def _clave_estacion(nombre: str) -> str:
+    f = re.search(r"\d{2,3}\.\d", nombre or "")
+    return f.group() if f else _norm(nombre)
+
+
+def _sin_duplicados(tests: list) -> list:
+    """Dos sesiones en la misma estacion graban el mismo evento: se cuenta una sola vez.
+
+    tests = [(emisora_nombre, keyword, datetime, fila)] ; solo colapsa entre sesiones
+    distintas (misma estacion+keyword a <= VENTANA_DUP_S), no toca repeticiones de una sesion.
+    """
+    kept: dict = {}  # (estacion, keyword) -> [(ts, sesion_id)]
+    out = []
+    for t in sorted(tests, key=lambda t: t[2]):
+        k = (_clave_estacion(t[0]), t[1])
+        sid = t[3]["sesion_id"]
+        if any(sid != s and abs((t[2] - ts).total_seconds()) <= VENTANA_DUP_S for ts, s in kept.get(k, [])):
+            continue
+        kept.setdefault(k, []).append((t[2], sid))
+        out.append(t)
+    return out
+
+
 @router.get("/cumplimiento")
 def cumplimiento(lote_id: str | None = None, semana: str | None = None):
     """Por linea de pauta: requerido vs detectado en testigos (solo lectura)."""
@@ -218,6 +244,7 @@ def cumplimiento(lote_id: str | None = None, semana: str | None = None):
         tests = c.execute("SELECT id, sesion_id, emisora_nombre, keyword_detectada, transcripcion, timestamp FROM testigos WHERE timestamp >= ? AND timestamp < ?",
                           (ini, fin)).fetchall()
     tests = [(t["emisora_nombre"], (t["keyword_detectada"] or "").strip().lower(), datetime.fromisoformat(t["timestamp"][:19]), t) for t in tests]
+    tests = _sin_duplicados(tests)
 
     hoy, lineas = datetime.now(), []
     for p in pautas:
